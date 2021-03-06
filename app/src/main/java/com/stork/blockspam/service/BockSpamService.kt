@@ -11,24 +11,6 @@ import android.telecom.CallScreeningService
 @TargetApi(Build.VERSION_CODES.O)
 class BockSpamService : CallScreeningService() {
 
-
-    private fun matchesContact(tel: String): Boolean {
-        val query = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(tel))
-
-        contentResolver.query(query,
-            null,
-            null,
-            null,
-            null
-        ).use { results ->
-            if (results?.count ?: 0 > 0) {
-                return true
-            }
-        }
-
-        return false
-    }
-
     override fun onScreenCall(details: Call.Details) {
         val responseBuilder = CallScreeningService.CallResponse.Builder()
         var response = responseBuilder.build()
@@ -55,4 +37,22 @@ class BockSpamService : CallScreeningService() {
         // In all unhandled cases, allow the call through.
         respondToCall(details, response)
     }
+
+    private fun matchesContact(tel: String): Boolean {
+        val query = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(tel))
+
+        contentResolver.query(query,
+            null,
+            null,
+            null,
+            null
+        ).use { results ->
+            if (results?.count ?: 0 > 0) {
+                return true
+            }
+        }
+
+        return false
+    }
+
 }
