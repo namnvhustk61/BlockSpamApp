@@ -1,17 +1,14 @@
 package com.stork.blockspam
 
-import android.app.role.RoleManager
-import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
-import android.telecom.TelecomManager
-import androidx.annotation.RequiresApi
+import androidx.room.Room
 import com.stork.blockspam.base.BaseActivity
+import com.stork.blockspam.database.AppDatabase
+import com.stork.blockspam.database.CallPhone
+import com.stork.blockspam.database.CallPhoneDAO
 import com.stork.blockspam.utils.AppPermission
 import com.stork.blockspam.utils.AppSettingsManager
-import java.lang.Exception
 
 
 class MainActivity : BaseActivity() {
@@ -19,6 +16,15 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val database =
+            Room.databaseBuilder(this, AppDatabase::class.java, AppDatabase.KEY_DATABASE)
+                .allowMainThreadQueries()
+                .build()
+
+        val itemDAO: CallPhoneDAO = database.callPhoneDAO
+
+        val items: List<CallPhone> = itemDAO.items
+
 
         setPermission()
 
