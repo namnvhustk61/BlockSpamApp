@@ -6,6 +6,10 @@ import android.os.Build
 import android.provider.ContactsContract
 import android.telecom.Call
 import android.telecom.CallScreeningService
+import androidx.room.Room
+import com.stork.blockspam.database.AppDatabase
+import com.stork.blockspam.database.CallPhone
+import com.stork.blockspam.database.CallPhoneDAO
 
 
 @TargetApi(Build.VERSION_CODES.O)
@@ -21,6 +25,14 @@ class BockSpamService : CallScreeningService() {
             respondToCall(details, response)
         }
 
+        val database =
+                Room.databaseBuilder(this, AppDatabase::class.java, AppDatabase.KEY_DATABASE)
+                        .allowMainThreadQueries()
+                        .build()
+
+        val itemDAO: CallPhoneDAO = database.callPhoneDAO
+
+        val items: List<CallPhone> = itemDAO.items
 
 
         // If a filter was tripped, reject the call.

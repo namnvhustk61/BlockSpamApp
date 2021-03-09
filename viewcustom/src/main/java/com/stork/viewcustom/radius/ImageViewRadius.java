@@ -1,4 +1,4 @@
-package com.stork.blockspam.viewcustom;
+package com.stork.viewcustom.radius;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,10 +13,12 @@ import android.graphics.RectF;
 import android.graphics.Xfermode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.util.AttributeSet;
 import androidx.appcompat.widget.AppCompatImageView;
 
-import com.stork.blockspam.R;
+import com.stork.viewcustom.R;
 
 
 public class ImageViewRadius extends AppCompatImageView {
@@ -94,12 +96,18 @@ public class ImageViewRadius extends AppCompatImageView {
             Xfermode oldMode = paint.getXfermode();
             // This is the paint already associated with the BitmapDrawable that super draws
             paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-            super.onDraw(canvas);
+//            super.onDraw(canvas);
             paint.setXfermode(oldMode);
             canvas.restoreToCount(saveCount);
-        } else {
-            super.onDraw(canvas);
+        }else if(myDrawable instanceof LayerDrawable && radii != null){
+            if(((LayerDrawable) myDrawable).getDrawable(0) instanceof GradientDrawable){
+                GradientDrawable drawBg = (GradientDrawable)((LayerDrawable) myDrawable).getDrawable(0);
+                drawBg.setCornerRadii(radii);
+                setImageDrawable(myDrawable);
+            }
+
         }
+        super.onDraw(canvas);
     }
 
     private float convertDp2Float(float dp) {

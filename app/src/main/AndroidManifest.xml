@@ -21,9 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BlockSpam"
         tools:ignore="AllowBackup">
-        <activity android:name=".MainActivity"
-            android:theme="@style/SplashTheme"
-            >
+        <activity
+            android:name=".ui.MainActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

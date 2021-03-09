@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">BlockSpam</string>
     <string name="alert_re_permission">Re Permission</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="frag_block_phone_title">Block Phone</string>
 </resources>

@@ -1,2 +1,3 @@
+include ':viewcustom'
 include ':app'
 rootProject.name = "BlockSpam"

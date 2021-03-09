@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorOnPrimary">#F44336</color>
+    <color name="colorPrimary">#009688</color>
+    <color name="colorOnPrimary">#FF5722</color>
     <color name="colorSecondary">#4CAF50</color>
     <color name="colorSecondaryVariant">#CDDC39</color>
     <color name="colorOnSecondary">#009688</color>
-    <color name="background">#FFFFFF</color>
+    <color name="background">#F1F1F1</color>
+    <color name="background_item">#FFFFFF</color>
+    <color name="text">#000000</color>
+    <color name="text_less">#232323</color>
 
 
     <color name="gradient_start" >#009688</color>
     <color name="gradient_end">#FFAEE1F9</color>
     <color name="white">#FFFFFF</color>
+    <color name="gray">#FCDADADA</color>
+    <color name="gray_blur">#80666666</color>
+    <color name="gray_light">#FCE0E0E0</color>
+    <color name="orange">#FF5D29</color>
+    <color name="blue">#008DFF</color>
 
 
 </resources>

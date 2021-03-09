@@ -1,4 +1,4 @@
-package com.stork.blockspam.viewcustom;
+package com.stork.viewcustom.radius;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,7 +12,8 @@ import android.util.AttributeSet;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.stork.blockspam.R;
+import com.stork.viewcustom.R;
+
 
 public class TextViewGradient extends AppCompatTextView {
 

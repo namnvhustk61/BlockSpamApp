@@ -1,33 +1,29 @@
-package com.stork.blockspam
+package com.stork.blockspam.ui
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.room.Room
+import androidx.fragment.app.Fragment
+import com.stork.blockspam.R
 import com.stork.blockspam.base.BaseActivity
-import com.stork.blockspam.database.AppDatabase
-import com.stork.blockspam.database.CallPhone
-import com.stork.blockspam.database.CallPhoneDAO
+import com.stork.blockspam.ui.fragblockphone.BlockPhoneFragment
 import com.stork.blockspam.utils.AppPermission
 import com.stork.blockspam.utils.AppSettingsManager
+import com.stork.viewcustom.general.TabBarView
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : BaseActivity() {
 
+    private var currentIndex = 0
+    private lateinit var tabBarItems: List<TabBarView>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val database =
-            Room.databaseBuilder(this, AppDatabase::class.java, AppDatabase.KEY_DATABASE)
-                .allowMainThreadQueries()
-                .build()
-
-        val itemDAO: CallPhoneDAO = database.callPhoneDAO
-
-        val items: List<CallPhone> = itemDAO.items
-
 
         setPermission()
 
+        setView()
     }
 
     private fun setPermission(){
@@ -64,5 +60,41 @@ class MainActivity : BaseActivity() {
                 // Your app is not the call screening app
             }
         }
+    }
+
+    private fun setView(){
+        val fragments = listOf(
+                BlockPhoneFragment(),
+                Fragment(),
+                Fragment(),
+                Fragment()
+        )
+
+        mainViewPager.adapter = MainPagerAdapter(supportFragmentManager, fragments)
+        mainViewPager.offscreenPageLimit = 4
+
+        tabBarItems = listOf(
+                tab0,
+                tab1,
+                tab2,
+                tab3
+        )
+
+        tabBarItems.forEachIndexed { index, tabBarItem ->
+            tabBarItem.setOnClickListener {
+                selectTab(index)
+            }
+        }
+
+        selectTab(0)
+    }
+
+    private fun selectTab(index: Int) {
+        this.currentIndex = index
+
+        tabBarItems.forEachIndexed { i, tabBarItem ->
+            tabBarItem.setActive(i == index)
+        }
+        mainViewPager.setCurrentItem(index, false)
     }
 }

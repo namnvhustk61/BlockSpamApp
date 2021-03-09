@@ -1,4 +1,4 @@
-package com.stork.blockspam.viewcustom;
+package com.stork.viewcustom.radius;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -11,13 +11,15 @@ import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 
-import com.stork.blockspam.R;
+import com.stork.viewcustom.R;
 
 
-public class LinearLayoutRadius extends LinearLayout {
+
+public class RelativeLayoutRadius extends RelativeLayout {
 
     private float[] radii = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
 
@@ -27,22 +29,22 @@ public class LinearLayoutRadius extends LinearLayout {
     private int strokeColor = Color.TRANSPARENT;
 
 
-    public LinearLayoutRadius(Context context) {
+    public RelativeLayoutRadius(Context context) {
         super(context);
         init(context, null);
     }
 
-    public LinearLayoutRadius(Context context, @Nullable AttributeSet attrs) {
+    public RelativeLayoutRadius(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public LinearLayoutRadius(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public RelativeLayoutRadius(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
-    public LinearLayoutRadius(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public RelativeLayoutRadius(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         setupBackground();
     }
@@ -100,11 +102,17 @@ public class LinearLayoutRadius extends LinearLayout {
         setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN: {
+                    if(v.getBackground() == null){
+                        v.setBackground(new GradientDrawable());
+                    }
                     v.getBackground().setColorFilter(0xFFDDDCDC, PorterDuff.Mode.SRC_ATOP);
                     v.invalidate();
                     break;
                 }
                 case MotionEvent.ACTION_UP: {
+                    if(v.getBackground() == null){
+                        v.setBackground(new GradientDrawable());
+                    }
                     v.getBackground().clearColorFilter();
                     v.invalidate();
                     break;
@@ -137,5 +145,6 @@ public class LinearLayoutRadius extends LinearLayout {
 
         return  Math.round((dp * getResources().getDisplayMetrics().density));
     }
+
 
 }

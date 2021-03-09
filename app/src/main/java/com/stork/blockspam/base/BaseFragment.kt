@@ -1,0 +1,9 @@
+package com.stork.blockspam.base
+
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+
+
+abstract class BaseFragment : Fragment() {
+
+}

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary" >#009688</color>
+    <color name="colorNotActive" >#9B9B9B</color>
+    <color name="colorBgGray" >#F8F8F8</color>
+    <color name="gradient_start" >#009688</color>
+    <color name="gradient_end">#FFAEE1F9</color>
+</resources>

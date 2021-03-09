@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">#009688</color>
     <color name="colorOnPrimary">#F44336</color>
     <color name="colorSecondary">#4CAF50</color>
     <color name="colorSecondaryVariant">#CDDC39</color>
     <color name="colorOnSecondary">#009688</color>
-
     <color name="background">#000000</color>
-    <color name="gradient_start" >#FFF6EBE6</color>
+    <color name="background_item">#1F1F1F</color>
+    <color name="text">#FFFFFF</color>
+    <color name="text_less">#D0D0D0</color>
+
+
+    <color name="gradient_start" >#009688</color>
     <color name="gradient_end">#FFAEE1F9</color>
+    <color name="white">#FFFFFF</color>
+    <color name="gray">#2F2E2E</color>
+    <color name="gray_blur">#CC474747</color>
+    <color name="gray_light">#FCE0E0E0</color>
+    <color name="orange">#FF5D29</color>
+    <color name="blue">#008DFF</color>
+
+
+
 </resources>
