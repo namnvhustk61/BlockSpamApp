@@ -16,6 +16,9 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
+
 import androidx.appcompat.widget.AppCompatImageView;
 
 import com.stork.viewcustom.R;
@@ -63,6 +66,10 @@ public class ImageViewRadius extends AppCompatImageView {
             radii = new float[]{tl, tl, tr, tr, br, br, bl, bl};
         }
 
+        if(!ta.getBoolean(R.styleable.RadiusLayout_offStateOnPressed, false)){
+            setStateOnPressed();
+        }
+
         ta.recycle();
     }
 
@@ -108,6 +115,32 @@ public class ImageViewRadius extends AppCompatImageView {
 
         }
         super.onDraw(canvas);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setStateOnPressed(){
+        setOnClickListener(new OnClickListener() {@Override public void onClick(View v) { }});
+        setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    if(v.getBackground() == null){
+                        v.setBackground(new GradientDrawable());
+                    }
+                    v.getBackground().setColorFilter(0x4DDDDCDC, PorterDuff.Mode.SRC_ATOP);
+                    v.invalidate();
+                    break;
+                }
+                case MotionEvent.ACTION_UP: {
+                    if(v.getBackground() == null){
+                        v.setBackground(new GradientDrawable());
+                    }
+                    v.getBackground().clearColorFilter();
+                    v.invalidate();
+                    break;
+                }
+            }
+            return false;
+        });
     }
 
     private float convertDp2Float(float dp) {

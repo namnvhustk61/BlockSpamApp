@@ -15,6 +15,7 @@
         <attr name="radiusBottomRight" format="dimension"/>
         <attr name="strokeWidth" />
         <attr name="strokeColor" />
+        <attr name="offStateOnPressed" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="TabBarView">

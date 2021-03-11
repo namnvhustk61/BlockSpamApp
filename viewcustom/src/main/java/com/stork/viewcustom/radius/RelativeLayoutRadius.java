@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -76,6 +77,10 @@ public class RelativeLayoutRadius extends RelativeLayout {
         }
         strokeWidth = ta.getDimensionPixelSize(R.styleable.RadiusLayout_strokeWidth, 0);
         strokeColor = ta.getColor(R.styleable.RadiusLayout_strokeColor, Color.TRANSPARENT);
+
+        if(!ta.getBoolean(R.styleable.RadiusLayout_offStateOnPressed, false)){
+            setStateOnPressed();
+        }
         ta.recycle();
     }
 
@@ -93,19 +98,18 @@ public class RelativeLayoutRadius extends RelativeLayout {
             drawable.setStroke(strokeWidth, strokeColor);
             setBackground(drawable);
         }
-
-        setStateonPressed();
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setStateonPressed(){
+    private void setStateOnPressed(){
+        setOnClickListener(new OnClickListener() {@Override public void onClick(View v) { }});
         setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN: {
                     if(v.getBackground() == null){
                         v.setBackground(new GradientDrawable());
                     }
-                    v.getBackground().setColorFilter(0xFFDDDCDC, PorterDuff.Mode.SRC_ATOP);
+                    v.getBackground().setColorFilter(0x4DDDDCDC, PorterDuff.Mode.SRC_ATOP);
                     v.invalidate();
                     break;
                 }

@@ -27,18 +27,31 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setPermission(){
-        //set APP is caller id & spam app default
-        AppSettingsManager.setDefaultAppBlockCall(this)
+        /*
+        *  Required  App is  caller id & spam app default  OR  Call Phone Default
+        *   at some android SDK slowly  don't  have caller id & spam app default
+        *   then require  Call Phone Default
+        * */
 
-        // Danh ba ---- READ_PHONE_STATE
-        AppPermission.requirePermissions(this, AppPermission.PER_READ_PHONE_STATE, AppPermission.PER_REQUEST_CODE)
-        AppPermission.requirePermissions(this, AppPermission.PER_READ_CONTACTS, AppPermission.PER_REQUEST_CODE)
+        /* set APP is caller id & spam app default
+         *
+         *  status == true  -> device have caller id & spam app default
+         *  status == false -> device don't have caller id & spam app default
+         */
+        val status :Boolean = AppSettingsManager.setDefaultAppBlockCall(this)
+        if(status){
+            // Danh ba ---- READ_PHONE_STATE
+            AppPermission.requirePermissions(this, AppPermission.PER_READ_PHONE_STATE, AppPermission.PER_REQUEST_CODE)
+            AppPermission.requirePermissions(this, AppPermission.PER_READ_CONTACTS, AppPermission.PER_REQUEST_CODE)
+        }else{
+            //set APP is app CallPhone default
+            AppSettingsManager.setDefaultAppCallPhone(this)
+            // Cach 2
+            AppPermission.requirePermissions(this, AppPermission.PER_CALL_PHONE, AppPermission.PER_REQUEST_CODE)
+            AppPermission.requirePermissions(this, AppPermission.PER_ANSWER_PHONE_CALLS, AppPermission.PER_REQUEST_CODE)
 
-
-        // Cach 2
-        AppPermission.requirePermissions(this, AppPermission.PER_CALL_PHONE, AppPermission.PER_REQUEST_CODE)
-        AppPermission.requirePermissions(this, AppPermission.PER_ANSWER_PHONE_CALLS, AppPermission.PER_REQUEST_CODE)
-    }
+        }
+       }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

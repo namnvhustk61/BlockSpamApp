@@ -4,6 +4,7 @@
     <dimen name="sp_20">20sp</dimen>
     <dimen name="dp_15">15dp</dimen>
     <dimen name="size_icon">24dp</dimen>
+    <dimen name="size_icon_30dp">30dp</dimen>
     <dimen name="size_icon_x1.5">36dp</dimen>
     <dimen name="size_icon_x2">48dp</dimen>
     <dimen name="size_icon_x4">64dp</dimen>
@@ -18,4 +19,6 @@
     <dimen name="sp_14">14sp</dimen>
     <dimen name="sp_12">12sp</dimen>
     <dimen name="dp_0_1">0.1dp</dimen>
+    <dimen name="sp_18">18sp</dimen>
+    <dimen name="dp_8">8dp</dimen>
 </resources>

@@ -10,16 +10,16 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.stork.viewcustom.R;
 
 
 
-public class LinearLayoutRadius extends LinearLayout {
+public class RecycleViewRadius extends RecyclerView {
 
     private float[] radii = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
 
@@ -29,24 +29,19 @@ public class LinearLayoutRadius extends LinearLayout {
     private int strokeColor = Color.TRANSPARENT;
 
 
-    public LinearLayoutRadius(Context context) {
+    public RecycleViewRadius(Context context) {
         super(context);
         init(context, null);
     }
 
-    public LinearLayoutRadius(Context context, @Nullable AttributeSet attrs) {
+    public RecycleViewRadius(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public LinearLayoutRadius(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public RecycleViewRadius(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
-    }
-
-    public LinearLayoutRadius(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        setupBackground();
     }
 
 
@@ -77,9 +72,6 @@ public class LinearLayoutRadius extends LinearLayout {
         strokeWidth = ta.getDimensionPixelSize(R.styleable.RadiusLayout_strokeWidth, 0);
         strokeColor = ta.getColor(R.styleable.RadiusLayout_strokeColor, Color.TRANSPARENT);
 
-        if(!ta.getBoolean(R.styleable.RadiusLayout_offStateOnPressed, false)){
-            setStateOnPressed();
-        }
         ta.recycle();
     }
 
@@ -100,32 +92,6 @@ public class LinearLayoutRadius extends LinearLayout {
 
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    public void setStateOnPressed(){
-        setOnClickListener(new OnClickListener() {@Override public void onClick(View v) { }});
-
-        setOnTouchListener((v, event) -> {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN: {
-                    if(v.getBackground() == null){
-                        v.setBackground(new GradientDrawable());
-                    }
-                    v.getBackground().setColorFilter(0x4DDDDCDC, PorterDuff.Mode.SRC_ATOP);
-                    v.invalidate();
-                    break;
-                }
-                case MotionEvent.ACTION_UP: {
-                    if(v.getBackground() == null){
-                        v.setBackground(new GradientDrawable());
-                    }
-                    v.getBackground().clearColorFilter();
-                    v.invalidate();
-                    break;
-                }
-            }
-            return false;
-        });
-    }
 
     @Override
     public void setBackgroundColor(int color) {

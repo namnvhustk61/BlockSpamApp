@@ -4,4 +4,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="frag_block_phone_title">Block Phone</string>
+    <string name="add_phone_title">Add Phone</string>
+    <string name="save">Save</string>
+    <string name="add_call_phone_edt_phone">Add phone</string>
+    <string name="add_call_phone_edt_name">Name</string>
+    <string name="not_data_show">Not data show!</string>
 </resources>

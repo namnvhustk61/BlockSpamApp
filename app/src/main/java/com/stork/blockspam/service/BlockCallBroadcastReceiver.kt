@@ -8,6 +8,7 @@ import android.os.Build
 import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
 import com.android.internal.telephony.ITelephony
+import com.stork.blockspam.database.AppControlDB
 import com.stork.blockspam.utils.AppPermission
 
 internal class BlockCallBroadcastReceiver : BroadcastReceiver() {
@@ -37,7 +38,9 @@ internal class BlockCallBroadcastReceiver : BroadcastReceiver() {
 //        }
         // get incoming call number.
         val number = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
-        breakCall(context)
+        if(AppControlDB.getInstance(context).phoneHasDB(number?:"")){
+            breakCall(context)
+        }
     }
 
 

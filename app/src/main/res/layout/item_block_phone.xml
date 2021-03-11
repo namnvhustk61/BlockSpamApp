@@ -11,7 +11,7 @@
     >
 
     <com.stork.viewcustom.radius.ImageViewRadius
-        android:id="@+id/img"
+        android:id="@+id/imgStatus"
         android:layout_width="@dimen/size_icon_x1.5"
         android:layout_height="@dimen/size_icon_x1.5"
         android:src="@drawable/ic_protect_good"
@@ -23,18 +23,18 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp_14"
         android:textColor="@color/text"
-        android:layout_toEndOf="@id/img"
+        android:layout_toEndOf="@id/imgStatus"
         android:layout_marginStart="@dimen/dp_15"
         android:text="0356955552"
         android:fontFamily="@font/svn_gilroy_medium"/>
 
     <TextView
-        android:id="@+id/tvCountry"
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp_12"
         android:textColor="@color/text_less"
-        android:layout_toEndOf="@id/img"
+        android:layout_toEndOf="@id/imgStatus"
         android:layout_marginStart="@dimen/dp_15"
         android:layout_marginTop="@dimen/dp_2"
         android:layout_below="@id/tvPhone"
@@ -42,6 +42,7 @@
         android:fontFamily="@font/svn_gilroy_light"/>
 
     <com.stork.viewcustom.general.ImageViewSwap
+        android:id="@+id/imgSwCheck"
         android:layout_width="@dimen/dp_18"
         android:layout_height="@dimen/dp_18"
         android:layout_alignParentEnd="true"
@@ -52,10 +53,10 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_0_1"
-        android:layout_toEndOf="@id/img"
+        android:layout_toEndOf="@id/imgStatus"
         android:layout_marginStart="@dimen/dp_15"
         android:layout_marginTop="@dimen/dp_10"
-        android:layout_below="@id/tvCountry"
+        android:layout_below="@id/tvName"
         android:background="@color/gray_blur"
         />
 

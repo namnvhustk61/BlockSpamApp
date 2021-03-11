@@ -7,6 +7,7 @@ import android.provider.ContactsContract
 import android.telecom.Call
 import android.telecom.CallScreeningService
 import androidx.room.Room
+import com.stork.blockspam.database.AppControlDB
 import com.stork.blockspam.database.AppDatabase
 import com.stork.blockspam.database.CallPhone
 import com.stork.blockspam.database.CallPhoneDAO
@@ -24,26 +25,18 @@ class BockSpamService : CallScreeningService() {
         if (matchesContact(tel)) {
             respondToCall(details, response)
         }
-
-        val database =
-                Room.databaseBuilder(this, AppDatabase::class.java, AppDatabase.KEY_DATABASE)
-                        .allowMainThreadQueries()
-                        .build()
-
-        val itemDAO: CallPhoneDAO = database.callPhoneDAO
-
-        val items: List<CallPhone> = itemDAO.items
-
+        val isBlock: Boolean =  AppControlDB.getInstance(this).phoneHasDB(tel)
 
         // If a filter was tripped, reject the call.
         // TODO allow different behavior tied to filters
         // TODO OR results from multiple filters together to get final action
 
+        // isBlock = true --> block
         response = responseBuilder
-            .setDisallowCall(true)
-            .setRejectCall(true)
-            .setSkipCallLog(true)
-            .setSkipNotification(true)
+            .setDisallowCall(isBlock)
+            .setRejectCall(isBlock)
+            .setSkipCallLog(isBlock)
+            .setSkipNotification(isBlock)
             .build()
 
         // In all unhandled cases, allow the call through.
