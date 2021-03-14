@@ -26,4 +26,10 @@ public interface CallPhoneDAO {
 
     @Query("SELECT * FROM TbCallPhone WHERE phone = :phone")
     List<CallPhone> getByPhone(String phone);
+
+    @Query("UPDATE TbCallPhone SET status = :statusNew")
+    void updateStatusAll(String statusNew);
+
+    @Query("DELETE FROM TbCallPhone")
+    void deleteAll();
 }

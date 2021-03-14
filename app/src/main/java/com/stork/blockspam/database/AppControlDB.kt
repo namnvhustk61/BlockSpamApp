@@ -24,25 +24,8 @@ class AppControlDB {
     /*
     *  CallPhoneDAO
     */
-    fun insertCallPhone(callPhone: CallPhone){
-        val dao :CallPhoneDAO? = database?.callPhoneDAO
-        dao?.insert(callPhone)
+    fun  getCallPhoneDAO(): CallPhoneDAO?{
+        return database?.callPhoneDAO
     }
 
-    fun updateCallPhone(callPhone: CallPhone){
-        val dao :CallPhoneDAO? = database?.callPhoneDAO
-        dao?.update(callPhone)
-    }
-
-    fun getAllCallPhone(): List<CallPhone>?{
-        val dao :CallPhoneDAO? = database?.callPhoneDAO
-        return dao?.all
-    }
-    fun phoneHasDB(phone: String): Boolean{
-        val dao :CallPhoneDAO? = database?.callPhoneDAO
-        val values = dao?.getByPhone(phone)?.size
-        if (values == null || values==0)(return false)
-        return true
-
-    }
 }

@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey;
 
 import com.stork.blockspam.AppConfig;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(
@@ -28,10 +29,13 @@ public class CallPhone{
 
     @Ignore
     public int insertDB(Context context){
-        if(!AppControlDB.Companion.getInstance(context).phoneHasDB(this.phone)){
+        CallPhoneDAO dao = AppControlDB.Companion.getInstance(context).getCallPhoneDAO();
+        if(!hasDB(context, this.phone)){
             try{
-                AppControlDB.Companion.getInstance(context).insertCallPhone(this);
-                return AppConfig.SUCCESS;
+                if (dao != null) {
+                    dao.insert(this);
+                    return AppConfig.SUCCESS;
+                }
             }catch (Exception e) {
                 return  AppConfig.EXCEPTION;
             }
@@ -47,13 +51,63 @@ public class CallPhone{
         }else {
             this.status = CallPhoneKEY.STATUS.getSTATUS_BLOCK();
         }
-        AppControlDB.Companion.getInstance(context).updateCallPhone(this);
+        CallPhoneDAO dao = AppControlDB.Companion.getInstance(context).getCallPhoneDAO();
+        if (dao != null) {
+            dao.update(this);
+        }
+
     }
 
 
+
+
+    /*******  Static   *******/
     @Ignore
-    public static List<CallPhone> getAllDB(Context context){
-        return AppControlDB.Companion.getInstance(context).getAllCallPhone();
+    public static   List<CallPhone> getAllDB(Context context){
+        CallPhoneDAO dao = AppControlDB.Companion.getInstance(context).getCallPhoneDAO();
+        if (dao != null) {
+            return dao.getAll();
+        }else {return  new ArrayList<>();}
+    }
+
+    @Ignore
+    public static  List<CallPhone> deleteAllDB(Context context){
+        CallPhoneDAO dao = AppControlDB.Companion.getInstance(context).getCallPhoneDAO();
+        if (dao != null) {
+            dao.deleteAll();
+            return dao.getAll();
+        }else {return  new ArrayList<>();}
+    }
+
+    @Ignore
+    public static List<CallPhone> updateAllDB__Status_Block(Context context){
+        CallPhoneDAO dao = AppControlDB.Companion.getInstance(context).getCallPhoneDAO();
+        if(dao != null){
+             dao.updateStatusAll(CallPhoneKEY.STATUS.getSTATUS_BLOCK());
+             return dao.getAll();
+        }
+        return  new ArrayList<>();
+    }
+
+    @Ignore
+    public static List<CallPhone> updateAllDB__Status_UNBLOCK(Context context){
+        CallPhoneDAO dao = AppControlDB.Companion.getInstance(context).getCallPhoneDAO();
+        if(dao != null){
+            dao.updateStatusAll(CallPhoneKEY.STATUS.getSTATUS_UNBLOCK());
+            return dao.getAll();
+        }
+        return  new ArrayList<>();
+    }
+
+    @Ignore
+    public static boolean hasDB(Context context, String phone ){
+        CallPhoneDAO dao = AppControlDB.Companion.getInstance(context).getCallPhoneDAO();
+        if (dao != null) {
+            List<CallPhone> values = dao.getByPhone(phone);
+            if(values == null || values.size() == 0){return false;}
+            return true;
+        }
+        return false;
     }
 
 }

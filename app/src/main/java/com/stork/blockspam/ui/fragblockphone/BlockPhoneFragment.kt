@@ -54,11 +54,14 @@ class BlockPhoneFragment : BaseFragment() {
     @SuppressLint("ResourceAsColor")
     private fun onEvent(){
         imgAdd.setOnClickListener { AppNavigation.toAddCallPhone(context!!)}
-        setPopUpWindow()
         imgMenu.setOnClickListener {
-            showOptionsMenu(it, PopupWindowMenu.Itf { index ->{
-
-            }})
+            showOptionsMenu(it, PopupWindowMenu.Itf { index ->
+                when(index){
+                    0->{menuClickSelectAll()}
+                    1->{menuClickIgnoreAll()}
+                    2->{menuClickDeleteAll()}
+                }
+            })
          }
     }
 
@@ -66,14 +69,18 @@ class BlockPhoneFragment : BaseFragment() {
         (rcvBlockPhone.adapter as BlockPhoneAdapter).refresh(CallPhone.getAllDB(context))
     }
 
+    private fun menuClickSelectAll(){
+        (rcvBlockPhone.adapter as BlockPhoneAdapter)
+                .refresh(CallPhone.updateAllDB__Status_Block(context))
+    }
 
-    var mypopupWindow: PopupWindow? = null
-    private fun setPopUpWindow() {
-        val inflater = context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(R.layout.item_block_phone, null)
-        mypopupWindow = PopupWindow(view, RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, true)
-        mypopupWindow?.elevation = 60f
-
+    private fun menuClickIgnoreAll(){
+        (rcvBlockPhone.adapter as BlockPhoneAdapter)
+            .refresh(CallPhone.updateAllDB__Status_UNBLOCK(context))
+    }
+    private fun menuClickDeleteAll(){
+        (rcvBlockPhone.adapter as BlockPhoneAdapter)
+            .refresh(CallPhone.deleteAllDB(context))
     }
 
 

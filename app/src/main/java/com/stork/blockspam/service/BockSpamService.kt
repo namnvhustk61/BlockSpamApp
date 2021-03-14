@@ -30,7 +30,7 @@ class BockSpamService : CallScreeningService() {
         if (matchesContact(tel)) {
             respondToCall(details, response)
         }
-        val isBlock: Boolean =  AppControlDB.getInstance(this).phoneHasDB(tel)
+        val isBlock: Boolean =  CallPhone.hasDB(this, tel)
 
         // If a filter was tripped, reject the call.
         // TODO allow different behavior tied to filters
