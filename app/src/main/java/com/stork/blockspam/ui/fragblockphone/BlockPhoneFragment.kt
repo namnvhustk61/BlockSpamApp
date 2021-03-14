@@ -62,7 +62,32 @@ class BlockPhoneFragment : BaseFragment() {
                     2->{menuClickDeleteAll()}
                 }
             })
-         }
+        }
+
+        tvCancel.setOnClickListener {
+            imgAdd.visibility = View.VISIBLE
+            imgMenu.visibility = View.VISIBLE
+            tvCancel.visibility = View.INVISIBLE
+            (rcvBlockPhone.adapter as BlockPhoneAdapter).setonStateDeleteItem(false)
+        }
+
+        (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnItemLongClickListener { item ->
+            (rcvBlockPhone.adapter as BlockPhoneAdapter).setonStateDeleteItem(true)
+            imgAdd.visibility = View.INVISIBLE
+            imgMenu.visibility = View.INVISIBLE
+            tvCancel.visibility = View.VISIBLE
+        }
+
+        (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnItemClickListener {
+                item -> item.updateDB__changeStatus(context)
+        }
+
+        (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnItemDeleteClickListener { item, index ->
+            if(item.deleteDb(context)){
+                (rcvBlockPhone.adapter as BlockPhoneAdapter).items.removeAt(index)
+                rcvBlockPhone.adapter?.notifyItemRemoved(index)
+            }
+        }
     }
 
     private fun refreshRCV(){

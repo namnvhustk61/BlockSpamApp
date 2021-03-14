@@ -44,6 +44,16 @@ public class CallPhone{
     }
 
     @Ignore
+    public Boolean deleteDb(Context context){
+        CallPhoneDAO dao = AppControlDB.Companion.getInstance(context).getCallPhoneDAO();
+        if (dao != null) {
+            dao.delete(this);
+            return true;
+        }
+        return false;
+    }
+
+    @Ignore
     public void updateDB__changeStatus(Context context){
 
         if(this.status.equals(CallPhoneKEY.STATUS.getSTATUS_BLOCK())){

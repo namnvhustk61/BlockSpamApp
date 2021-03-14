@@ -12,10 +12,12 @@
         android:layout_height="match_parent"
         android:layout_above="@id/mainTabBar" />
 
-    <LinearLayout
+    <com.stork.viewcustom.radius.LinearLayoutRadius
         android:id="@+id/mainTabBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/background_item"
+        app:radius="@dimen/dp_15"
         android:layout_alignParentBottom="true">
 
         <com.stork.viewcustom.general.TabBarView
@@ -50,6 +52,6 @@
             app:activeIcon="@drawable/ic_phone_keyboard_active"
             app:inactiveIcon="@drawable/ic_phone_keyboard_not_active"
             tools:ignore="InvalidId" />
-    </LinearLayout>
+    </com.stork.viewcustom.radius.LinearLayoutRadius>
 
 </RelativeLayout>

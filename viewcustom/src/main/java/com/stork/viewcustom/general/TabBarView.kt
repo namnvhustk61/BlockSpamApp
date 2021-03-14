@@ -11,13 +11,13 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.core.view.setPadding
 import com.stork.viewcustom.R
 import com.stork.viewcustom.extension.dp
+import com.stork.viewcustom.radius.LinearLayoutRadius
 
 
-class TabBarView: LinearLayout {
+class TabBarView: LinearLayoutRadius {
 
     private var activeIcon: Drawable? = null
     private var inactiveIcon: Drawable? = null
@@ -72,7 +72,7 @@ class TabBarView: LinearLayout {
     private fun createIcon() {
         setPadding(context.dp(8f))
         imageView = ImageView(context)
-        val size = context.dp(20f)
+        val size = context.dp(24f)
         val params = LayoutParams(size, size)
 //        params.bottomMargin = context.dp(5f)
         imageView.layoutParams = params
@@ -100,17 +100,20 @@ class TabBarView: LinearLayout {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun setStateOnPressed() {
+    override fun setStateOnPressed() {
         setOnTouchListener { v: View, event: MotionEvent ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     if (v.background == null) {
-                        v.background = GradientDrawable()
+                        val drawable = GradientDrawable()
+                        height
+                        drawable.cornerRadius = height.toFloat()
+                        v.background = drawable
                     }
-                    v.background.setColorFilter(-0x222324, PorterDuff.Mode.SRC_ATOP)
+                    v.background.setColorFilter(0x4DDDDCDC, PorterDuff.Mode.SRC_ATOP)
                     v.invalidate()
                 }
-                MotionEvent.ACTION_UP -> {
+                MotionEvent.ACTION_UP,  MotionEvent.ACTION_CANCEL -> {
                     if (v.background == null) {
                         v.background = GradientDrawable()
                     }

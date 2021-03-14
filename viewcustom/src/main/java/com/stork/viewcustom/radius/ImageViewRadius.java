@@ -124,13 +124,15 @@ public class ImageViewRadius extends AppCompatImageView {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN: {
                     if(v.getBackground() == null){
-                        v.setBackground(new GradientDrawable());
+                        GradientDrawable drawable = new GradientDrawable();
+                        drawable.setCornerRadius(15f);
+                        v.setBackground(drawable);
                     }
                     v.getBackground().setColorFilter(0x4DDDDCDC, PorterDuff.Mode.SRC_ATOP);
                     v.invalidate();
                     break;
                 }
-                case MotionEvent.ACTION_UP: {
+                case MotionEvent.ACTION_UP: case MotionEvent.ACTION_CANCEL: {
                     if(v.getBackground() == null){
                         v.setBackground(new GradientDrawable());
                     }

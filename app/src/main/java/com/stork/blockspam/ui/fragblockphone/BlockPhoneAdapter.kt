@@ -3,6 +3,8 @@ package com.stork.blockspam.ui.fragblockphone
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -14,9 +16,11 @@ import com.stork.viewcustom.radius.ImageViewRadius
 import kotlinx.android.synthetic.main.item_block_phone.view.*
 
 class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
-    private val items = mutableListOf<CallPhone>()
+    val items = mutableListOf<CallPhone>()
     private val VIEWTYPEDATA = 1
     private val VIEWTYPENULL = 0
+
+    var onStateDeleteItem: Boolean = false
     private var view:View? = null
 
     override fun getItemViewType(position: Int): Int {
@@ -43,8 +47,11 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (holder is ThisViewHolder){
-            holder.setData(items[position])
-            holder.setOnEvent(this, onItemClickListener, items[position], position)
+            holder.setData(items[position], this.onStateDeleteItem)
+            holder.setOnEvent(
+                this,
+                items[position], position
+            )
         }
     }
 
@@ -61,10 +68,27 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
         this.notifyDataSetChanged()
     }
 
+    fun setonStateDeleteItem(on: Boolean){
+        this.onStateDeleteItem = on
+        this.notifyDataSetChanged()
+    }
+
     private var onItemClickListener: ((item: CallPhone)->Unit)? = null
 
     fun setOnItemClickListener(onItemClickListener: ((item: CallPhone)->Unit)){
         this.onItemClickListener = onItemClickListener
+    }
+
+    private var onItemLongClickListener: ((item: CallPhone)->Unit)? = null
+
+    fun setOnItemLongClickListener(onItemLongClickListener: ((item: CallPhone)->Unit)){
+        this.onItemLongClickListener = onItemLongClickListener
+    }
+
+    private var onItemDeleteClickListener: ((item: CallPhone, index: Int)->Unit)? = null
+
+    fun setOnItemDeleteClickListener(onItemDeleteClickListener: ((item: CallPhone, index: Int)->Unit)){
+        this.onItemDeleteClickListener = onItemDeleteClickListener
     }
 
     class ThisViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -73,9 +97,13 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
         private val imgSwCheck: ImageViewSwap = itemView.imgSwCheck
         private val imgStatus: ImageViewRadius = itemView.imgStatus
 
-        fun setData(item: CallPhone){
+        fun setData(item: CallPhone, onStateDeleteItem: Boolean){
             tvPhone.text = item.phone
             tvName.text = item.name
+            if(onStateDeleteItem){
+                imgSwCheck.setImageResource(R.drawable.ic_delete_item)
+                return
+            }
             if(item.status == CallPhoneKEY.STATUS.STATUS_BLOCK){
                 imgSwCheck.setActive(true)
                 imgStatus.setImageResource(R.drawable.ic_protect_good)
@@ -85,10 +113,28 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
             }
         }
 
-        fun setOnEvent(adapter: RecyclerView.Adapter<ViewHolder>, onItemClickListener: ((item: CallPhone)->Unit)?, item: CallPhone, position: Int){
-            if(onItemClickListener != null){
+        fun setOnEvent(
+            adapter: BlockPhoneAdapter,
+            item: CallPhone, position: Int
+        ){
+            if(adapter.onItemClickListener != null && !adapter.onStateDeleteItem){
                 itemView.setOnClickListener {
-                    onItemClickListener.invoke(item)
+                    adapter.onItemClickListener?.invoke(item)
+                    adapter.notifyItemChanged(position)
+                }
+            }
+            if(adapter.onItemLongClickListener != null){
+                itemView.setOnLongClickListener{v ->
+                    adapter.onItemLongClickListener?.invoke(item)
+                    adapter.notifyDataSetChanged()
+                    true
+                }
+                return
+            }
+
+            if(adapter.onItemDeleteClickListener != null && adapter.onStateDeleteItem){
+                imgSwCheck.setOnClickListener {
+                    adapter.onItemDeleteClickListener?.invoke(item, position)
                     adapter.notifyItemChanged(position)
                 }
             }

@@ -12,4 +12,5 @@
     <string name="all_phone__alert_phone_requied">Add Phone required not null!</string>
     <string name="all_phone__alert_err_phone_saved">Number Phone is Saved, Let change other!</string>
     <string name="all_phone__alert_add_excaeption">ERROR: Not Save</string>
+    <string name="cancel">Cancel</string>
 </resources>

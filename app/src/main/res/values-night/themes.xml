@@ -18,6 +18,7 @@
         <item name="android:statusBarColor" >@color/background</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">@color/background_item</item>
         <item name="android:windowBackground">@drawable/splash_background</item>
 
         <item name="android:itemBackground">@color/background</item>
