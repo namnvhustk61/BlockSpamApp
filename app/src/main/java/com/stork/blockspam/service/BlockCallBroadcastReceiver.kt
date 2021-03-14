@@ -14,8 +14,8 @@ import com.stork.blockspam.utils.AppPermission
 internal class BlockCallBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (!AppPermission.hasPermission(context, AppPermission.PER_READ_PHONE_STATE) ||
-                !AppPermission.hasPermission(context, AppPermission.PER_CALL_PHONE)) {
-            return;
+                !AppPermission.hasPermission(context, AppPermission.PER_READ_CALL_LOG)) {
+            return
         }
 
         // get telephony service
@@ -37,7 +37,8 @@ internal class BlockCallBroadcastReceiver : BroadcastReceiver() {
 //            return
 //        }
         // get incoming call number.
-        val number = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
+        var number = intent.getStringExtra("android.intent.extra.PHONE_NUMBER")
+         number = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
         if(AppControlDB.getInstance(context).phoneHasDB(number?:"")){
             breakCall(context)
         }
@@ -46,9 +47,7 @@ internal class BlockCallBroadcastReceiver : BroadcastReceiver() {
 
     // Ends phone call
     private fun breakCall(context: Context) {
-        if ( !AppPermission.hasPermission(context, AppPermission.PER_CALL_PHONE)) {
-            return
-        }
+
         if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.P) {
             breakCallPieAndHigher(context)
         } else {

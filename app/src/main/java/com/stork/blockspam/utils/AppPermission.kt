@@ -15,11 +15,14 @@ object AppPermission {
     const val STATUS_FAIL :Int    = 1    // chưa được cấp quyền
     const val STATUS_DENY :Int    = 2    // người dùng bật trạng thái đừng hỏi lại
 
+    // BlockSpamService
     const val PER_READ_CONTACTS         =  Manifest.permission.READ_CONTACTS
     const val PER_READ_PHONE_STATE      =  Manifest.permission.READ_PHONE_STATE
 
-    const val PER_CALL_PHONE            =  Manifest.permission.CALL_PHONE
-    const val PER_ANSWER_PHONE_CALLS    =  Manifest.permission.ANSWER_PHONE_CALLS
+    // BlockCallBroadcastReceiver
+//    const val PER_READ_CONTACTS         =  Manifest.permission.READ_CONTACTS
+    const val PER_READ_CALL_LOG    =  Manifest.permission.READ_CALL_LOG
+    const val PER_CALL_PHONE    =  Manifest.permission.CALL_PHONE
 
 
     const val PER_REQUEST_CODE = 99
@@ -28,6 +31,17 @@ object AppPermission {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(!hasPermission(permissions, activity)){
                 activity.requestPermissions(arrayOf(permissions), requestCode)
+            }
+        }
+        return true
+    }
+
+    fun requirePermissions(activity: Activity, permissions: Array<String>, requestCode: Int):Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            permissions.forEach { s ->
+                if(!hasPermission(s, activity)){
+                    activity.requestPermissions(permissions, requestCode)
+                }
             }
         }
         return true

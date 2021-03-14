@@ -18,10 +18,11 @@
     <color name="white">#FFFFFF</color>
     <color name="gray">#FCDADADA</color>
     <color name="gray_blur">#80666666</color>
-    <color name="gray_light">#FCE0E0E0</color>
+    <color name="gray_light">#FFE0E0E0</color>
     <color name="hint">#FCB4B4B4</color>
     <color name="orange">#FF5D29</color>
     <color name="blue">#008DFF</color>
+    <color name="red">#FF7066</color>
 
 
 

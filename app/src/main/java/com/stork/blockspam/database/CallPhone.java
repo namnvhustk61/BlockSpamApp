@@ -3,11 +3,19 @@ package com.stork.blockspam.database;
 import android.content.Context;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import com.stork.blockspam.AppConfig;
 
 import java.util.List;
 
-@Entity(tableName = "TbCallPhone")
+@Entity(
+        tableName = "TbCallPhone",
+        indices = {@Index(value = {"phone"},
+                unique = true)}
+)
 public class CallPhone{
     @PrimaryKey
     public Long id;
@@ -17,10 +25,21 @@ public class CallPhone{
     public String status;
 
     // Action
-    public void insertDB(Context context){
-        AppControlDB.Companion.getInstance(context).insertCallPhone(this);
+
+    @Ignore
+    public int insertDB(Context context){
+        if(!AppControlDB.Companion.getInstance(context).phoneHasDB(this.phone)){
+            try{
+                AppControlDB.Companion.getInstance(context).insertCallPhone(this);
+                return AppConfig.SUCCESS;
+            }catch (Exception e) {
+                return  AppConfig.EXCEPTION;
+            }
+        }
+        return AppConfig.ERROR;
     }
 
+    @Ignore
     public void updateDB__changeStatus(Context context){
 
         if(this.status.equals(CallPhoneKEY.STATUS.getSTATUS_BLOCK())){
@@ -31,6 +50,8 @@ public class CallPhone{
         AppControlDB.Companion.getInstance(context).updateCallPhone(this);
     }
 
+
+    @Ignore
     public static List<CallPhone> getAllDB(Context context){
         return AppControlDB.Companion.getInstance(context).getAllCallPhone();
     }

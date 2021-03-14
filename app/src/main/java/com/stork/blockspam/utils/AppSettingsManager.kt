@@ -17,7 +17,7 @@ object AppSettingsManager {
     fun setDefaultAppBlockCall(activity: Activity?):Boolean{
         try {
             val roleManager = activity?.getSystemService(Context.ROLE_SERVICE)
-            if(roleManager  is RoleManager){
+            if(roleManager  != null && roleManager is RoleManager){
                 val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING)
                 activity.startActivityForResult(intent, ROLE_CALL_SCREENING_ID)
 

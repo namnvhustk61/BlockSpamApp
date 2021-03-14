@@ -1,5 +1,6 @@
 package com.stork.blockspam.ui
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -39,19 +40,14 @@ class MainActivity : BaseActivity() {
          *  status == false -> device don't have caller id & spam app default
          */
         val status :Boolean = AppSettingsManager.setDefaultAppBlockCall(this)
-        if(status){
-            // Danh ba ---- READ_PHONE_STATE
-            AppPermission.requirePermissions(this, AppPermission.PER_READ_PHONE_STATE, AppPermission.PER_REQUEST_CODE)
-            AppPermission.requirePermissions(this, AppPermission.PER_READ_CONTACTS, AppPermission.PER_REQUEST_CODE)
-        }else{
-            //set APP is app CallPhone default
-            AppSettingsManager.setDefaultAppCallPhone(this)
-            // Cach 2
-            AppPermission.requirePermissions(this, AppPermission.PER_CALL_PHONE, AppPermission.PER_REQUEST_CODE)
-            AppPermission.requirePermissions(this, AppPermission.PER_ANSWER_PHONE_CALLS, AppPermission.PER_REQUEST_CODE)
-
+        if(!status){
+            AppPermission.requirePermissions(
+                this,
+                arrayOf(AppPermission.PER_READ_CONTACTS, AppPermission.PER_READ_PHONE_STATE),
+                AppPermission.PER_REQUEST_CODE
+            )
         }
-       }
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -69,8 +65,22 @@ class MainActivity : BaseActivity() {
         if (requestCode == AppSettingsManager.ROLE_CALL_SCREENING_ID) {
             if (resultCode == android.app.Activity.RESULT_OK) {
                 // Your app is now the call screening app
+                AppPermission.requirePermissions(
+                    this,
+                    arrayOf(AppPermission.PER_READ_CONTACTS, AppPermission.PER_READ_PHONE_STATE),
+                    AppPermission.PER_REQUEST_CODE
+                )
             } else {
                 // Your app is not the call screening app
+                AppPermission.requirePermissions(
+                    this,
+                    arrayOf(
+                        AppPermission.PER_READ_PHONE_STATE,
+                        AppPermission.PER_READ_CALL_LOG,
+                        Manifest.permission.ANSWER_PHONE_CALLS
+                    ),
+                    AppPermission.PER_REQUEST_CODE
+                )
             }
         }
     }

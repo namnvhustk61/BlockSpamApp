@@ -119,7 +119,7 @@ public class LinearLayoutRadius extends LinearLayout {
                         v.setBackground(new GradientDrawable());
                     }
                     v.getBackground().clearColorFilter();
-                    v.invalidate();
+                     v.invalidate();
                     break;
                 }
             }
@@ -139,10 +139,16 @@ public class LinearLayoutRadius extends LinearLayout {
         setupBackground();
     }
 
+    public void setRadii(float radii){
+        this.radii = new float[]{radii, radii, radii, radii, radii, radii, radii, radii};
+        setupBackground();
+    }
 
 
-    public void setStrokeWidth(int width) {
+
+    public void setStrokeWidth(int width, int strokeColor) {
         this.strokeWidth = width;
+        this.strokeColor = strokeColor;
         setupBackground();
     }
 

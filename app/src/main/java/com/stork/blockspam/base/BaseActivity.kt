@@ -17,16 +17,16 @@ abstract class BaseActivity : AppCompatActivity() {
 
     var focusedView: View? = null
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        try {
-            val imm =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            focusedView = this.currentFocus
-            if (focusedView != null) imm.hideSoftInputFromWindow(
-                currentFocus!!.windowToken,
-                0
-            )
-        } catch (e: Exception) {
-        }
+        popKeyboard()
         return true
+    }
+
+    open fun popKeyboard() {
+        try {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            focusedView = this.currentFocus
+            if (focusedView != null) imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+        } catch (e: java.lang.Exception) {
+        }
     }
 }

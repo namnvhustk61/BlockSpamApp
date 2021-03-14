@@ -18,7 +18,7 @@ public interface CallPhoneDAO {
     @Delete
     void delete(CallPhone item);
 
-    @Query("SELECT * FROM TbCallPhone")
+    @Query("SELECT * FROM TbCallPhone ORDER BY id DESC")
     List<CallPhone> getAll();
 
     @Query("SELECT * FROM TbCallPhone WHERE id = :id")

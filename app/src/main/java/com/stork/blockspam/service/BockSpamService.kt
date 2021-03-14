@@ -11,12 +11,17 @@ import com.stork.blockspam.database.AppControlDB
 import com.stork.blockspam.database.AppDatabase
 import com.stork.blockspam.database.CallPhone
 import com.stork.blockspam.database.CallPhoneDAO
+import com.stork.blockspam.utils.AppPermission
 
 
 @TargetApi(Build.VERSION_CODES.O)
 class BockSpamService : CallScreeningService() {
 
     override fun onScreenCall(details: Call.Details) {
+        if (!AppPermission.hasPermission(this, AppPermission.PER_READ_PHONE_STATE)
+                || !AppPermission.hasPermission(this, AppPermission.PER_READ_CONTACTS)) {
+            return;
+        }
         val responseBuilder = CallScreeningService.CallResponse.Builder()
         var response = responseBuilder.build()
 

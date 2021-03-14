@@ -9,4 +9,7 @@
     <string name="add_call_phone_edt_phone">Add phone</string>
     <string name="add_call_phone_edt_name">Name</string>
     <string name="not_data_show">Not data show!</string>
+    <string name="all_phone__alert_phone_requied">Add Phone required not null!</string>
+    <string name="all_phone__alert_err_phone_saved">Number Phone is Saved, Let change other!</string>
+    <string name="all_phone__alert_add_excaeption">ERROR: Not Save</string>
 </resources>
