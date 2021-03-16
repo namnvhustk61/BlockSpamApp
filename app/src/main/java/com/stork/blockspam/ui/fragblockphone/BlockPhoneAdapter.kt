@@ -117,12 +117,14 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
             adapter: BlockPhoneAdapter,
             item: CallPhone, position: Int
         ){
-            if(adapter.onItemClickListener != null && !adapter.onStateDeleteItem){
-                itemView.setOnClickListener {
-                    adapter.onItemClickListener?.invoke(item)
+
+            if(adapter.onItemDeleteClickListener != null && adapter.onStateDeleteItem){
+                imgSwCheck.setOnClickListener {
+                    adapter.onItemDeleteClickListener?.invoke(item, position)
                     adapter.notifyItemChanged(position)
                 }
             }
+
             if(adapter.onItemLongClickListener != null){
                 itemView.setOnLongClickListener{v ->
                     adapter.onItemLongClickListener?.invoke(item)
@@ -132,12 +134,14 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
                 return
             }
 
-            if(adapter.onItemDeleteClickListener != null && adapter.onStateDeleteItem){
-                imgSwCheck.setOnClickListener {
-                    adapter.onItemDeleteClickListener?.invoke(item, position)
+            if(adapter.onItemClickListener != null && !adapter.onStateDeleteItem){
+                itemView.setOnClickListener {
+                    adapter.onItemClickListener?.invoke(item)
                     adapter.notifyItemChanged(position)
                 }
             }
+
+
         }
     }
     class ViewNull(itemView: View): RecyclerView.ViewHolder(itemView){
