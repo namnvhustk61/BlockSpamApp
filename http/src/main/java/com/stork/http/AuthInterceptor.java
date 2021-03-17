@@ -52,7 +52,7 @@ public class AuthInterceptor implements Interceptor {
         JSONObject bodyErr;
         try {
             bodyErr = new JSONObject()
-                    .put("status", "3")
+                    .put("code", "3")
                     .put("message", message)
                     .put("data", null);
 

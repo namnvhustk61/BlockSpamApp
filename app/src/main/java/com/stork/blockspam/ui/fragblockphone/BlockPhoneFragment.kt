@@ -46,9 +46,6 @@ class BlockPhoneFragment : BaseFragment() {
     }
     private fun init(){
         rcvBlockPhone.adapter = BlockPhoneAdapter()
-        (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnItemClickListener {
-            item -> item.updateDB__changeStatus(context)
-        }
         rcvBlockPhone.layoutManager = LinearLayoutManager(context)
     }
     @SuppressLint("ResourceAsColor")
