@@ -51,4 +51,7 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
     kapt "android.arch.persistence.room:compiler:$rootProject.roomVersion"
     androidTestImplementation "android.arch.persistence.room:testing:$rootProject.roomVersion"
+
+    // SwipeLayout for Recycle
+    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
 }

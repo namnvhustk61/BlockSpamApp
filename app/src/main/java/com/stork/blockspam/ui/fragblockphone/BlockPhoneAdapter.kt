@@ -3,17 +3,18 @@ package com.stork.blockspam.ui.fragblockphone
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.daimajia.swipe.SwipeLayout
+import com.daimajia.swipe.SwipeLayout.SwipeListener
 import com.stork.blockspam.R
 import com.stork.blockspam.database.CallPhone
 import com.stork.blockspam.database.CallPhoneKEY
 import com.stork.viewcustom.general.ImageViewSwap
 import com.stork.viewcustom.radius.ImageViewRadius
 import kotlinx.android.synthetic.main.item_block_phone.view.*
+import kotlinx.android.synthetic.main.item_block_phone_swipe.view.*
 
 class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
     val items = mutableListOf<CallPhone>()
@@ -33,7 +34,7 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         return if (viewType == VIEWTYPEDATA){
-            view = LayoutInflater.from(parent.context).inflate(R.layout.item_block_phone, parent, false)
+            view = LayoutInflater.from(parent.context).inflate(R.layout.item_block_phone_swipe, parent, false)
             ThisViewHolder(view!!)
         }else{
             view = LayoutInflater.from(parent.context).inflate(R.layout.layout_null, parent, false)
@@ -97,6 +98,8 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
         private val imgSwCheck: ImageViewSwap = itemView.imgSwCheck
         private val imgStatus: ImageViewRadius = itemView.imgStatus
 
+        private val swipeLayout: SwipeLayout = itemView.swipeLayout
+
         fun setData(item: CallPhone, onStateDeleteItem: Boolean){
             tvPhone.text = item.phone
             tvName.text = item.name
@@ -111,6 +114,45 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
                 imgSwCheck.setActive(false)
                 imgStatus.setImageResource(R.drawable.ic_protect_fail)
             }
+
+            // Set Swipe
+            swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut)
+            // Drag From Left
+            swipeLayout.addDrag(
+                SwipeLayout.DragEdge.Left,
+                swipeLayout.findViewById(R.id.bottom_wrapper_left)
+            )
+            // Drag From Right
+            swipeLayout.addDrag(
+                SwipeLayout.DragEdge.Right,
+                swipeLayout.findViewById(R.id.bottom_wrapper_right)
+            )
+            // Handling different events when swiping
+            swipeLayout.addSwipeListener(object : SwipeListener {
+                override fun onClose(layout: SwipeLayout) {
+                    //when the SurfaceView totally cover the BottomView.
+                }
+                override fun onUpdate(
+                    layout: SwipeLayout,
+                    leftOffset: Int,
+                    topOffset: Int
+                ) {
+                    //you are swiping.
+                }
+                override fun onStartOpen(layout: SwipeLayout) {}
+                override fun onOpen(layout: SwipeLayout) {
+                    //when the BottomView totally show.
+                }
+
+                override fun onStartClose(layout: SwipeLayout) {}
+                override fun onHandRelease(
+                    layout: SwipeLayout,
+                    xvel: Float,
+                    yvel: Float
+                ) {
+                    //when user's hand released.
+                }
+            })
         }
 
         fun setOnEvent(

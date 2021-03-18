@@ -8,6 +8,7 @@ import com.stork.blockspam.R
 import com.stork.blockspam.base.BaseActivity
 import com.stork.blockspam.ui.fragblockphone.BlockPhoneFragment
 import com.stork.blockspam.ui.fragserver.ServerFragment
+import com.stork.blockspam.ui.fraguser.UserFragment
 import com.stork.blockspam.utils.AppPermission
 import com.stork.blockspam.utils.AppSettingsManager
 import com.stork.viewcustom.general.TabBarView
@@ -90,7 +91,7 @@ class MainActivity : BaseActivity() {
         val fragments = listOf(
                 BlockPhoneFragment(),
                 ServerFragment(),
-                Fragment(),
+                UserFragment(),
                 Fragment()
         )
 

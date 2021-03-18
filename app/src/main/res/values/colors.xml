@@ -11,6 +11,7 @@
     <color name="text">#000000</color>
     <color name="text_less">#232323</color>
     <color name="not_active">#5F5F5F</color>
+    <color name="swipe">#F0FAFF</color>
 
 
     <color name="gradient_start" >#009688</color>
@@ -23,6 +24,7 @@
     <color name="orange">#FF5D29</color>
     <color name="blue">#008DFF</color>
     <color name="red">#FF7066</color>
+    <color name="green">#4CAF50</color>
 
 
 
