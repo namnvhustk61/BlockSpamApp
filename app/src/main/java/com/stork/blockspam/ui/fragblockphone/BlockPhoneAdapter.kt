@@ -6,12 +6,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.daimajia.swipe.SwipeLayout
-import com.daimajia.swipe.SwipeLayout.SwipeListener
 import com.stork.blockspam.R
 import com.stork.blockspam.database.CallPhone
 import com.stork.blockspam.database.CallPhoneKEY
 import com.stork.viewcustom.general.ImageViewSwap
+import com.stork.viewcustom.otherlayout.MySwipeLayout
+import com.stork.viewcustom.otherlayout.MySwipeLayout.DragEdge.*
+import com.stork.viewcustom.otherlayout.MySwipeLayout.ShowMode.*
 import com.stork.viewcustom.radius.ImageViewRadius
 import kotlinx.android.synthetic.main.item_block_phone.view.*
 import kotlinx.android.synthetic.main.item_block_phone_swipe.view.*
@@ -92,13 +93,21 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
         this.onItemDeleteClickListener = onItemDeleteClickListener
     }
 
+    private var onItemShareClickListener: ((item: CallPhone, index: Int)->Unit)? = null
+
+    fun setOnItemShareClickListener(onItemShareClickListener: ((item: CallPhone, index: Int)->Unit)){
+        this.onItemShareClickListener = onItemShareClickListener
+    }
+
     class ThisViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvPhone: TextView = itemView.tvPhone
         private val tvName: TextView = itemView.tvName
         private val imgSwCheck: ImageViewSwap = itemView.imgSwCheck
         private val imgStatus: ImageViewRadius = itemView.imgStatus
 
-        private val swipeLayout: SwipeLayout = itemView.swipeLayout
+        private val MySwipeLayout: MySwipeLayout = itemView.swipeLayout
+        private val bottom_wrapper_right: ImageViewRadius = itemView.bottom_wrapper_right
+        private val bottom_wrapper_left: ImageViewRadius = itemView.bottom_wrapper_left
 
         fun setData(item: CallPhone, onStateDeleteItem: Boolean){
             tvPhone.text = item.phone
@@ -116,43 +125,45 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
             }
 
             // Set Swipe
-            swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut)
+            MySwipeLayout.setShowMode(PullOut)
+            MySwipeLayout.isClickToClose = true
             // Drag From Left
-            swipeLayout.addDrag(
-                SwipeLayout.DragEdge.Left,
-                swipeLayout.findViewById(R.id.bottom_wrapper_left)
+            MySwipeLayout.addDrag(
+                Left,
+                MySwipeLayout.findViewById(R.id.bottom_wrapper_left)
             )
             // Drag From Right
-            swipeLayout.addDrag(
-                SwipeLayout.DragEdge.Right,
-                swipeLayout.findViewById(R.id.bottom_wrapper_right)
+            MySwipeLayout.addDrag(
+                Right,
+                MySwipeLayout.findViewById(R.id.bottom_wrapper_right)
             )
             // Handling different events when swiping
-            swipeLayout.addSwipeListener(object : SwipeListener {
-                override fun onClose(layout: SwipeLayout) {
+            MySwipeLayout.addSwipeListener(object : MySwipeLayout.SwipeListener {
+                override fun onClose(layout: MySwipeLayout) {
                     //when the SurfaceView totally cover the BottomView.
                 }
                 override fun onUpdate(
-                    layout: SwipeLayout,
+                    layout: MySwipeLayout,
                     leftOffset: Int,
                     topOffset: Int
                 ) {
                     //you are swiping.
                 }
-                override fun onStartOpen(layout: SwipeLayout) {}
-                override fun onOpen(layout: SwipeLayout) {
+                override fun onStartOpen(layout: MySwipeLayout) {}
+                override fun onOpen(layout: MySwipeLayout) {
                     //when the BottomView totally show.
                 }
 
-                override fun onStartClose(layout: SwipeLayout) {}
+                override fun onStartClose(layout: MySwipeLayout) {}
                 override fun onHandRelease(
-                    layout: SwipeLayout,
+                    layout: MySwipeLayout,
                     xvel: Float,
                     yvel: Float
                 ) {
                     //when user's hand released.
                 }
             })
+
         }
 
         fun setOnEvent(
@@ -168,21 +179,30 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
             }
 
             if(adapter.onItemLongClickListener != null){
-                itemView.setOnLongClickListener{v ->
+                MySwipeLayout.surfaceView.setOnLongClickListener{v ->
                     adapter.onItemLongClickListener?.invoke(item)
                     adapter.notifyDataSetChanged()
                     true
                 }
-                return
             }
 
             if(adapter.onItemClickListener != null && !adapter.onStateDeleteItem){
-                itemView.setOnClickListener {
+                MySwipeLayout.surfaceView.setOnClickListener {
                     adapter.onItemClickListener?.invoke(item)
                     adapter.notifyItemChanged(position)
                 }
             }
 
+            if(adapter.onItemShareClickListener != null){
+                bottom_wrapper_right.setOnClickListener {
+                    adapter.onItemShareClickListener?.invoke(item, position)
+                    adapter.notifyItemChanged(position)
+                }
+                bottom_wrapper_left.setOnClickListener {
+                    adapter.onItemShareClickListener?.invoke(item, position)
+                    adapter.notifyItemChanged(position)
+                }
+            }
 
         }
     }

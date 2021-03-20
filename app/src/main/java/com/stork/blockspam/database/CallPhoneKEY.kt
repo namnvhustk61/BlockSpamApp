@@ -6,7 +6,7 @@ enum class CallPhoneKEY{
         override var STATUS_UNBLOCK = "1"
     },
     TYPE{
-        override var TYPE_NORMAL = "0"
+        override var TYPE_NORMAL = "other"
     };
 
 

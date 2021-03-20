@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.stork.viewcustom.otherlayout.MySwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:swipe="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipeLayout"
     android:layout_width="match_parent"
@@ -31,4 +31,4 @@
 
     <!-- Row itemView gồm 2 trường -->
     <include layout="@layout/item_block_phone"/>
-</com.daimajia.swipe.SwipeLayout>
+</com.stork.viewcustom.otherlayout.MySwipeLayout>

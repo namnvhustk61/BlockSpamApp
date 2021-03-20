@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.provider.Settings
+import android.provider.Settings.Secure.ANDROID_ID
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -16,9 +18,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.stork.blockspam.R
 import com.stork.blockspam.base.BaseFragment
 import com.stork.blockspam.database.CallPhone
+import com.stork.blockspam.database.CallPhoneKEY
+import com.stork.blockspam.extension.alert
 import com.stork.blockspam.navigation.AppNavigation
+import com.stork.http.API
+import com.stork.http.ServiceResult
+import com.stork.http.model.AddPhoneCloud
 import com.stork.viewcustom.popup.PopupWindowMenu
 import kotlinx.android.synthetic.main.fragment_block_phone.*
+import java.util.*
 
 
 class BlockPhoneFragment : BaseFragment() {
@@ -85,6 +93,10 @@ class BlockPhoneFragment : BaseFragment() {
                 rcvBlockPhone.adapter?.notifyItemRemoved(index)
             }
         }
+
+        (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnItemShareClickListener {
+           item, index -> sharePhoneCloud(item)
+        }
     }
 
     private fun refreshRCV(){
@@ -123,4 +135,31 @@ class BlockPhoneFragment : BaseFragment() {
         popupMenu?.showAsDropDown(view, 0, -70)
     }
 
+
+    //////////////
+    @SuppressLint("HardwareIds")
+    private fun sharePhoneCloud(item: CallPhone) {
+        val android_id = Settings.Secure.getString(context?.contentResolver, ANDROID_ID)
+        val body = AddPhoneCloud()
+        body.phone = item.phone
+        body.name = item.name
+        body.type = if (item.type == null) {
+            CallPhoneKEY.TYPE.TYPE_NORMAL
+        } else {
+            item.type
+        }
+        body.user_id = android_id
+
+        API.addPhoneCloud(body, object : API.ApiItf<Objects> {
+            override fun onSuccess(response: ServiceResult<Objects>?) {
+                alert(response!!.message)
+            }
+
+            override fun onError(message: String?) {
+                alert(message!!)
+
+            }
+
+        })
+    }
 }
