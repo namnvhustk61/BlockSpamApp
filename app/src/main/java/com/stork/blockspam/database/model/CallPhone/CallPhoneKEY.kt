@@ -1,4 +1,4 @@
-package com.stork.blockspam.database
+package com.stork.blockspam.database.model.CallPhone
 
 enum class CallPhoneKEY{
     STATUS{

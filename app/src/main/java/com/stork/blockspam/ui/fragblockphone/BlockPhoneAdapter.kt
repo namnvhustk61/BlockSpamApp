@@ -7,8 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.stork.blockspam.R
-import com.stork.blockspam.database.CallPhone
-import com.stork.blockspam.database.CallPhoneKEY
+import com.stork.blockspam.database.model.CallPhone.CallPhone
+import com.stork.blockspam.database.model.CallPhone.CallPhoneKEY
 import com.stork.viewcustom.general.ImageViewSwap
 import com.stork.viewcustom.otherlayout.MySwipeLayout
 import com.stork.viewcustom.otherlayout.MySwipeLayout.DragEdge.*
@@ -167,8 +167,8 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
         }
 
         fun setOnEvent(
-            adapter: BlockPhoneAdapter,
-            item: CallPhone, position: Int
+                adapter: BlockPhoneAdapter,
+                item: CallPhone, position: Int
         ){
 
             if(adapter.onItemDeleteClickListener != null && adapter.onStateDeleteItem){

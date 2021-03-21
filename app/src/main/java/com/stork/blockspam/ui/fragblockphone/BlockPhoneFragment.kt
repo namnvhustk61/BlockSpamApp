@@ -1,24 +1,19 @@
 package com.stork.blockspam.ui.fragblockphone
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.provider.Settings
 import android.provider.Settings.Secure.ANDROID_ID
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupWindow
-import android.widget.RelativeLayout
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stork.blockspam.R
 import com.stork.blockspam.base.BaseFragment
-import com.stork.blockspam.database.CallPhone
-import com.stork.blockspam.database.CallPhoneKEY
+import com.stork.blockspam.database.model.CallPhone.CallPhone
+import com.stork.blockspam.database.model.CallPhone.CallPhoneKEY
 import com.stork.blockspam.extension.alert
 import com.stork.blockspam.navigation.AppNavigation
 import com.stork.http.API

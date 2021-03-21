@@ -1,4 +1,4 @@
-package com.stork.blockspam.database;
+package com.stork.blockspam.database.model.CallPhone;
 
 import android.content.Context;
 
@@ -8,6 +8,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.stork.blockspam.AppConfig;
+import com.stork.blockspam.database.AppControlDB;
 
 import java.util.ArrayList;
 import java.util.List;

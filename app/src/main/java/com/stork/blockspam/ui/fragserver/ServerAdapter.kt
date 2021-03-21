@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.stork.blockspam.R
-import com.stork.blockspam.database.CallPhoneKEY
+import com.stork.blockspam.database.model.CallPhone.CallPhoneKEY
 import com.stork.http.model.BlockPhone
 import com.stork.viewcustom.general.ImageViewSwap
 import com.stork.viewcustom.radius.ImageViewRadius

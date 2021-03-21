@@ -8,8 +8,7 @@ import android.os.Build
 import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
 import com.android.internal.telephony.ITelephony
-import com.stork.blockspam.database.AppControlDB
-import com.stork.blockspam.database.CallPhone
+import com.stork.blockspam.database.model.CallPhone.CallPhone
 import com.stork.blockspam.utils.AppPermission
 
 internal class BlockCallBroadcastReceiver : BroadcastReceiver() {

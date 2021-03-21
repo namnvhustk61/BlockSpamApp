@@ -6,11 +6,7 @@ import android.os.Build
 import android.provider.ContactsContract
 import android.telecom.Call
 import android.telecom.CallScreeningService
-import androidx.room.Room
-import com.stork.blockspam.database.AppControlDB
-import com.stork.blockspam.database.AppDatabase
-import com.stork.blockspam.database.CallPhone
-import com.stork.blockspam.database.CallPhoneDAO
+import com.stork.blockspam.database.model.CallPhone.CallPhone
 import com.stork.blockspam.utils.AppPermission
 
 

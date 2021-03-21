@@ -1,4 +1,4 @@
-package com.stork.blockspam.database;
+package com.stork.blockspam.database.model.CallPhone;
 
 
 import androidx.room.Dao;
@@ -6,6 +6,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import com.stork.blockspam.database.model.CallPhone.CallPhone;
 
 import java.util.List;
 

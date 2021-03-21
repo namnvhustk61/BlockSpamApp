@@ -2,6 +2,8 @@ package com.stork.blockspam.database
 
 import android.content.Context
 import androidx.room.Room
+import com.stork.blockspam.database.model.CallPhone.CallPhoneDAO
+import com.stork.blockspam.database.model.DbBlockPhone.DbBlockPhoneDAO
 
 
 class AppControlDB {
@@ -26,6 +28,12 @@ class AppControlDB {
     */
     fun  getCallPhoneDAO(): CallPhoneDAO?{
         return database?.callPhoneDAO
+    }
+    /*
+   *  CallPhoneDAO
+   */
+    fun  getDbBlockPhoneDAO(): DbBlockPhoneDAO?{
+        return database?.dbBlockPhoneDAO
     }
 
 }

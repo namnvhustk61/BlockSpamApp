@@ -1,12 +1,11 @@
 package com.stork.blockspam.ui.addcallphone
 
 import android.os.Bundle
-import android.widget.Toast
 import com.stork.blockspam.AppConfig
 import com.stork.blockspam.R
 import com.stork.blockspam.base.BaseActivity
-import com.stork.blockspam.database.CallPhone
-import com.stork.blockspam.database.CallPhoneKEY
+import com.stork.blockspam.database.model.CallPhone.CallPhone
+import com.stork.blockspam.database.model.CallPhone.CallPhoneKEY
 import com.stork.blockspam.extension.alert
 import kotlinx.android.synthetic.main.activity_add_call_phone.*
 

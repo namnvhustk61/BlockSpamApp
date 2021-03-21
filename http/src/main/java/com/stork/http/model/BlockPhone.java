@@ -13,4 +13,13 @@ public class BlockPhone {
     public String type;
     @SerializedName("status")
     public String status;
+
+    public BlockPhone(String phone, String name, String type, String status){
+        this.phone = phone;
+        this.name = name;
+        this.type = type;
+        this.status = status;
+
+    }
+
 }
