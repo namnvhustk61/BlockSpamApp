@@ -27,8 +27,7 @@ class ServerFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         init()
         onEvent()
-        getData()
-
+        getData(false)
     }
 
     private fun init(){
@@ -39,20 +38,22 @@ class ServerFragment : BaseFragment() {
     @SuppressLint("ResourceAsColor")
     private fun onEvent(){
         imgReNew.setOnClickListener {
-            getData()
+            getData(true)
         }
     }
 
-    private fun getData() {
+    private fun getData(isLoading: Boolean) {
+        if(isLoading){showLoading()}
         API.getAllBLockPhone(object : ApiItf<List<BlockPhone>>{
             override fun onSuccess(response: ServiceResult<List<BlockPhone>>?) {
+                if(isLoading){dismissLoading()}
                 if(response?.code == "OK"){
                     (rcvBlockPhone.adapter as ServerAdapter).refresh(response.data)
                 }
             }
 
             override fun onError(message: String?) {
-
+                if(isLoading){dismissLoading()}
             }
         })
     }
