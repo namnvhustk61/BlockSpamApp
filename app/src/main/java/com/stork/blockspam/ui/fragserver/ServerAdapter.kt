@@ -10,15 +10,19 @@ import com.stork.blockspam.R
 import com.stork.blockspam.database.model.CallPhone.CallPhoneKEY
 import com.stork.http.model.BlockPhone
 import com.stork.viewcustom.general.ImageViewSwap
+import com.stork.viewcustom.otherlayout.MySwipeLayout
+import com.stork.viewcustom.otherlayout.MySwipeLayout.DragEdge.*
+import com.stork.viewcustom.otherlayout.MySwipeLayout.ShowMode.*
 import com.stork.viewcustom.radius.ImageViewRadius
-import kotlinx.android.synthetic.main.item_block_phone.view.*
+import kotlinx.android.synthetic.main.item_server_phone.view.*
+
 
 class ServerAdapter : RecyclerView.Adapter<ViewHolder>() {
     val items = mutableListOf<BlockPhone>()
     private val VIEWTYPEDATA = 1
     private val VIEWTYPENULL = 0
 
-    var onStateDeleteItem: Boolean = false
+    var onStateLongCLick: Boolean = false
     private var view:View? = null
 
     override fun getItemViewType(position: Int): Int {
@@ -31,7 +35,7 @@ class ServerAdapter : RecyclerView.Adapter<ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         return if (viewType == VIEWTYPEDATA){
-            view = LayoutInflater.from(parent.context).inflate(R.layout.item_block_phone, parent, false)
+            view = LayoutInflater.from(parent.context).inflate(R.layout.item_server_phone, parent, false)
             ThisViewHolder(view!!)
         }else{
             view = LayoutInflater.from(parent.context).inflate(R.layout.layout_null, parent, false)
@@ -45,7 +49,7 @@ class ServerAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (holder is ThisViewHolder){
-            holder.setData(items[position], this.onStateDeleteItem)
+            holder.setData(items[position], this.onStateLongCLick)
             holder.setOnEvent(
                 this,
                 items[position], position
@@ -66,15 +70,9 @@ class ServerAdapter : RecyclerView.Adapter<ViewHolder>() {
         this.notifyDataSetChanged()
     }
 
-    fun setonStateDeleteItem(on: Boolean){
-        this.onStateDeleteItem = on
+    fun setonStateLongCLick(on: Boolean){
+        this.onStateLongCLick = on
         this.notifyDataSetChanged()
-    }
-
-    private var onItemClickListener: ((item: BlockPhone)->Unit)? = null
-
-    fun setOnItemClickListener(onItemClickListener: ((item: BlockPhone)->Unit)){
-        this.onItemClickListener = onItemClickListener
     }
 
     private var onItemLongClickListener: ((item: BlockPhone)->Unit)? = null
@@ -83,32 +81,57 @@ class ServerAdapter : RecyclerView.Adapter<ViewHolder>() {
         this.onItemLongClickListener = onItemLongClickListener
     }
 
-    private var onItemDeleteClickListener: ((item: BlockPhone, index: Int)->Unit)? = null
+    private var onItemClickListener: ((item: BlockPhone)->Unit)? = null
 
-    fun setOnItemDeleteClickListener(onItemDeleteClickListener: ((item: BlockPhone, index: Int)->Unit)){
-        this.onItemDeleteClickListener = onItemDeleteClickListener
+    fun setOnItemClickListener(onItemClickListener: ((item: BlockPhone)->Unit)){
+        this.onItemClickListener = onItemClickListener
+    }
+
+    private var onItemSwipeClickListener: ((item: BlockPhone, index: Int)->Unit)? = null
+
+    fun setOnItemSwipeClickListener(onItemSwipeClickListener: ((item: BlockPhone, index: Int)->Unit)){
+        this.onItemSwipeClickListener = onItemSwipeClickListener
     }
 
     class ThisViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvPhone: TextView = itemView.tvPhone
         private val tvName: TextView = itemView.tvName
         private val imgSwCheck: ImageViewSwap = itemView.imgSwCheck
-        private val imgStatus: ImageViewRadius = itemView.imgStatus
+
+        private val MySwipeLayout: MySwipeLayout = itemView.swipeLayout
+        private val bottom_wrapper_right: ImageViewRadius = itemView.bottom_wrapper_right
+        private val bottom_wrapper_left: ImageViewRadius = itemView.bottom_wrapper_left
 
         fun setData(item: BlockPhone, onStateDeleteItem: Boolean){
             tvPhone.text = item.phone
             tvName.text = item.name
+
             if(onStateDeleteItem){
-                imgSwCheck.setImageResource(R.drawable.ic_delete_item)
-                return
+                imgSwCheck.visibility = View.VISIBLE
+            }else{
+                imgSwCheck.visibility = View.INVISIBLE
             }
+
             if(item.status == CallPhoneKEY.STATUS.STATUS_BLOCK){
                 imgSwCheck.setActive(true)
-                imgStatus.setImageResource(R.drawable.ic_protect_good)
             }else{
                 imgSwCheck.setActive(false)
-                imgStatus.setImageResource(R.drawable.ic_protect_fail)
             }
+
+            // Set Swipe
+            MySwipeLayout.showMode = PullOut
+            MySwipeLayout.isClickToClose = true
+            // Drag From Left
+            MySwipeLayout.addDrag(
+                    Left,
+                    MySwipeLayout.findViewById(R.id.bottom_wrapper_left)
+            )
+            // Drag From Right
+            MySwipeLayout.addDrag(
+                    Right,
+                    MySwipeLayout.findViewById(R.id.bottom_wrapper_right)
+            )
+
         }
 
         fun setOnEvent(
@@ -116,36 +139,34 @@ class ServerAdapter : RecyclerView.Adapter<ViewHolder>() {
             item: BlockPhone, position: Int
         ){
 
-            if(adapter.onItemDeleteClickListener != null && adapter.onStateDeleteItem){
-                imgSwCheck.setOnClickListener {
-                    adapter.onItemDeleteClickListener?.invoke(item, position)
-                    adapter.notifyItemChanged(position)
-                }
-            }
-
             if(adapter.onItemLongClickListener != null){
-                itemView.setOnLongClickListener{v ->
+                MySwipeLayout.surfaceView.setOnLongClickListener{v ->
                     adapter.onItemLongClickListener?.invoke(item)
                     adapter.notifyDataSetChanged()
                     true
                 }
-                return
             }
 
-            if(adapter.onItemClickListener != null && !adapter.onStateDeleteItem){
-                itemView.setOnClickListener {
+            if(adapter.onItemClickListener != null && adapter.onStateLongCLick){
+                MySwipeLayout.surfaceView.setOnClickListener {
                     adapter.onItemClickListener?.invoke(item)
                     adapter.notifyItemChanged(position)
                 }
             }
 
-
+            if(adapter.onItemSwipeClickListener != null){
+                bottom_wrapper_right.setOnClickListener {
+                    adapter.onItemSwipeClickListener?.invoke(item, position)
+                    adapter.notifyItemChanged(position)
+                }
+                bottom_wrapper_left.setOnClickListener {
+                    adapter.onItemSwipeClickListener?.invoke(item, position)
+                    adapter.notifyItemChanged(position)
+                }
+            }
         }
     }
-    class ViewNull(itemView: View): RecyclerView.ViewHolder(itemView){
-
-    }
-
+    class ViewNull(itemView: View): RecyclerView.ViewHolder(itemView)
 
 
 }

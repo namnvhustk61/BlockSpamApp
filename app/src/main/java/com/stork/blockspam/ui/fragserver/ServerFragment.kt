@@ -6,9 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.stork.blockspam.AppConfig
 import com.stork.blockspam.R
 import com.stork.blockspam.base.BaseFragment
+import com.stork.blockspam.database.model.CallPhone.CallPhone
+import com.stork.blockspam.database.model.CallPhone.CallPhoneKEY
 import com.stork.blockspam.database.model.DbBlockPhone.DbBlockPhone
+
 import com.stork.http.API
 import com.stork.http.API.ApiItf
 import com.stork.http.ServiceResult
@@ -38,9 +42,94 @@ class ServerFragment : BaseFragment() {
 
     @SuppressLint("ResourceAsColor")
     private fun onEvent(){
+        imgCloseStateLongClick.setOnClickListener {
+            openStateLongClick(false)
+        }
+
+        imgSwCheckAll.setOnClickListener {
+            setSelectAll(imgSwCheckAll.changeStateActive())
+        }
+
         imgReNew.setOnClickListener {
             getData(true)
         }
+
+        imgAddAll.setOnClickListener {
+            val lsDB:ArrayList<BlockPhone> = arrayListOf()
+            (rcvBlockPhone.adapter as ServerAdapter).items.forEach { item: BlockPhone ->
+                if(item.status == CallPhoneKEY.STATUS.STATUS_BLOCK){
+                    if(!addPhoneToBlockList(item)){
+                        lsDB.add(item)
+                    }
+                }else{
+                    lsDB.add(item)
+                }
+            }
+            (rcvBlockPhone.adapter as ServerAdapter).refresh(lsDB)
+            openStateLongClick(false)
+        }
+
+        (rcvBlockPhone.adapter as ServerAdapter).setOnItemLongClickListener { item ->
+            update_StatusItem(item)
+
+            openStateLongClick(true)
+
+        }
+        (rcvBlockPhone.adapter as ServerAdapter).setOnItemClickListener { item ->
+            update_StatusItem(item)
+        }
+        (rcvBlockPhone.adapter as ServerAdapter).setOnItemSwipeClickListener {
+            item, index ->
+            if(addPhoneToBlockList(item)){
+                (rcvBlockPhone.adapter as ServerAdapter).items.removeAt(index)
+                rcvBlockPhone.adapter?.notifyItemRemoved(index)
+            }
+        }
+    }
+
+    private fun openStateLongClick(open: Boolean){
+        (rcvBlockPhone.adapter as ServerAdapter).setonStateLongCLick(open)
+        imgSwCheckAll.setActive(false)
+
+        if(open){
+            imgCloseStateLongClick.visibility = View.VISIBLE
+            tvTitle.visibility                = View.GONE
+
+            imgReNew.visibility                = View.GONE
+
+            llStatusLongClick.visibility = View.VISIBLE
+        }else{
+            imgCloseStateLongClick.visibility = View.GONE
+            tvTitle.visibility                = View.VISIBLE
+
+            imgReNew.visibility               = View.VISIBLE
+
+            llStatusLongClick.visibility      = View.GONE
+            setSelectAll(false)
+        }
+    }
+
+    private fun update_StatusItem(item: BlockPhone){
+        if(item.status == CallPhoneKEY.STATUS.STATUS_BLOCK){
+            item.status = CallPhoneKEY.STATUS.STATUS_UNBLOCK
+        }else{
+            item.status = CallPhoneKEY.STATUS.STATUS_BLOCK
+        }
+    }
+
+    private fun setSelectAll(bool: Boolean){
+        if(bool){
+            // select All
+            (rcvBlockPhone.adapter as ServerAdapter).items.forEach{item: BlockPhone? ->
+                item?.status = CallPhoneKEY.STATUS.STATUS_BLOCK
+            }
+        }else{
+            // dismiss select All
+            (rcvBlockPhone.adapter as ServerAdapter).items.forEach { item: BlockPhone? ->
+                item?.status = CallPhoneKEY.STATUS.STATUS_UNBLOCK
+            }
+        }
+        (rcvBlockPhone.adapter as ServerAdapter).notifyDataSetChanged()
     }
 
     private fun getData(isLoading: Boolean) {
@@ -50,7 +139,7 @@ class ServerFragment : BaseFragment() {
             override fun onSuccess(response: ServiceResult<List<BlockPhone>>?) {
                 if(isLoading){dismissLoading()}
                 if(response?.code == "OK"){
-                    (rcvBlockPhone.adapter as ServerAdapter).refresh(response.data)
+                    refreshRCV(ArrayList<BlockPhone>(response.data))
                     // SAVE DATA TO DB
                    RxThread.onDoInIO {
                        val lsDB:ArrayList<DbBlockPhone> = arrayListOf()
@@ -80,8 +169,40 @@ class ServerFragment : BaseFragment() {
                             dbBlockPhone.status
                     ))
                 }
-                (rcvBlockPhone.adapter as ServerAdapter).refresh(lsDB)
+                refreshRCV(lsDB)
             }
         })
     }
+
+    private fun refreshRCV(list :ArrayList<BlockPhone>){
+        val valueNew :ArrayList<BlockPhone> = arrayListOf()
+        for (index in 0 until list.size){
+            if(CallPhone.hasDB(context, list[index].phone)){
+                continue
+            }
+            valueNew.add(list[index])
+
+        }
+
+        (rcvBlockPhone.adapter as ServerAdapter).refresh(valueNew)
+    }
+
+    private fun addPhoneToBlockList(item: BlockPhone): Boolean{
+        val callPhone = CallPhone()
+        callPhone.phone = item.phone
+        callPhone.name  = item.name
+        callPhone.type = item.type
+        callPhone.status = CallPhoneKEY.STATUS.STATUS_BLOCK
+
+        return when(callPhone.insertDB(context)){
+            AppConfig.SUCCESS   ->{
+                true
+            }
+            AppConfig.ERROR, AppConfig.EXCEPTION->{
+                false
+            }
+            else-> false
+        }
+    }
+
 }

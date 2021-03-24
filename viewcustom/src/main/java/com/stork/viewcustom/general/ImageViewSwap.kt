@@ -33,16 +33,25 @@ class ImageViewSwap : AppCompatImageView {
         attrs?.let {
             obtainValue(context, attrs)
         }
-        setActive(true)
+        setActive(this.isActive)
     }
 
-
+    private  var isActive :Boolean = false
     fun setActive(isActive: Boolean) {
-        setImageDrawable(if (isActive) {
+        this.isActive = isActive
+        setImageDrawable(if (this.isActive) {
             activeIcon
         } else {
             inactiveIcon
         })
+    }
+    fun getActive():Boolean{
+        return this.isActive;
+    }
 
+    fun changeStateActive() :Boolean{
+        this.isActive = !this.isActive
+        setActive(this.isActive)
+        return this.isActive
     }
 }
