@@ -15,4 +15,7 @@
     <string name="cancel">Cancel</string>
     <string name="frag_server_title">Block Share</string>
     <string name="block_all">Block All</string>
+    <string name="add_from_block_list">Add from BlockList</string>
+    <string name="block_list">Block List</string>
+    <string name="you_added_number_block_phones">You added %s phones into Local Block Phone</string>
 </resources>

@@ -14,6 +14,7 @@ object AppSettingsManager {
 
 
     val ROLE_CALL_SCREENING_ID = 100
+    val ROLE_CALL_DIAL_ID = 99
     fun setDefaultAppBlockCall(activity: Activity?):Boolean{
         try {
             val roleManager = activity?.getSystemService(Context.ROLE_SERVICE)
@@ -29,9 +30,18 @@ object AppSettingsManager {
     }
 
      fun setDefaultAppCallPhone(activity: Activity?){
-        val intent = Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER)
-        intent.putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, activity?.packageName)
-        activity?.startActivity(intent)
+         try {
+             val roleManager = activity?.getSystemService(Context.ROLE_SERVICE)
+             if(roleManager  != null && roleManager is RoleManager){
+                 val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_DIALER)
+                 activity.startActivityForResult(intent, ROLE_CALL_DIAL_ID)
+                 return
+             }
+         }catch (e: Exception){
+         }
+         val intent = Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER)
+         intent.putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, activity?.packageName)
+         activity?.startActivityForResult(intent, ROLE_CALL_DIAL_ID)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

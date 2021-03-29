@@ -50,11 +50,23 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp_18"
             android:textColor="@color/blue"
-            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/imgMenu"
             android:fontFamily="@font/svn_gilroy_medium"
             android:text="@string/save"
+            android:layout_marginEnd="@dimen/dp_10"
             tools:ignore="RelativeOverlap" />
+
+
+        <com.stork.viewcustom.radius.ImageViewRadius
+            android:id="@+id/imgMenu"
+            android:layout_alignParentEnd="true"
+            android:layout_width="@dimen/size_icon"
+            android:layout_height="@dimen/size_icon"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_menu"
+            app:radius="@dimen/size_icon_x2"
+            />
 
 
     </RelativeLayout>
@@ -91,5 +103,7 @@
             android:textColor="@color/text_less"/>
 
     </com.stork.viewcustom.radius.LinearLayoutRadius>
+
+
 
 </LinearLayout>

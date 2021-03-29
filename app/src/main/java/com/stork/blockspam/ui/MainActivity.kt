@@ -6,6 +6,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.stork.blockspam.R
 import com.stork.blockspam.base.BaseActivity
+import com.stork.blockspam.storage.AppSharedPreferences
+import com.stork.blockspam.storage.Constant
 import com.stork.blockspam.ui.fragblockphone.BlockPhoneFragment
 import com.stork.blockspam.ui.fragserver.ServerFragment
 import com.stork.blockspam.ui.fraguser.UserFragment
@@ -111,15 +113,19 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        selectTab(0)
+        selectTab(Constant.getInstance().selected_tab_home)
     }
 
-    private fun selectTab(index: Int) {
-        this.currentIndex = index
+    //////
 
+    private fun selectTab(index: Int) {
         tabBarItems.forEachIndexed { i, tabBarItem ->
             tabBarItem.setActive(i == index)
         }
+
+        if(Constant.getInstance().selected_tab_home == index){return}
+            Constant.getInstance().selected_tab_home = index
+
         mainViewPager.setCurrentItem(index, false)
     }
 }
