@@ -12,6 +12,8 @@ import com.stork.blockspam.base.BaseFragment
 import com.stork.blockspam.database.model.CallPhone.CallPhone
 import com.stork.blockspam.database.model.CallPhone.CallPhoneKEY
 import com.stork.blockspam.database.model.DbBlockPhone.DbBlockPhone
+import com.stork.blockspam.service.foreground.AppForegroundService
+import com.stork.blockspam.storage.AppSharedPreferences
 
 import com.stork.http.API
 import com.stork.http.API.ApiItf
@@ -83,6 +85,27 @@ class ServerFragment : BaseFragment() {
             if(addPhoneToBlockList(item)){
                 (rcvBlockPhone.adapter as ServerAdapter).items.removeAt(index)
                 rcvBlockPhone.adapter?.notifyItemRemoved(index)
+            }
+        }
+
+        swStatus.isChecked = AppSharedPreferences.getInstance(context!!).getString(
+            AppSharedPreferences.KEY_PREFERRENCE.SERVICE_RUNNING) == "true"
+
+        swStatus.setOnCheckedChangeListener { buttonView, isChecked ->
+            if(isChecked){
+                // start foreground
+                AppForegroundService.startService(activity)
+                AppSharedPreferences.getInstance(context!!).saveString(
+                    AppSharedPreferences.KEY_PREFERRENCE.SERVICE_RUNNING,
+                    "true"
+                )
+            }else{
+                // start foreground
+                AppForegroundService.stopForegroundService(activity)
+                AppSharedPreferences.getInstance(context!!).saveString(
+                    AppSharedPreferences.KEY_PREFERRENCE.SERVICE_RUNNING,
+                    "false"
+                )
             }
         }
     }

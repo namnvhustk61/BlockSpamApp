@@ -72,6 +72,28 @@
         </LinearLayout>
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/svn_gilroy_medium"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/text_less"
+            android:text="@string/auto_block_phone_from_server"
+            />
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/swStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+
+            />
+    </LinearLayout>
+
     <com.stork.viewcustom.radius.RecycleViewRadius
         android:id="@+id/rcvBlockPhone"
         android:layout_marginTop="@dimen/dp_15"

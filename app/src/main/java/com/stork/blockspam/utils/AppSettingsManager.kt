@@ -49,4 +49,19 @@ object AppSettingsManager {
         val intent = Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS)
         activity?.startActivity(intent)
     }
+
+
+    fun setDefaultAppSMS(activity: Activity?):Boolean{
+        try {
+            val roleManager = activity?.getSystemService(Context.ROLE_SERVICE)
+            if(roleManager  != null && roleManager is RoleManager){
+                val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_SMS)
+                activity.startActivityForResult(intent, ROLE_CALL_SCREENING_ID)
+
+                return true
+            }
+        }catch (e: Exception){
+        }
+        return false
+    }
 }

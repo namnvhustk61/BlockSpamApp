@@ -18,4 +18,5 @@
     <string name="add_from_block_list">Add from BlockList</string>
     <string name="block_list">Block List</string>
     <string name="you_added_number_block_phones">You added %s phones into Local Block Phone</string>
+    <string name="auto_block_phone_from_server">Auto Block Phone From Server</string>
 </resources>
