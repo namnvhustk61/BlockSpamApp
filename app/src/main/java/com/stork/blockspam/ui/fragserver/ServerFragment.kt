@@ -34,6 +34,7 @@ class ServerFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         init()
         onEvent()
+
         getData(false)
     }
 

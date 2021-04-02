@@ -13,5 +13,4 @@ class Constant {
         }
     }
 
-    var selected_tab_home = 0
 }

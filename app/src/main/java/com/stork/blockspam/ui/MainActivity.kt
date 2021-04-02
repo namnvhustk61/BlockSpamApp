@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
 
-    private var currentIndex = 0
     private lateinit var tabBarItems: List<TabBarView>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,7 +112,7 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        selectTab(Constant.getInstance().selected_tab_home)
+        selectTab(AppSharedPreferences.getInstance(this).getInt(AppSharedPreferences.KEY_PREFERRENCE.TAB_SELECTED)?:0)
     }
 
     //////
@@ -123,8 +122,8 @@ class MainActivity : BaseActivity() {
             tabBarItem.setActive(i == index)
         }
 
-        if(Constant.getInstance().selected_tab_home == index){return}
-            Constant.getInstance().selected_tab_home = index
+        if(AppSharedPreferences.getInstance(this).getInt(AppSharedPreferences.KEY_PREFERRENCE.TAB_SELECTED) == index){return}
+        AppSharedPreferences.getInstance(this).saveInt(AppSharedPreferences.KEY_PREFERRENCE.TAB_SELECTED, index)
 
         mainViewPager.setCurrentItem(index, false)
     }
