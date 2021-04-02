@@ -2,6 +2,7 @@ package com.stork.blockspam.ui
 
 import android.Manifest
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.stork.blockspam.R
@@ -43,12 +44,15 @@ class MainActivity : BaseActivity() {
          *  status == false -> device don't have caller id & spam app default
          */
         val status :Boolean = AppSettingsManager.setDefaultAppBlockCall(this)
+        AppSharedPreferences.getInstance(this).saveString(
+                AppSharedPreferences.KEY_PREFERRENCE.IS_DEFAULT_BLOCK_APP,
+                status.toString()
+        )
         if(!status){
-            AppPermission.requirePermissions(
-                this,
-                arrayOf(AppPermission.PER_READ_CONTACTS, AppPermission.PER_READ_PHONE_STATE),
-                AppPermission.PER_REQUEST_CODE
-            )
+            /*
+            * Permission for BlockCallBroadcastReceiver running
+            */
+            checkPermissionForBlockBroadcast()
         }
     }
 
@@ -59,7 +63,10 @@ class MainActivity : BaseActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         AppPermission.onRequestPermissionsResult(requestCode, permissions, grantResults) {state: Boolean ->
-
+            AppSharedPreferences.getInstance(this).saveString(
+                    AppSharedPreferences.KEY_PREFERRENCE.IS_PER_BLOCK,
+                    state.toString()
+            )
         }
     }
 
@@ -68,22 +75,16 @@ class MainActivity : BaseActivity() {
         if (requestCode == AppSettingsManager.ROLE_CALL_SCREENING_ID) {
             if (resultCode == android.app.Activity.RESULT_OK) {
                 // Your app is now the call screening app
-                AppPermission.requirePermissions(
-                    this,
-                    arrayOf(AppPermission.PER_READ_CONTACTS, AppPermission.PER_READ_PHONE_STATE),
-                    AppPermission.PER_REQUEST_CODE
-                )
+                /*
+                * Permission for BlockSpamService running
+                */
+                checkPermissionForBlockSpamService()
             } else {
                 // Your app is not the call screening app
-                AppPermission.requirePermissions(
-                    this,
-                    arrayOf(
-                        AppPermission.PER_READ_PHONE_STATE,
-                        AppPermission.PER_READ_CALL_LOG,
-                        Manifest.permission.ANSWER_PHONE_CALLS
-                    ),
-                    AppPermission.PER_REQUEST_CODE
-                )
+                /*
+                * Permission for BlockCallBroadcastReceiver running
+                */
+                checkPermissionForBlockBroadcast()
             }
         }
     }
@@ -126,5 +127,41 @@ class MainActivity : BaseActivity() {
         AppSharedPreferences.getInstance(this).saveInt(AppSharedPreferences.KEY_PREFERRENCE.TAB_SELECTED, index)
 
         mainViewPager.setCurrentItem(index, false)
+    }
+
+    /*
+    *
+    *
+    * */
+
+    private fun checkPermissionForBlockSpamService(){
+        AppPermission.requirePermissions(
+                this,
+                arrayOf(AppPermission.PER_READ_CONTACTS, AppPermission.PER_READ_PHONE_STATE),
+                AppPermission.PER_REQUEST_CODE
+        )
+    }
+
+    private fun checkPermissionForBlockBroadcast(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            AppPermission.requirePermissions(
+                    this,
+                    arrayOf(
+                            AppPermission.PER_READ_PHONE_STATE,
+                            AppPermission.PER_READ_CALL_LOG,
+                            AppPermission.PER_ANSWER_PHONE_CALLS // >=26
+                    ),
+                    AppPermission.PER_REQUEST_CODE
+            )
+        }else{
+            AppPermission.requirePermissions(
+                    this,
+                    arrayOf(
+                            AppPermission.PER_READ_PHONE_STATE,
+                            AppPermission.PER_READ_CALL_LOG
+                    ),
+                    AppPermission.PER_REQUEST_CODE
+            )
+        }
     }
 }

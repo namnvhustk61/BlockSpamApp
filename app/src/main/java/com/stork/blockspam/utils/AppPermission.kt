@@ -25,6 +25,9 @@ object AppPermission {
     const val PER_CALL_PHONE    =  Manifest.permission.CALL_PHONE
 
 
+    const val PER_ANSWER_PHONE_CALLS  =  Manifest.permission.ANSWER_PHONE_CALLS
+
+
     const val PER_REQUEST_CODE = 99
 
     fun requirePermissions(activity: Activity, permissions: String, requestCode: Int):Boolean {
@@ -67,12 +70,19 @@ object AppPermission {
         grantResults: IntArray,
         callback: ((state: Boolean) -> Unit)?
     ){
-        if (grantResults.isEmpty()){return}
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-           callback?.invoke(true)
-        }else{
-            callback?.invoke(false)
+        if (grantResults.isEmpty()){
+            callback?.invoke(true)
+            return
         }
+        grantResults.forEach { grantResult: Int ->
+
+            if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                callback?.invoke(false)
+                return
+            }
+            callback?.invoke(true)
+        }
+
     }
 
     private fun showAlertReAskPermission(activity: Activity, permissions: String){

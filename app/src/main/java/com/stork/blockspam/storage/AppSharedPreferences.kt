@@ -23,7 +23,15 @@ class AppSharedPreferences {
     }
 ////////////////
     enum class KEY_PREFERRENCE{
-        TAB_SELECTED, SERVICE_RUNNING
+        // int
+        TAB_SELECTED,
+
+        // Boolean
+        SERVICE_RUNNING,
+        IS_DEFAULT_BLOCK_APP,
+        IS_PER_BLOCK,
+
+        // String
     }
 
     final val vALUE_STR_FAIL: String = "*$*"
