@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.stork.viewcustom.radius.LinearLayoutRadius xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/dp_120"
     android:theme="@style/BlockSpam"
     android:background="@color/background_item"
+    app:radius="@dimen/dp_15"
     android:gravity="center">
     <TextView
         android:layout_width="wrap_content"
@@ -13,4 +15,4 @@
         android:textColor="@color/text_less"
         android:text="@string/not_data_show"/>
 
-</LinearLayout>
+</com.stork.viewcustom.radius.LinearLayoutRadius>

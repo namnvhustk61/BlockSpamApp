@@ -10,6 +10,7 @@ import android.graphics.drawable.GradientDrawable;
 
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
@@ -51,6 +52,7 @@ public class TextViewAction extends AppCompatTextView {
 
     @SuppressLint("ClickableViewAccessibility")
     private void setStateOnPressed(){
+        setOnClickListener(new OnClickListener() {@Override public void onClick(View v) { }});
         setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN: {

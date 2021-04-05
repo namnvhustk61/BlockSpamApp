@@ -31,7 +31,7 @@ class MainActivity : BaseActivity() {
         setView()
     }
 
-    private fun setPermission(){
+    public fun setPermission(){
         /*
         *  Required  App is  caller id & spam app default  OR  Call Phone Default
         *   at some android SDK slowly  don't  have caller id & spam app default

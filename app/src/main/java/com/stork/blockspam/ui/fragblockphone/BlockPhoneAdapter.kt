@@ -16,44 +16,72 @@ import com.stork.viewcustom.otherlayout.MySwipeLayout.ShowMode.*
 import com.stork.viewcustom.radius.ImageViewRadius
 import kotlinx.android.synthetic.main.item_block_phone.view.*
 import kotlinx.android.synthetic.main.item_block_phone_swipe.view.*
+import kotlinx.android.synthetic.main.layout_ask_permission.view.*
 
 class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
     val items = mutableListOf<CallPhone>()
     private val VIEWTYPEDATA = 1
     private val VIEWTYPENULL = 0
+    private val VIEWTYPEASKPERMISSION = 2
 
     var onStateDeleteItem: Boolean = false
     private var view:View? = null
 
+    private var isShow_Ask_Permission: Boolean = false
+
     override fun getItemViewType(position: Int): Int {
+        if(position ==0 && isShow_Ask_Permission) return VIEWTYPEASKPERMISSION
         return if (items.size != 0){
-            VIEWTYPEDATA
+             VIEWTYPEDATA
         }else{
             VIEWTYPENULL
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
-        return if (viewType == VIEWTYPEDATA){
-            view = LayoutInflater.from(parent.context).inflate(R.layout.item_block_phone_swipe, parent, false)
-            ThisViewHolder(view!!)
-        }else{
-            view = LayoutInflater.from(parent.context).inflate(R.layout.layout_null, parent, false)
-            ViewNull(view!!)
+        return when(viewType){
+            VIEWTYPEDATA->{
+                view = LayoutInflater.from(parent.context).inflate(R.layout.item_block_phone_swipe, parent, false)
+                ThisViewHolder(view!!)
+            }
+            VIEWTYPEASKPERMISSION->{
+                view = LayoutInflater.from(parent.context).inflate(R.layout.layout_ask_permission, parent, false)
+                ViewAskPermission(view!!)
+            }
+            VIEWTYPENULL->{
+                view = LayoutInflater.from(parent.context).inflate(R.layout.layout_null, parent, false)
+                ViewNull(view!!)
+            }
+            else  -> {
+                view = LayoutInflater.from(parent.context).inflate(R.layout.item_block_phone_swipe, parent, false)
+                ThisViewHolder(view!!)
+            }
         }
     }
 
+    var _numbItemPlus = 0;
     override fun getItemCount(): Int {
-        return if (items.size != 0){ items.size }else{ 1 }
+        _numbItemPlus = if(this.isShow_Ask_Permission){1}else{0}
+        val itemCount = _numbItemPlus + if (items.size != 0){
+            items.size
+        }else{
+            1
+        }
+        return itemCount
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (holder is ThisViewHolder){
-            holder.setData(items[position], this.onStateDeleteItem)
-            holder.setOnEvent(
-                this,
-                items[position], position
-            )
+        when(holder){
+            is ThisViewHolder->{
+                val posInData = position - _numbItemPlus
+                holder.setData(items[posInData], this.onStateDeleteItem)
+                holder.setOnEvent(
+                        this,
+                        items[posInData], posInData
+                )
+            }
+            is ViewAskPermission->{
+                holder.setOnEvent(this)
+            }
         }
     }
 
@@ -97,6 +125,22 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     fun setOnItemShareClickListener(onItemShareClickListener: ((item: CallPhone, index: Int)->Unit)){
         this.onItemShareClickListener = onItemShareClickListener
+    }
+
+    ////////// on item VIEWTYPEASKPERMISSION
+    fun set_isShow_Ask_Permission(bool: Boolean){
+        this.isShow_Ask_Permission = bool
+        notifyDataSetChanged()
+    }
+
+    private var onGiveNowClickListener: (()->Unit)? = null
+    fun setOnGiveNowClickListener(onGiveNowClickListener: (()->Unit)){
+        this.onGiveNowClickListener = onGiveNowClickListener
+    }
+
+    private var onDismissClickListener: (()->Unit)? = null
+    fun setOnDismissClickListener(onDismissClickListener: (()->Unit)){
+        this.onDismissClickListener = onDismissClickListener
     }
 
     class ThisViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -207,6 +251,21 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
         }
     }
     class ViewNull(itemView: View): RecyclerView.ViewHolder(itemView){
+
+    }
+
+    class ViewAskPermission(itemView: View): RecyclerView.ViewHolder(itemView){
+        private val tvGiveNow: TextView = itemView.tvGiveNow
+        private val tvDismiss: TextView = itemView.tvDismiss
+
+        fun setOnEvent(adapter: BlockPhoneAdapter){
+            tvGiveNow.setOnClickListener {
+                adapter.onGiveNowClickListener?.invoke()
+            }
+            tvDismiss.setOnClickListener {
+                adapter.onDismissClickListener?.invoke()
+            }
+        }
 
     }
 

@@ -16,6 +16,8 @@ import com.stork.blockspam.database.model.CallPhone.CallPhone
 import com.stork.blockspam.database.model.CallPhone.CallPhoneKEY
 import com.stork.blockspam.extension.alert
 import com.stork.blockspam.navigation.AppNavigation
+import com.stork.blockspam.storage.AppSharedPreferences
+import com.stork.blockspam.ui.MainActivity
 import com.stork.http.API
 import com.stork.http.ServiceResult
 import com.stork.http.model.AddPhoneCloud
@@ -45,6 +47,17 @@ class BlockPhoneFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
 
+        if(AppSharedPreferences.getInstance(context!!)
+                        .getString(AppSharedPreferences.KEY_PREFERRENCE.IS_PER_BLOCK)
+                        .toString() != true.toString()){
+
+            (rcvBlockPhone.adapter as BlockPhoneAdapter).set_isShow_Ask_Permission(true)
+        }else{
+            (rcvBlockPhone.adapter as BlockPhoneAdapter).set_isShow_Ask_Permission(false)
+
+        }
+
+
         refreshRCV()
     }
     private fun init(){
@@ -65,17 +78,13 @@ class BlockPhoneFragment : BaseFragment() {
         }
 
         tvCancel.setOnClickListener {
-            imgAdd.visibility = View.VISIBLE
-            imgMenu.visibility = View.VISIBLE
-            tvCancel.visibility = View.INVISIBLE
+            _setonStateDeleteItem(false)
             (rcvBlockPhone.adapter as BlockPhoneAdapter).setonStateDeleteItem(false)
         }
 
-        (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnItemLongClickListener { item ->
+        (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnItemLongClickListener { _ ->
             (rcvBlockPhone.adapter as BlockPhoneAdapter).setonStateDeleteItem(true)
-            imgAdd.visibility = View.INVISIBLE
-            imgMenu.visibility = View.INVISIBLE
-            tvCancel.visibility = View.VISIBLE
+           _setonStateDeleteItem(true)
         }
 
         (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnItemClickListener {
@@ -85,12 +94,38 @@ class BlockPhoneFragment : BaseFragment() {
         (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnItemDeleteClickListener { item, index ->
             if(item.deleteDb(context)){
                 (rcvBlockPhone.adapter as BlockPhoneAdapter).items.removeAt(index)
+                if((rcvBlockPhone.adapter as BlockPhoneAdapter).items.size == 0){
+                    _setonStateDeleteItem(false)
+                }
+
                 rcvBlockPhone.adapter?.notifyItemRemoved(index)
             }
         }
 
         (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnItemShareClickListener {
-           item, index -> sharePhoneCloud(item)
+           item, _ -> sharePhoneCloud(item)
+        }
+
+        (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnItemShareClickListener {
+            item, _ -> sharePhoneCloud(item)
+        }
+
+        (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnDismissClickListener {
+            (rcvBlockPhone.adapter as BlockPhoneAdapter).set_isShow_Ask_Permission(false)
+        }
+        (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnGiveNowClickListener {
+            (activity as MainActivity).setPermission()
+        }
+    }
+    private fun _setonStateDeleteItem(bool: Boolean){
+        if(bool){
+            imgAdd.visibility = View.INVISIBLE
+            imgMenu.visibility = View.INVISIBLE
+            tvCancel.visibility = View.VISIBLE
+        }else{
+            imgAdd.visibility = View.VISIBLE
+            imgMenu.visibility = View.VISIBLE
+            tvCancel.visibility = View.INVISIBLE
         }
     }
 

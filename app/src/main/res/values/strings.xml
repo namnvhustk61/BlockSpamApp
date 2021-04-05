@@ -19,4 +19,8 @@
     <string name="block_list">Block List</string>
     <string name="you_added_number_block_phones">You added %s phones into Local Block Phone</string>
     <string name="auto_block_phone_from_server">Auto Block Phone From Server</string>
+    <string name="ask_permission_title">Permission for block service</string>
+    <string name="ask_permission_ask">Let app can block the phone number,\nYou need give permission for the App to use it. \n***</string>
+    <string name="give_now">GIVE NOW</string>
+    <string name="dismiss">DISMISS</string>
 </resources>
