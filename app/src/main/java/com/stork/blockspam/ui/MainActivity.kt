@@ -1,15 +1,13 @@
 package com.stork.blockspam.ui
 
-import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import com.stork.blockspam.R
 import com.stork.blockspam.base.BaseActivity
 import com.stork.blockspam.storage.AppSharedPreferences
-import com.stork.blockspam.storage.Constant
 import com.stork.blockspam.ui.fragblockphone.BlockPhoneFragment
+import com.stork.blockspam.ui.fragphone.PhoneFragment
 import com.stork.blockspam.ui.fragserver.ServerFragment
 import com.stork.blockspam.ui.fraguser.UserFragment
 import com.stork.blockspam.utils.AppPermission
@@ -94,7 +92,7 @@ class MainActivity : BaseActivity() {
                 BlockPhoneFragment(),
                 ServerFragment(),
                 UserFragment(),
-                Fragment()
+                PhoneFragment()
         )
 
         mainViewPager.adapter = MainPagerAdapter(supportFragmentManager, fragments)
