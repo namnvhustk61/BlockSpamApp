@@ -57,7 +57,12 @@ class PhoneFragment: BaseFragment() {
         dialpad_hashtag.setOnClickListener { dialpadPressed('#', it) }
         dialpad_clear_char.setOnClickListener { clearChar(it) }
         dialpad_clear_char.setOnLongClickListener { clearInput(); true }
-        dialpad_call_button.setOnClickListener {  }
+        dialpad_call_button.setOnClickListener {
+            if(dialpad_input.text.isNotEmpty()){
+                val intentDial = Intent(Intent.ACTION_DIAL, Uri.parse("tel: ${dialpad_input.text}"))
+                context!!.startActivity(intentDial)
+            }
+        }
         dialpad_input.onTextChangeListener { dialpadValueChanged(it) }
 
         disableKeyboardPopping()
