@@ -143,8 +143,11 @@ class BlockPhoneFragment : BaseFragment() {
             .refresh(CallPhone.updateAllDB__Status_UNBLOCK(context))
     }
     private fun menuClickDeleteAll(){
-        (rcvBlockPhone.adapter as BlockPhoneAdapter)
-            .refresh(CallPhone.deleteAllDB(context))
+        alert(message = getString(R.string.are_you_delete), cancelable = false, cancel = true){
+            (rcvBlockPhone.adapter as BlockPhoneAdapter)
+                    .refresh(CallPhone.deleteAllDB(context))
+        }
+
     }
 
 
