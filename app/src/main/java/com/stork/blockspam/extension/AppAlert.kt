@@ -45,6 +45,8 @@ const val BTN_TEXT_OK :String = "OK"
             val dialog = builder.create()
 
             dialog.show()
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.colorPrimary))
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.gray))
         }catch (e : Exception){
 
         }
@@ -73,8 +75,8 @@ fun Activity.alert(
 
         val dialog = builder.create()
         dialog.show()
-        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.text))
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.text_less))
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.colorPrimary))
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.gray))
     }catch (e : Exception){
 
     }
