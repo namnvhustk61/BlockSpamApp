@@ -38,7 +38,7 @@ internal class BlockCallBroadcastReceiver : BroadcastReceiver() {
 //        }
         // get incoming call number.
         val number = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
-        if(CallPhone.hasDB(context, number?:"")){
+        if(CallPhone.isBlockDB(context, number?:"")){
             breakCall(context)
         }
     }

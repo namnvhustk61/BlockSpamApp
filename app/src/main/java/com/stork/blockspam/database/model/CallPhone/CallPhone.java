@@ -121,4 +121,33 @@ public class CallPhone{
         return false;
     }
 
+    @Ignore
+    public static boolean isBlockDB(Context context, String phone ){
+        List<String> lsPhoneCheck = new ArrayList<>();
+        lsPhoneCheck.add(phone);
+        if(phone.startsWith("0")){
+            String phoneSub0 = phone.substring(1);
+            lsPhoneCheck.add(phoneSub0); // remove 0
+            lsPhoneCheck.add("+84" + phoneSub0);
+        }
+        if(phone.startsWith("+")){
+            String phoneSubPlusXX = phone.substring(3);
+            lsPhoneCheck.add(phoneSubPlusXX); // remove 0
+            lsPhoneCheck.add("0" + phoneSubPlusXX);
+        }
+        /*
+         * this.phone  9899999999
+         **/
+        CallPhoneDAO dao = AppControlDB.Companion.getInstance(context).getCallPhoneDAO();
+        if (dao != null) {
+            for (String p : lsPhoneCheck){
+                List<CallPhone> values = dao.getByPhone(p);
+                if(values != null && values.size() > 0){
+                    if(values.get(0).status.equals(CallPhoneKEY.STATUS.getSTATUS_BLOCK())){return true;}
+                }
+            }
+        }
+        return false;
+    }
+
 }
