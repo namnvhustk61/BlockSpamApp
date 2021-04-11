@@ -224,7 +224,7 @@
         android:id="@+id/dialpad_0_holder"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        style="@style/DialpadNumberStyle"
         app:layout_constraintEnd_toStartOf="@+id/dialpad_hashtag"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/dialpad_asterisk"

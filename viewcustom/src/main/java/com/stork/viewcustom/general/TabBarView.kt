@@ -110,7 +110,8 @@ class TabBarView: LinearLayoutRadius {
                         drawable.cornerRadius = height.toFloat()
                         v.background = drawable
                     }
-                    v.background.setColorFilter(0x4DDDDCDC, PorterDuff.Mode.SRC_ATOP)
+                    v.background.setColorFilter(context.getColor(R.color.color_press), PorterDuff.Mode.SRC_ATOP)
+
                     v.invalidate()
                 }
                 MotionEvent.ACTION_UP,  MotionEvent.ACTION_CANCEL -> {

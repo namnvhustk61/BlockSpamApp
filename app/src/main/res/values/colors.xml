@@ -13,6 +13,8 @@
     <color name="not_active">#5F5F5F</color>
     <color name="swipe">#F0FAFF</color>
 
+    <color name="transaction">#00FFFFFF</color>
+
 
     <color name="gradient_start" >#009688</color>
     <color name="gradient_end">#FFAEE1F9</color>

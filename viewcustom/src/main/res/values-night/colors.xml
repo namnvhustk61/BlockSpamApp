@@ -10,5 +10,5 @@
 
     <color name="loader_defalut">#44ffffff</color>
     <color name="loader_selected">#ffffff</color>
-    <color name="color_press">#DCDCDC</color>
+    <color name="color_press">#565656</color>
 </resources>

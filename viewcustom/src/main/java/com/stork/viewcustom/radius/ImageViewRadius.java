@@ -128,7 +128,7 @@ public class ImageViewRadius extends AppCompatImageView {
                         drawable.setCornerRadius(15f);
                         v.setBackground(drawable);
                     }
-                    v.getBackground().setColorFilter(0x4DDDDCDC, PorterDuff.Mode.SRC_ATOP);
+                    v.getBackground().setColorFilter(getContext().getColor(R.color.color_press), PorterDuff.Mode.SRC_ATOP);
                     v.invalidate();
                     break;
                 }
