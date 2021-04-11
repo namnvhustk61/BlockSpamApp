@@ -40,6 +40,7 @@
 
     <dimen name="activity_margin">16dp</dimen>
     <dimen name="normal_margin">12dp</dimen>
+    <dimen name="normal_margin_less">10dp</dimen>
     <dimen name="smaller_text_size">12sp</dimen>
     <dimen name="small_margin">4dp</dimen>
     <dimen name="actionbar_text_size">20sp</dimen>

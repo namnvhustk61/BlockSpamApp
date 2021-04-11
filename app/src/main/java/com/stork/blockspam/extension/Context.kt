@@ -3,8 +3,11 @@ package com.stork.blockspam.extension
 import android.annotation.TargetApi
 import android.app.role.RoleManager
 import android.content.Context
+import android.database.Cursor
+import android.net.Uri
 import android.os.Build
 import android.telecom.TelecomManager
+import android.widget.Toast
 
 @TargetApi(Build.VERSION_CODES.M)
 fun isMarshmallowPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -22,3 +25,29 @@ fun Context.isDefaultDialer(): Boolean {
 }
 
 val Context.telecomManager: TelecomManager get() = getSystemService(Context.TELECOM_SERVICE) as TelecomManager
+
+
+fun Context.queryCursor(
+        uri: Uri,
+        projection: Array<String>,
+        selection: String? = null,
+        selectionArgs: Array<String>? = null,
+        sortOrder: String? = null,
+        showErrors: Boolean = false,
+        callback: (cursor: Cursor) -> Unit
+) {
+    try {
+        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, sortOrder)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                do {
+                    callback(cursor)
+                } while (cursor.moveToNext())
+            }
+        }
+    } catch (e: Exception) {
+        if (showErrors) {
+            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT ).show()
+        }
+    }
+}

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.stork.blockspam.R
 import com.stork.blockspam.extension.alert
 
@@ -32,17 +33,29 @@ object AppPermission {
 
     fun requirePermissions(activity: Activity, permissions: String, requestCode: Int):Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(!hasPermission(permissions, activity)){
+            if(!hasPermission(activity, permissions)){
                 activity.requestPermissions(arrayOf(permissions), requestCode)
+                return false
             }
         }
         return true
     }
 
+    fun requirePermissions(fragment: Fragment, permissions: String, requestCode: Int):Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(!hasPermission(fragment.context!!, permissions)){
+                fragment.requestPermissions(arrayOf(permissions), requestCode)
+                return false
+            }
+        }
+        return true
+    }
+
+
     fun requirePermissions(activity: Activity, permissions: Array<String>, requestCode: Int):Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             permissions.forEach { s ->
-                if(!hasPermission(s, activity)){
+                if(!hasPermission(activity, s)){
                     activity.requestPermissions(permissions, requestCode)
                 }
             }
@@ -50,10 +63,10 @@ object AppPermission {
         return true
     }
 
-     fun hasPermission(permission: String, activity: Activity?): Boolean {
+     fun hasPermission(activity: Activity, permission: String): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             activity.let {
-                it!!.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+                it.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
             }
         } else true
     }
@@ -96,7 +109,7 @@ object AppPermission {
     }
 
     fun checkStatusPermission(activity: Activity, permission: String): Int{
-        return if (hasPermission(permission, activity)){
+        return if (hasPermission(activity, permission)){
             STATUS_SUCCESS
         }else{
             if (ActivityCompat.shouldShowRequestPermissionRationale(

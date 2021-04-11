@@ -24,4 +24,5 @@
     <string name="give_now">GIVE NOW</string>
     <string name="dismiss">DISMISS</string>
     <string name="frag_phone_title">Phone</string>
+    <string name="frag_user_title">Contact</string>
 </resources>

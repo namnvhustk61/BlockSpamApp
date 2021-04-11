@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity(
         tableName = "TbCallPhone",
-        indices = {@Index(value = {"phone"},
+        indices = {@Index(value = {"id"},
                 unique = true)}
 )
 public class CallPhone{

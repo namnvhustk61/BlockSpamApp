@@ -14,7 +14,7 @@ import java.util.List;
 
 @Entity(
         tableName = "TbDbBlockPhone",
-        indices = {@Index(value = {"phone"},
+        indices = {@Index(value = {"id"},
                 unique = true)}
 )
 public class DbBlockPhone {
@@ -53,7 +53,7 @@ public class DbBlockPhone {
 
     @Ignore
     public static void insertAllDB(Context context, List<DbBlockPhone> list){
-//        try{
+        try{
             DbBlockPhoneDAO dao = AppControlDB.Companion.getInstance(context).getDbBlockPhoneDAO();
             if (dao != null) {
                 dao.deleteAll();
@@ -61,9 +61,9 @@ public class DbBlockPhone {
                 list.toArray(arr); // fill the array
                 dao.insert(arr);
             }
-//        }catch (Exception ignored){
-//
-//        }
+        }catch (Exception ignored){
+            String x = "";
+        }
 
     }
 }
