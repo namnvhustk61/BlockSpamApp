@@ -13,7 +13,7 @@
     <string name="all_phone__alert_err_phone_saved">Number Phone is Saved, Let change other!</string>
     <string name="all_phone__alert_add_excaeption">ERROR: Not Save</string>
     <string name="cancel">Cancel</string>
-    <string name="frag_server_title">Block Share</string>
+    <string name="frag_server_title">Block Server</string>
     <string name="block_all">Block All</string>
     <string name="add_from_block_list">Add from BlockList</string>
     <string name="block_list">Block List</string>

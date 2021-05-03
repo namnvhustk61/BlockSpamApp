@@ -8,7 +8,6 @@
     android:paddingStart="@dimen/dp_15"
     android:paddingTop="@dimen/dp_15"
     android:paddingEnd="@dimen/dp_15"
-    app:radius="@dimen/dp_5"
     >
 
     <com.stork.viewcustom.radius.ImageViewRadius

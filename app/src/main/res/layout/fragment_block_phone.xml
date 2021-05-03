@@ -66,7 +66,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:itemCount="20"
-        android:background="@color/background_item"
         android:layout_margin="@dimen/dp_10"
         tools:listitem="@layout/item_block_phone"
         app:radius= "@dimen/dp_15"

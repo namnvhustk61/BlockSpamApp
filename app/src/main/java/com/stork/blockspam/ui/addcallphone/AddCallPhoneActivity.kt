@@ -75,7 +75,7 @@ class AddCallPhoneActivity : BaseActivity() {
         val callPhone = CallPhone()
         callPhone.phone = phone
         callPhone.name  = name
-        callPhone.type = CallPhoneKEY.TYPE.TYPE_NORMAL
+        callPhone.type = CallPhoneKEY.TYPE.TYPE_LOCAL
         callPhone.status = CallPhoneKEY.STATUS.STATUS_BLOCK
        return callPhone.insertDB(this)
     }

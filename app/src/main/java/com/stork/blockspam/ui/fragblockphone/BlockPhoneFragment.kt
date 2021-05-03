@@ -91,14 +91,13 @@ class BlockPhoneFragment : BaseFragment() {
                 item -> item.updateDB__changeStatus(context)
         }
 
-        (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnItemDeleteClickListener { item, index ->
+        (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnItemDeleteClickListener { item, pos ->
             if(item.deleteDb(context)){
-                (rcvBlockPhone.adapter as BlockPhoneAdapter).items.removeAt(index)
-                if((rcvBlockPhone.adapter as BlockPhoneAdapter).items.size == 0){
-                    _setonStateDeleteItem(false)
+                (rcvBlockPhone.adapter as BlockPhoneAdapter).deleteItem(pos, item) { newLsItems ->
+                    if(newLsItems.size == 0){
+                        _setonStateDeleteItem(false)
+                    }
                 }
-
-                rcvBlockPhone.adapter?.notifyItemRemoved(index)
             }
         }
 

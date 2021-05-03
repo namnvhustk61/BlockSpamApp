@@ -215,7 +215,7 @@ class ServerFragment : BaseFragment() {
         val callPhone = CallPhone()
         callPhone.phone = item.phone
         callPhone.name  = item.name
-        callPhone.type = item.type
+        callPhone.type = "${CallPhoneKEY.TYPE.TYPE_ONLINE}-${item.type}"
         callPhone.status = CallPhoneKEY.STATUS.STATUS_BLOCK
 
         return when(callPhone.insertDB(context)){

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.stork.blockspam.R
 import com.stork.blockspam.database.model.CallPhone.CallPhone
 import com.stork.blockspam.database.model.CallPhone.CallPhoneKEY
+import com.stork.http.model.BlockPhone
 import com.stork.viewcustom.general.ImageViewSwap
 import com.stork.viewcustom.otherlayout.MySwipeLayout
 import com.stork.viewcustom.otherlayout.MySwipeLayout.DragEdge.*
@@ -19,8 +20,19 @@ import kotlinx.android.synthetic.main.item_block_phone_swipe.view.*
 import kotlinx.android.synthetic.main.layout_ask_permission.view.*
 
 class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
-    val items = mutableListOf<CallPhone>()
+    private val _items: MutableList<CallPhone> = mutableListOf<CallPhone>()
+    fun get_items(): MutableList<CallPhone>{
+        return _items
+    }
+
+    private val mapTypeItem: HashMap<String, List<CallPhone>> = hashMapOf()
+    private val lsKeyTitleType = mutableListOf<String>()
+
     private val VIEWTYPEDATA = 1
+    private val VIEWTYPEDATATITLE = 3
+
+    private val VIEWSPACE = 4
+
     private val VIEWTYPENULL = 0
     private val VIEWTYPEASKPERMISSION = 2
 
@@ -30,13 +42,21 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
     private var isShow_Ask_Permission: Boolean = false
 
     override fun getItemViewType(position: Int): Int {
-        if(position ==0 && isShow_Ask_Permission) return VIEWTYPEASKPERMISSION
-        return if (items.size != 0){
-             VIEWTYPEDATA
+        if(position == 0) {
+            return if(isShow_Ask_Permission) VIEWTYPEASKPERMISSION else VIEWSPACE
+        }
+         if (_items.size != 0){
+
+             if(getItemDataInMap(position) == null){
+                 return VIEWTYPEDATATITLE
+             }else{
+                 return VIEWTYPEDATA
+             }
         }else{
-            VIEWTYPENULL
+          return  VIEWTYPENULL
         }
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when(viewType){
             VIEWTYPEDATA->{
@@ -51,6 +71,14 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
                 view = LayoutInflater.from(parent.context).inflate(R.layout.layout_null, parent, false)
                 ViewNull(view!!)
             }
+            VIEWTYPEDATATITLE->{
+                view = LayoutInflater.from(parent.context).inflate(R.layout.item_block_phone_title, parent, false)
+                ViewTitleType(view!!)
+            }
+            VIEWSPACE->{
+                view = LayoutInflater.from(parent.context).inflate(R.layout.layout_space, parent, false)
+                ViewNull(view!!)
+            }
             else  -> {
                 view = LayoutInflater.from(parent.context).inflate(R.layout.item_block_phone_swipe, parent, false)
                 ThisViewHolder(view!!)
@@ -58,13 +86,12 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
         }
     }
 
-    var _numbItemPlus = 0;
     override fun getItemCount(): Int {
-        _numbItemPlus = if(this.isShow_Ask_Permission){1}else{0}
-        val itemCount = _numbItemPlus + if (items.size != 0){
-            items.size
+        // 1 item first  is VIEW TYPE ASK PERMISSION
+        val itemCount = 1 + if (_items.size != 0){
+            mapTypeItem.keys.size + _items.size
         }else{
-            1
+            1 // VIEW TYPE NULL PERMISSION
         }
         return itemCount
     }
@@ -72,12 +99,19 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when(holder){
             is ThisViewHolder->{
-                val posInData = position - _numbItemPlus
-                holder.setData(items[posInData], this.onStateDeleteItem)
-                holder.setOnEvent(
-                        this,
-                        items[posInData], posInData
-                )
+                val item = getItemDataInMap(position)
+                if(item != null){
+                    holder.setData(item, this.onStateDeleteItem)
+                    holder.setOnEvent(
+                            this,
+                            item, position
+                    )
+                }
+
+            }
+            is ViewTitleType->{
+                val item = getItemDataInMap(position+1)
+                holder.setData(item!!.type)
             }
             is ViewAskPermission->{
                 holder.setOnEvent(this)
@@ -85,16 +119,93 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
         }
     }
 
+
+
     fun refresh(items: List<CallPhone>?) {
         if (items == null){return}
-        this.items.clear()
-        this.items.addAll(items)
+
+        this._items.clear()
+        this.mapTypeItem.clear()
+        this.lsKeyTitleType.clear()
+
+        this._items.addAll(items)
+        // TYPE_LOCAL
+        this._items.forEach { _item: CallPhone? ->
+            val indexType = lsKeyTitleType.indexOf(_item?.type)
+            if(indexType == -1){
+                // create new item map
+                val entryNew: ArrayList<CallPhone>  = arrayListOf<CallPhone>()
+                val keyNew: String = "${lsKeyTitleType.size}-${_item?.type!!}"
+
+                entryNew.add(_item)
+                mapTypeItem.put(keyNew, entryNew)
+                // create new item ls type
+                lsKeyTitleType.add(_item.type!!)
+
+            }else{
+                val key = "${indexType}-${_item?.type!!}"
+                val entry =  mapTypeItem.get(key) as  ArrayList<CallPhone>
+
+                entry.add(_item)
+            }
+        }
         this.notifyDataSetChanged()
     }
 
+    fun refresh() {
+
+        this.mapTypeItem.clear()
+        this.lsKeyTitleType.clear()
+
+        // TYPE_LOCAL
+        this._items.forEach { _item: CallPhone? ->
+            val indexType = lsKeyTitleType.indexOf(_item?.type)
+            if(indexType == -1){
+                // create new item map
+                val entryNew: ArrayList<CallPhone>  = arrayListOf<CallPhone>()
+                val keyNew: String = "${lsKeyTitleType.size}-${_item?.type!!}"
+
+                entryNew.add(_item)
+                mapTypeItem.put(keyNew, entryNew)
+                // create new item ls type
+                lsKeyTitleType.add(_item.type!!)
+
+            }else{
+                val key = "${indexType}-${_item?.type!!}"
+                val entry =  mapTypeItem.get(key) as  ArrayList<CallPhone>
+
+                entry.add(_item)
+            }
+        }
+        this.notifyDataSetChanged()
+    }
+
+    fun getItemDataInMap(position: Int): CallPhone?{
+        val posReal = position -1
+        var sum = 0
+        var result: CallPhone?= null
+        lsKeyTitleType.forEachIndexed { index, type ->
+            sum += 1
+            sum += mapTypeItem.get("${index}-${type}")!!.size
+
+            if(posReal < sum){
+
+                val entry = mapTypeItem.get("${index}-${type}")
+                val idxInEntryMap = entry!!.size -( sum -1 - posReal)
+                if(idxInEntryMap > 0){
+                    result =  entry.get(idxInEntryMap - 1)
+                }
+                return result
+            }
+        }
+        return result
+    }
+
+
+
     fun append(items: List<CallPhone>?){
         if (items == null){return}
-        this.items.addAll(items)
+        this._items.addAll(items)
         this.notifyDataSetChanged()
     }
 
@@ -119,6 +230,16 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     fun setOnItemDeleteClickListener(onItemDeleteClickListener: ((item: CallPhone, index: Int)->Unit)){
         this.onItemDeleteClickListener = onItemDeleteClickListener
+    }
+
+    fun deleteItem(pos: Int, item: CallPhone, itf: (newLsItems:  MutableList<CallPhone>)->Unit?){
+       val idx: Int = _items.indexOfFirst { _it ->
+           item.phone == _it.phone
+       }
+        _items.removeAt(idx)
+        itf.invoke(_items)
+
+        refresh()
     }
 
     private var onItemShareClickListener: ((item: CallPhone, index: Int)->Unit)? = null
@@ -269,6 +390,12 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     }
 
+    class ViewTitleType(itemView: View): RecyclerView.ViewHolder(itemView){
+        private val tvTitle: TextView = itemView.tvTitle
+        fun setData(title: String){
+            tvTitle.text = title
+        }
+    }
 
 
 }
