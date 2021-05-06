@@ -26,4 +26,5 @@
     <string name="frag_phone_title">Phone</string>
     <string name="frag_user_title">Contact</string>
     <string name="are_you_delete">Are you sure you want to delete all list phone?</string>
+    <string name="block_successfully">Block Successfully</string>
 </resources>

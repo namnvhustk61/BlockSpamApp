@@ -98,7 +98,7 @@ class ServerAdapter : RecyclerView.Adapter<ViewHolder>() {
         private val tvName: TextView = itemView.tvName
         private val imgSwCheck: ImageViewSwap = itemView.imgSwCheck
 
-        private val MySwipeLayout: MySwipeLayout = itemView.swipeLayout
+        private val mySwipeLayout: MySwipeLayout = itemView.swipeLayout
         private val bottom_wrapper_right: ImageViewRadius = itemView.bottom_wrapper_right
         private val bottom_wrapper_left: ImageViewRadius = itemView.bottom_wrapper_left
 
@@ -119,17 +119,17 @@ class ServerAdapter : RecyclerView.Adapter<ViewHolder>() {
             }
 
             // Set Swipe
-            MySwipeLayout.showMode = PullOut
-            MySwipeLayout.isClickToClose = true
+            mySwipeLayout.showMode = PullOut
+            mySwipeLayout.isClickToClose = true
             // Drag From Left
-            MySwipeLayout.addDrag(
+            mySwipeLayout.addDrag(
                     Left,
-                    MySwipeLayout.findViewById(R.id.bottom_wrapper_left)
+                    mySwipeLayout.findViewById(R.id.bottom_wrapper_left)
             )
             // Drag From Right
-            MySwipeLayout.addDrag(
+            mySwipeLayout.addDrag(
                     Right,
-                    MySwipeLayout.findViewById(R.id.bottom_wrapper_right)
+                    mySwipeLayout.findViewById(R.id.bottom_wrapper_right)
             )
 
         }
@@ -140,7 +140,7 @@ class ServerAdapter : RecyclerView.Adapter<ViewHolder>() {
         ){
 
             if(adapter.onItemLongClickListener != null){
-                MySwipeLayout.surfaceView.setOnLongClickListener{v ->
+                mySwipeLayout.surfaceView.setOnLongClickListener{v ->
                     adapter.onItemLongClickListener?.invoke(item)
                     adapter.notifyDataSetChanged()
                     true
@@ -148,7 +148,7 @@ class ServerAdapter : RecyclerView.Adapter<ViewHolder>() {
             }
 
             if(adapter.onItemClickListener != null && adapter.onStateLongCLick){
-                MySwipeLayout.surfaceView.setOnClickListener {
+                mySwipeLayout.surfaceView.setOnClickListener {
                     adapter.onItemClickListener?.invoke(item)
                     adapter.notifyItemChanged(position)
                 }

@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import com.stork.blockspam.R
 import com.stork.blockspam.base.BaseFragment
 import com.stork.blockspam.extension.*
+import com.stork.blockspam.utils.IntentAction
 import kotlinx.android.synthetic.main.fragment_phone.*
 import kotlinx.android.synthetic.main.layout_dialpad.*
 
@@ -59,8 +60,7 @@ class PhoneFragment: BaseFragment() {
         dialpad_clear_char.setOnLongClickListener { clearInput(); true }
         dialpad_call_button.setOnClickListener {
             if(dialpad_input.text.isNotEmpty()){
-                val intentDial = Intent(Intent.ACTION_DIAL, Uri.parse("tel: ${dialpad_input.text}"))
-                context!!.startActivity(intentDial)
+                IntentAction.callPhone(context!!, dialpad_input.text.toString())
             }
         }
         dialpad_input.onTextChangeListener { dialpadValueChanged(it) }
