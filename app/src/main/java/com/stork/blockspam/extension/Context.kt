@@ -1,12 +1,15 @@
 package com.stork.blockspam.extension
 
 import android.annotation.TargetApi
+import android.app.NotificationManager
 import android.app.role.RoleManager
 import android.content.Context
 import android.database.Cursor
+import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.telecom.TelecomManager
+import android.view.ViewGroup
 import android.widget.Toast
 
 @TargetApi(Build.VERSION_CODES.M)
@@ -51,3 +54,8 @@ fun Context.queryCursor(
         }
     }
 }
+
+// CallingIncoming
+val Context.audioManager: AudioManager get() = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+val Context.notificationManager: NotificationManager get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
