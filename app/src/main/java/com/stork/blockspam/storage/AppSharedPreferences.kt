@@ -27,6 +27,7 @@ class AppSharedPreferences {
         TAB_SELECTED,
 
         // Boolean
+        IS_FIRST_INSTALL,
         SERVICE_RUNNING,
         IS_DEFAULT_BLOCK_APP,
         IS_PER_BLOCK,
@@ -54,6 +55,8 @@ class AppSharedPreferences {
         if(sharedPreferences == null){return vALUE_INT_FAIL}
         return sharedPreferences!!.getInt( key.name, vALUE_INT_FAIL)
     }
+
+
 
     fun removeKey(key: KEY_PREFERRENCE){
         sharedPreferences?.edit()?.remove(key.name)?.apply()

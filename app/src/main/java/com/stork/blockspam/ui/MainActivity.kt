@@ -24,67 +24,9 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setPermission()
-
         setView()
-    }
 
-    fun setPermission(){
-        /*
-        *  Required  App is  caller id & spam app default  OR  Call Phone Default
-        *   at some android SDK slowly  don't  have caller id & spam app default
-        *   then require  Call Phone Default
-        * */
-
-        /* set APP is caller id & spam app default
-         *
-         *  status == true  -> device have caller id & spam app default
-         *  status == false -> device don't have caller id & spam app default
-         */
-        val status :Boolean = AppSettingsManager.setDefaultAppBlockCall(this)
-        AppSharedPreferences.getInstance(this).saveString(
-                AppSharedPreferences.KEY_PREFERRENCE.IS_DEFAULT_BLOCK_APP,
-                status.toString()
-        )
-        if(!status){
-            /*
-            * Permission for BlockCallBroadcastReceiver running
-            */
-            checkPermissionForBlockBroadcast()
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        AppPermission.onRequestPermissionsResult(requestCode, permissions, grantResults) {state: Boolean ->
-            AppSharedPreferences.getInstance(this).saveString(
-                    AppSharedPreferences.KEY_PREFERRENCE.IS_PER_BLOCK,
-                    state.toString()
-            )
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AppSettingsManager.ROLE_CALL_SCREENING_ID) {
-            if (resultCode == android.app.Activity.RESULT_OK) {
-                // Your app is now the call screening app
-                /*
-                * Permission for BlockSpamService running
-                */
-                checkPermissionForBlockSpamService()
-            } else {
-                // Your app is not the call screening app
-                /*
-                * Permission for BlockCallBroadcastReceiver running
-                */
-                checkPermissionForBlockBroadcast()
-            }
-        }
+        setPermissionV1()
     }
 
     private fun setView(){
@@ -127,39 +69,4 @@ class MainActivity : BaseActivity() {
         mainViewPager.setCurrentItem(index, false)
     }
 
-    /*
-    *
-    *
-    * */
-
-    private fun checkPermissionForBlockSpamService(){
-        AppPermission.requirePermissions(
-                this,
-                arrayOf(AppPermission.PER_READ_CONTACTS, AppPermission.PER_READ_PHONE_STATE),
-                AppPermission.PER_REQUEST_CODE
-        )
-    }
-
-    private fun checkPermissionForBlockBroadcast(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            AppPermission.requirePermissions(
-                    this,
-                    arrayOf(
-                            AppPermission.PER_READ_PHONE_STATE,
-                            AppPermission.PER_READ_CALL_LOG,
-                            AppPermission.PER_ANSWER_PHONE_CALLS // >=26
-                    ),
-                    AppPermission.PER_REQUEST_CODE
-            )
-        }else{
-            AppPermission.requirePermissions(
-                    this,
-                    arrayOf(
-                            AppPermission.PER_READ_PHONE_STATE,
-                            AppPermission.PER_READ_CALL_LOG
-                    ),
-                    AppPermission.PER_REQUEST_CODE
-            )
-        }
-    }
 }
