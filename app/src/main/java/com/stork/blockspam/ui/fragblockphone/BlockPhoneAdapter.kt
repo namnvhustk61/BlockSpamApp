@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.stork.blockspam.R
 import com.stork.blockspam.database.model.CallPhone.CallPhone
 import com.stork.blockspam.database.model.CallPhone.CallPhoneKEY
+import com.stork.blockspam.storage.AppSharedPreferences
 import com.stork.http.model.BlockPhone
 import com.stork.viewcustom.general.ImageViewSwap
 import com.stork.viewcustom.otherlayout.MySwipeLayout
@@ -115,6 +116,7 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
             }
             is ViewAskPermission->{
                 holder.setOnEvent(this)
+                holder.setData()
             }
         }
     }
@@ -254,9 +256,14 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    private var onGiveNowClickListener: (()->Unit)? = null
-    fun setOnGiveNowClickListener(onGiveNowClickListener: (()->Unit)){
-        this.onGiveNowClickListener = onGiveNowClickListener
+    private var onGivePhoneDefaultNowClickListener: (()->Unit)? = null
+    fun setOnGivePhoneDefaultNowClickListener(onGivePhoneDefaultNowClickListener: (()->Unit)){
+        this.onGivePhoneDefaultNowClickListener = onGivePhoneDefaultNowClickListener
+    }
+
+    private var onGiveBlockDefaultNowClickListener: (()->Unit)? = null
+    fun setOnGiveBlockDefaultNowClickListener(onGiveBlockDefaultNowClickListener: (()->Unit)){
+        this.onGiveBlockDefaultNowClickListener = onGivePhoneDefaultNowClickListener
     }
 
     private var onDismissClickListener: (()->Unit)? = null
@@ -376,12 +383,24 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     class ViewAskPermission(itemView: View): RecyclerView.ViewHolder(itemView){
-        private val tvGiveNow: TextView = itemView.tvGiveNow
+        private val tvGiveDialPhoneNow: TextView = itemView.tvGiveDialPhoneNow
+        private val tvGiveBlockPhoneNow: TextView = itemView.tvGiveBlockPhoneNow
         private val tvDismiss: TextView = itemView.tvDismiss
+        private val tvDes: TextView = itemView.tvDes
 
+        fun setData(){
+            val isDefaultBlockApp = AppSharedPreferences.getInstance(itemView.context).getBoolean(AppSharedPreferences.KEY_PREFERRENCE.IS_DEFAULT_BLOCK_APP)
+            if(isDefaultBlockApp){
+                tvGiveBlockPhoneNow.visibility = View.GONE
+                tvDes.text = itemView.context.getString(R.string.ask_permission_dial)
+            }
+        }
         fun setOnEvent(adapter: BlockPhoneAdapter){
-            tvGiveNow.setOnClickListener {
-                adapter.onGiveNowClickListener?.invoke()
+            tvGiveDialPhoneNow.setOnClickListener {
+                adapter.onGivePhoneDefaultNowClickListener?.invoke()
+            }
+            tvGiveBlockPhoneNow.setOnClickListener {
+                adapter.onGiveBlockDefaultNowClickListener?.invoke()
             }
             tvDismiss.setOnClickListener {
                 adapter.onDismissClickListener?.invoke()

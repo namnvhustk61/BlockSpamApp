@@ -8,6 +8,7 @@ import android.os.Build
 import android.provider.Settings
 import android.telecom.TelecomManager
 import androidx.annotation.RequiresApi
+import com.stork.blockspam.extension.telecomManager
 import java.lang.Exception
 
 object AppSettingsManager {
@@ -63,5 +64,10 @@ object AppSettingsManager {
         }catch (e: Exception){
         }
         return false
+    }
+
+    fun isDefaultDialer(context: Context): Boolean {
+        val default =  context.telecomManager.defaultDialerPackage
+        return context.telecomManager.defaultDialerPackage == context.packageName
     }
 }

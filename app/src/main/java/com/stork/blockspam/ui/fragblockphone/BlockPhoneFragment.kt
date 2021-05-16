@@ -18,6 +18,7 @@ import com.stork.blockspam.extension.alert
 import com.stork.blockspam.navigation.AppNavigation
 import com.stork.blockspam.storage.AppSharedPreferences
 import com.stork.blockspam.ui.MainActivity
+import com.stork.blockspam.utils.AppSettingsManager
 import com.stork.http.API
 import com.stork.http.ServiceResult
 import com.stork.http.model.AddPhoneCloud
@@ -46,17 +47,14 @@ class BlockPhoneFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-
-        if(AppSharedPreferences.getInstance(context!!)
-                        .getString(AppSharedPreferences.KEY_PREFERRENCE.IS_PER_BLOCK)
-                        .toString() != true.toString()){
-
-            (rcvBlockPhone.adapter as BlockPhoneAdapter).set_isShow_Ask_Permission(true)
-        }else{
-            (rcvBlockPhone.adapter as BlockPhoneAdapter).set_isShow_Ask_Permission(false)
-
-        }
-
+        /*
+        * if app is not default Dial App
+        * then show item in recycle to user choose settings default app
+        * 1. Default DIAL APP
+        * 2. Default BLOCK APP
+        * */
+         (rcvBlockPhone.adapter as BlockPhoneAdapter)
+                .set_isShow_Ask_Permission(!AppSettingsManager.isDefaultDialer(context!!))
 
         refreshRCV()
     }
@@ -112,8 +110,11 @@ class BlockPhoneFragment : BaseFragment() {
         (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnDismissClickListener {
             (rcvBlockPhone.adapter as BlockPhoneAdapter).set_isShow_Ask_Permission(false)
         }
-        (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnGiveNowClickListener {
-            (activity as MainActivity).setPermission()
+        (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnGivePhoneDefaultNowClickListener {
+            (activity as MainActivity).setPermissionV2 {  }
+        }
+        (rcvBlockPhone.adapter as BlockPhoneAdapter).setOnGiveBlockDefaultNowClickListener {
+           AppSettingsManager.setDefaultAppBlockCall(activity)
         }
     }
     private fun _setonStateDeleteItem(bool: Boolean){

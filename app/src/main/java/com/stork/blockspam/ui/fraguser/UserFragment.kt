@@ -17,6 +17,7 @@ import com.stork.blockspam.utils.AppPermission
 import com.stork.blockspam.utils.IntentAction
 import kotlinx.android.synthetic.main.fragment_user.*
 import kotlinx.android.synthetic.main.layout_ask_permission.*
+import kotlinx.android.synthetic.main.layout_ask_permission.view.*
 
 class UserFragment : BaseFragment() {
 
@@ -53,7 +54,7 @@ class UserFragment : BaseFragment() {
 
     private fun initView() {
         tvDismiss.setOnClickListener { showAskLayout(false)}
-        tvGiveNow.setOnClickListener {  PhoneContact.requirePermissions(this) }
+        tvGiveDialPhoneNow.setOnClickListener {  PhoneContact.requirePermissions(this) }
 
         rcvContacts.layoutManager =  LinearLayoutManager(context)
         rcvContacts.adapter =  ContactAdapter<PhoneContact>()

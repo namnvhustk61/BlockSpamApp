@@ -46,39 +46,54 @@
            android:fontFamily="@font/svn_gilroy_light"
            android:textSize="@dimen/sp_14"
            android:textColor="@color/text_less"
-           android:text="@string/ask_permission_ask"
+           android:text="@string/ask_permission_dial_and_block"
            />
 
-       <com.stork.viewcustom.general.TextViewAction
-           android:id="@+id/tvGiveNow"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_below="@id/tvDes"
-           android:padding="@dimen/dp_5"
-           android:layout_marginTop="@dimen/dp_5"
-           android:layout_marginEnd="@dimen/dp_10"
-           android:layout_alignParentStart="true"
-           android:fontFamily="@font/svn_gilroy_medium"
-           android:textSize="@dimen/sp_14"
-           android:textColor="@color/blue"
-           android:text="@string/give_now"
-           />
+      <com.stork.viewcustom.radius.LinearLayoutRadius
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/dp_5"
+          android:layout_below="@id/tvDes"
+          android:layout_alignParentStart="true"
+          android:orientation="horizontal">
 
-       <com.stork.viewcustom.general.TextViewAction
-           android:id="@+id/tvDismiss"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_below="@id/tvDes"
-           android:padding="@dimen/dp_5"
-           android:layout_marginTop="@dimen/dp_5"
-           android:layout_marginEnd="@dimen/dp_10"
-           android:layout_marginStart="@dimen/dp_2"
-           android:layout_toEndOf="@id/tvGiveNow"
-           android:fontFamily="@font/svn_gilroy_medium"
-           android:textSize="@dimen/sp_14"
-           android:textColor="@color/gray_blur"
-           android:text="@string/dismiss"
-           />
+          <com.stork.viewcustom.general.TextViewAction
+              android:id="@+id/tvGiveDialPhoneNow"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+
+              android:padding="@dimen/dp_5"
+              android:fontFamily="@font/svn_gilroy_bold"
+              android:textSize="@dimen/sp_14"
+              android:textColor="@color/green"
+              android:text="@string/give_dial_phone_now"
+              />
+
+          <com.stork.viewcustom.general.TextViewAction
+              android:id="@+id/tvGiveBlockPhoneNow"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:padding="@dimen/dp_5"
+              android:layout_marginStart="@dimen/dp_10"
+              android:layout_alignParentStart="true"
+              android:fontFamily="@font/svn_gilroy_bold"
+              android:textSize="@dimen/sp_14"
+              android:textColor="@color/blue"
+              android:text="@string/give_block_phone_now_has_numb"
+              />
+
+          <com.stork.viewcustom.general.TextViewAction
+              android:id="@+id/tvDismiss"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:padding="@dimen/dp_5"
+              android:layout_marginStart="@dimen/dp_10"
+              android:fontFamily="@font/svn_gilroy_medium"
+              android:textSize="@dimen/sp_14"
+              android:textColor="@color/gray_blur"
+              android:text="@string/dismiss"
+              />
+      </com.stork.viewcustom.radius.LinearLayoutRadius>
    </com.stork.viewcustom.radius.RelativeLayoutRadius>
 
     <View

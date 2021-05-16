@@ -61,13 +61,25 @@ abstract class BaseActivity : AppCompatActivity(), BaseView {
                 /*
                 * Permission for BlockSpamService running
                 */
+                AppSharedPreferences.getInstance(this).saveBoolean(AppSharedPreferences.KEY_PREFERRENCE.IS_DEFAULT_BLOCK_APP, true)
                 checkPermissionForBlockSpamService()
             } else {
                 // Your app is not the call screening app
                 /*
                 * Permission for BlockCallBroadcastReceiver running
                 */
+                AppSharedPreferences.getInstance(this).saveBoolean(AppSharedPreferences.KEY_PREFERRENCE.IS_DEFAULT_BLOCK_APP, false)
                 checkPermissionForBlockBroadcast()
+            }
+        }
+
+        if (requestCode == AppSettingsManager.ROLE_CALL_DIAL_ID) {
+            if (resultCode == android.app.Activity.RESULT_OK) {
+                // Your app is now the call screening app
+                onStatusPermissionListener?.invoke(true)
+            } else {
+                // Your app is not the call screening app
+                onStatusPermissionListener?.invoke(false)
             }
         }
     }
@@ -86,6 +98,7 @@ abstract class BaseActivity : AppCompatActivity(), BaseView {
         }
     }
 
+    ////////////// Permission /////////////
     fun setPermissionV1(){
         /*
         *  Required  App is  caller id & spam app default  OR  Call Phone Default
@@ -111,7 +124,14 @@ abstract class BaseActivity : AppCompatActivity(), BaseView {
         }
     }
 
-    private fun checkPermissionForBlockSpamService(){
+    private var onStatusPermissionListener: ((status: Boolean)->Unit)? = null
+    fun setPermissionV2(onStatusListener: ((status: Boolean)->Unit)?){
+        this.onStatusPermissionListener = onStatusListener;
+        // ask permission set default DIAL
+        AppSettingsManager.setDefaultAppCallPhone(this)
+    }
+
+    fun checkPermissionForBlockSpamService(){
         AppPermission.requirePermissions(
                 this,
                 arrayOf(AppPermission.PER_READ_CONTACTS, AppPermission.PER_READ_PHONE_STATE),
@@ -119,7 +139,7 @@ abstract class BaseActivity : AppCompatActivity(), BaseView {
         )
     }
 
-    private fun checkPermissionForBlockBroadcast(){
+    fun checkPermissionForBlockBroadcast(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             AppPermission.requirePermissions(
                     this,

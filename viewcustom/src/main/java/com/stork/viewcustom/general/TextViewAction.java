@@ -61,11 +61,12 @@ public class TextViewAction extends AppCompatTextView {
                         drawable.setCornerRadius(10f);
                         v.setBackground(drawable);
                     }
-                    v.getBackground().setColorFilter(0x4DEFEFEF, PorterDuff.Mode.SRC_ATOP);
+                    v.getBackground().setColorFilter(getContext().getColor(R.color.color_press), PorterDuff.Mode.SRC_ATOP);
+
                     v.invalidate();
                     break;
                 }
-                case MotionEvent.ACTION_UP: {
+                case MotionEvent.ACTION_UP: case MotionEvent.ACTION_CANCEL: {
                     if(v.getBackground() == null){
                         v.setBackground(new GradientDrawable());
                     }
