@@ -27,4 +27,10 @@
         <item name="android:popupElevation">@dimen/dp_15</item>
 
     </style>
+
+    <style name="BottomSheetBackgroundWhite" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item> <!-- This is important -->
+        <item name="android:statusBarColor">@color/transaction</item> <!-- And then this will be needed -->
+        <item name="android:navigationBarColor">@color/background_item</item>
+    </style>
 </resources>

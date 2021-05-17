@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.stork.viewcustom.radius.ConstraintLayoutRadius
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+android:background="@color/background_item"
+app:radiusTopLeft="@dimen/radius"
+app:radiusTopRight="@dimen/radius"
+    >
+
+<EditText
+    android:visibility="gone"
+    android:id="@+id/dialpad_input"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:inputType="phone"
+    android:textCursorDrawable="@null"
+    android:textSize="@dimen/dialpad_text_size"
+    android:textColor="@color/text"
+    style="@style/DialpadEditText"
+    android:background="@android:color/transparent"
+    app:layout_constraintBottom_toTopOf="@+id/dialpad_wrapper"
+    />
+
+<ImageView
+    android:visibility="invisible"
+    android:id="@+id/dialpad_clear_char"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_10"
+    style="@style/DialpadNumberStyle"
+
+    android:layout_marginStart="@dimen/activity_margin"
+    android:src="@drawable/ic_backspace"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="@+id/dialpad_call_button"
+    app:layout_constraintStart_toEndOf="@+id/dialpad_call_button"
+    />
+
+<include
+    android:id="@+id/dialpad_wrapper"
+    layout="@layout/layout_dialpad"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toTopOf="@+id/dialpad_call_button" />
+
+<com.stork.viewcustom.radius.ImageViewRadius
+    android:id="@+id/dialpad_call_button"
+    android:layout_width="@dimen/dialpad_button_size"
+    android:layout_height="@dimen/dialpad_button_size"
+    android:layout_marginBottom="@dimen/activity_margin"
+    android:elevation="@dimen/medium_margin"
+    android:src="@drawable/ic_phone"
+    app:radius="@dimen/dp_60"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
+</com.stork.viewcustom.radius.ConstraintLayoutRadius>

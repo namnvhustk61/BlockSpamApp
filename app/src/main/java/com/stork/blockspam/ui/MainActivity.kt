@@ -16,12 +16,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : BaseActivity() {
 
     private lateinit var tabBarItems: List<TabBarView>
+    private var keyboardPhoneBottomSheet: KeyboardPhoneBottomSheet? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setView()
+        setEvent()
 
         /* Only, the first open App will ask user allow to DIAL
         * */
@@ -65,6 +67,13 @@ class MainActivity : BaseActivity() {
         }
 
         selectTab(AppSharedPreferences.getInstance(this).getInt(AppSharedPreferences.KEY_PREFERRENCE.TAB_SELECTED)?:0)
+        keyboardPhoneBottomSheet = KeyboardPhoneBottomSheet()
+    }
+
+    private fun setEvent(){
+        fabShowKeyboardPhone.setOnClickListener {
+            keyboardPhoneBottomSheet?.show(supportFragmentManager, keyboardPhoneBottomSheet?.tag)
+        }
     }
 
     //////
