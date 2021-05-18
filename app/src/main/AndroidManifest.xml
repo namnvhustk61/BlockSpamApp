@@ -16,6 +16,16 @@
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
+
+
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+
+
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -27,7 +37,11 @@
         android:supportsRtl="true"
         android:theme="@style/SplashTheme"
         tools:ignore="AllowBackup">
-        <activity android:name=".ui.callingincome.CallingIncomeActivity"></activity>
+        <activity android:name=".ui.callingincome.CallingIncomeActivity"
+            android:label="@string/ongoing_call"
+            android:screenOrientation="portrait"
+            android:showOnLockScreen="true"
+            />
         <activity
             android:name=".ui.MainActivity"
             android:theme="@style/SplashTheme">
@@ -54,6 +68,19 @@
         <activity
             android:name=".ui.addcallphone.AddCallPhoneActivity"
             android:theme="@style/SplashTheme" />
+
+        <activity
+            android:name=".ui.dialer.DialerActivity"
+            android:label="Dialer"
+            >
+
+            <intent-filter>
+                <action android:name="android.intent.action.CALL" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="tel" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".service.BockSpamService"

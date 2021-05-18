@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stork.blockspam.AppConfig
 import com.stork.blockspam.R
@@ -62,7 +63,7 @@ class UserFragment : BaseFragment() {
 
     private fun onEvent(){
         (rcvContacts.adapter as ContactAdapter<*>).setOnItemClickListener {item->
-            IntentAction.callPhone(context!!, item.phoneNumbers[0])
+            IntentAction.callPhone(activity as AppCompatActivity, item.phoneNumbers[0])
         }
 
         (rcvContacts.adapter as ContactAdapter<*>).setOnItemSwipeClickListener_Block {item, index ->
@@ -70,7 +71,7 @@ class UserFragment : BaseFragment() {
         }
 
         (rcvContacts.adapter as ContactAdapter<*>).setOnItemSwipeClickListener_Call{item, index ->
-            IntentAction.callPhone(context!!, item.phoneNumbers[0])
+            IntentAction.callPhone(activity as AppCompatActivity, item.phoneNumbers[0])
         }
 
         (rcvContacts.adapter as ContactAdapter<*>).setOnItemSwipeClickListener_Message { item, index ->

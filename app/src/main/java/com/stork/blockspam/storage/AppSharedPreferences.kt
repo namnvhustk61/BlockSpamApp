@@ -33,6 +33,8 @@ class AppSharedPreferences {
         // String
         SERVICE_RUNNING,
         IS_PER_BLOCK,
+        REMEMBER_SIM_PREFIX
+
     }
 
     final val VALUE_STR_FAIL: String = "*$*"
@@ -46,6 +48,11 @@ class AppSharedPreferences {
     fun getString(key: KEY_PREFERRENCE): String? {
         if(sharedPreferences == null){return VALUE_STR_FAIL}
         return sharedPreferences!!.getString( key.name, VALUE_STR_FAIL)
+    }
+
+    fun getStringDefault(key: KEY_PREFERRENCE, default: String): String? {
+        if(sharedPreferences == null){return default}
+        return sharedPreferences!!.getString( key.name, default)
     }
 
     fun saveInt( key :KEY_PREFERRENCE, value: Int) {

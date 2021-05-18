@@ -108,6 +108,10 @@ fun Activity.alert(
 
     }
 
+    fun Activity.showToast(message: String) {
+      Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
     fun Fragment.alert(message: String) {
         activity?.alert(message)
     }
@@ -135,6 +139,5 @@ fun Activity.alert(
 
 fun Fragment.showToast(message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-
 }
 

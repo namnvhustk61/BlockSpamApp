@@ -30,6 +30,7 @@ object AppPermission {
 
 
     const val PER_REQUEST_CODE = 99
+    const val PER_REQUEST_CODE_READ_PHONE = 999
 
     fun requirePermissions(activity: Activity, permissions: String, requestCode: Int):Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

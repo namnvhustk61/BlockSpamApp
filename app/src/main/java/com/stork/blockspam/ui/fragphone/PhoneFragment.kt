@@ -10,6 +10,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.stork.blockspam.R
 import com.stork.blockspam.base.BaseFragment
 import com.stork.blockspam.extension.*
@@ -60,7 +61,7 @@ class PhoneFragment: BaseFragment() {
         dialpad_clear_char.setOnLongClickListener { clearInput(); true }
         dialpad_call_button.setOnClickListener {
             if(dialpad_input.text.isNotEmpty()){
-                IntentAction.callPhone(context!!, dialpad_input.text.toString())
+                IntentAction.callPhone(activity as AppCompatActivity, dialpad_input.text.toString())
             }
         }
         dialpad_input.onTextChangeListener { dialpadValueChanged(it) }
