@@ -49,7 +49,15 @@ class CallingIncomeActivity : AppCompatActivity() {
         initButtons()
 
         audioManager.mode = AudioManager.MODE_IN_CALL
-
+        CallManager.getCallContact(applicationContext) { contact ->
+            callContact = contact
+            callContactAvatar = getCallContactAvatar()
+            runOnUiThread {
+                setupNotification()
+                updateOtherPersonsInfo()
+                checkCalledSIMCard()
+            }
+        }
         addLockScreenFlags()
 
         CallManager.registerCallback(callCallback)
