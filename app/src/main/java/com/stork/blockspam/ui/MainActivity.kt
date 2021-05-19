@@ -7,6 +7,7 @@ import com.stork.blockspam.base.BaseActivity
 import com.stork.blockspam.storage.AppSharedPreferences
 import com.stork.blockspam.ui.fragblockphone.BlockPhoneFragment
 import com.stork.blockspam.ui.fragphone.PhoneFragment
+import com.stork.blockspam.ui.fragrecentcall.RecentCallFragment
 import com.stork.blockspam.ui.fragserver.ServerFragment
 import com.stork.blockspam.ui.fraguser.UserFragment
 import com.stork.viewcustom.general.TabBarView
@@ -47,7 +48,7 @@ class MainActivity : BaseActivity() {
                 BlockPhoneFragment(),
                 ServerFragment(),
                 UserFragment(),
-                PhoneFragment()
+                RecentCallFragment()
         )
 
         mainViewPager.adapter = MainPagerAdapter(supportFragmentManager, fragments)

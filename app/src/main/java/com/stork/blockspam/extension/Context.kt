@@ -1,5 +1,6 @@
 package com.stork.blockspam.extension
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.NotificationManager
 import android.app.role.RoleManager
@@ -52,6 +53,15 @@ fun Context.queryCursor(
         if (showErrors) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT ).show()
         }
+    }
+}
+
+@SuppressLint("MissingPermission")
+fun Context.areMultipleSIMsAvailable(): Boolean {
+    return try {
+        telecomManager.callCapablePhoneAccounts.size > 1
+    } catch (ignored: Exception) {
+        false
     }
 }
 

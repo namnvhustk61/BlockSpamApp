@@ -85,7 +85,7 @@ class CallManager {
         } catch (e: Exception) {
             null
         }
-        private fun ensureBackgroundThread(callback: () -> Unit) {
+         fun ensureBackgroundThread(callback: () -> Unit) {
             if (isOnMainThread()) {
                 Thread {
                     callback()
@@ -94,7 +94,7 @@ class CallManager {
                 callback()
             }
         }
-        private fun isOnMainThread() = Looper.myLooper() == Looper.getMainLooper()
+         fun isOnMainThread() = Looper.myLooper() == Looper.getMainLooper()
     }
 
 
