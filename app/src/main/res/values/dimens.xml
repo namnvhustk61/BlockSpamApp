@@ -29,23 +29,29 @@
 
 
 
-    <dimen name="dialpad_button_size">60dp</dimen>
-    <dimen name="incoming_call_button_size">72dp</dimen>
+    <dimen name="dialpad_button_size">64dp</dimen>
+    <dimen name="incoming_call_button_size">48dp</dimen>
     <dimen name="call_notification_button_size">30dp</dimen>
-    <dimen name="incoming_call_avatar_size">120dp</dimen>
+    <dimen name="incoming_call_avatar_size">72dp</dimen>
 
     <dimen name="dialpad_text_size">30sp</dimen>
-    <dimen name="caller_name_text_size">34sp</dimen>
-    <dimen name="call_status_text_size">20sp</dimen>
+    <dimen name="caller_name_text_size">28sp</dimen>
+    <dimen name="call_status_text_size">18sp</dimen>
+    <dimen name="actionbar_text_size">20sp</dimen>
+    <dimen name="smaller_text_size">12sp</dimen>
+    <dimen name="text_size_medium">14sp</dimen>
+    <dimen name="text_size_high">16sp</dimen>
+    <dimen name="text_size_big">18sp</dimen>
+    <dimen name="text_size_big_max">36sp</dimen>
 
     <dimen name="activity_margin">16dp</dimen>
     <dimen name="normal_margin">12dp</dimen>
     <dimen name="normal_margin_less">10dp</dimen>
-    <dimen name="smaller_text_size">12sp</dimen>
+
     <dimen name="small_margin">4dp</dimen>
-    <dimen name="actionbar_text_size">20sp</dimen>
     <dimen name="medium_margin">8dp</dimen>
     <dimen name="radius">16dp</dimen>
     <dimen name="radius_medium">16dp</dimen>
+    <dimen name="margin_large">32dp</dimen>
 
 </resources>

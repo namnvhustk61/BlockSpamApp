@@ -7,16 +7,15 @@ import android.content.Intent
 import android.graphics.*
 import android.media.AudioManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Handler
-import android.os.PowerManager
+import android.os.*
 import android.provider.MediaStore
 import android.telecom.Call
 import android.telecom.CallAudioState
 import android.util.Size
+import android.view.View
 import android.view.WindowManager
 import android.widget.RemoteViews
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.stork.blockspam.R
 import com.stork.blockspam.extension.*
@@ -29,6 +28,7 @@ import com.stork.blockspam.utils.isOreoPlus
 import kotlinx.android.synthetic.main.activity_calling_income.*
 import kotlinx.android.synthetic.main.layout_dialpad.*
 import java.util.*
+
 
 class CallingIncomeActivity : AppCompatActivity() {
     private val CALL_NOTIFICATION_ID = 1
@@ -133,7 +133,13 @@ class CallingIncomeActivity : AppCompatActivity() {
         dialpad_asterisk.setOnClickListener { dialpadPressed('*') }
         dialpad_hashtag.setOnClickListener { dialpadPressed('#') }
 
-
+        imgActionBellClose.setOnClickListener(object : View.OnClickListener{
+            var setMute: Boolean = true
+            override fun onClick(v: View?) {
+                actionBellClose(setMute)
+            }
+        })
+        imgActionBlock.setOnClickListener {  }
 
     }
 
@@ -150,6 +156,24 @@ class CallingIncomeActivity : AppCompatActivity() {
 
         val newRoute = if (isSpeakerOn) CallAudioState.ROUTE_SPEAKER else CallAudioState.ROUTE_EARPIECE
         CallManager.inCallService?.setAudioRoute(newRoute)
+    }
+
+    private fun actionBellClose(setMute: Boolean){
+        // off Music
+        audioManager.ringerMode = AudioManager.RINGER_MODE_VIBRATE
+        // off Rung
+        val pattern = longArrayOf(10000)
+        val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if(v != null){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                v.vibrate(pattern, 0)
+            } else {
+                //deprecated in API 26
+                v.vibrate(pattern, 0)
+            }
+            v.cancel()
+        }
+
     }
 
     private fun toggleMicrophone() {
@@ -181,7 +205,10 @@ class CallingIncomeActivity : AppCompatActivity() {
         }
 
         if (callContactAvatar != null) {
-            caller_avatar.setImageBitmap(callContactAvatar)
+            caller_avatar_image.setImageBitmap(callContactAvatar)
+
+            caller_avatar_image.visibility = View.VISIBLE
+            caller_avatar_text.visibility = View.INVISIBLE
         }
     }
 

@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/call_holder"
+    android:background="@color/green_blur"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/caller_avatar"
+    <com.stork.viewcustom.general.TextViewAction
+        android:id="@+id/caller_avatar_text"
         android:layout_width="@dimen/incoming_call_avatar_size"
         android:layout_height="@dimen/incoming_call_avatar_size"
         android:contentDescription="@string/accept"
@@ -16,26 +17,49 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.05"
-        tools:src="@drawable/ic_phone" />
+        android:background="@drawable/ic_text_view_round_0"
+        android:gravity="center"
+        android:text="N"
+        android:textSize="@dimen/text_size_big_max"
+        android:fontFamily="@font/svn_gilroy_medium"
+        android:textColor="@color/white"
+        app:radius="@dimen/incoming_call_avatar_size"/>
+
+    <ImageView
+        android:visibility="invisible"
+        android:id="@+id/caller_avatar_image"
+        android:layout_width="@dimen/incoming_call_avatar_size"
+        android:layout_height="@dimen/incoming_call_avatar_size"
+        android:contentDescription="@string/accept"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.05"
+        tools:src="@drawable/ic_phone_green" />
 
     <TextView
         android:id="@+id/caller_name_label"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginTop="@dimen/margin_large"
         android:gravity="center_horizontal"
         android:textSize="@dimen/caller_name_text_size"
+        android:fontFamily="@font/svn_gilroy_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/caller_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/caller_avatar_image"
+        android:textColor="@color/white"
         tools:text="Caller name" />
 
     <TextView
         android:id="@+id/caller_number_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginTop="@dimen/dp_10"
+        android:fontFamily="@font/svn_gilroy_medium"
         android:gravity="center_horizontal"
+        android:textColor="@color/white"
         android:textSize="@dimen/call_status_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,22 +71,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/dp_5"
         android:alpha="0.8"
-        android:textSize="@dimen/call_status_text_size"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/call_sim_image"
         app:layout_constraintTop_toBottomOf="@+id/caller_number_label"
-        tools:text="Is Calling" />
+        tools:text="Calling" />
+
 
     <ImageView
         android:id="@+id/call_sim_image"
-        android:layout_width="@dimen/incoming_call_avatar_size"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:alpha="0.8"
         android:background="?selectableItemBackgroundBorderless"
         android:src="@drawable/ic_sim_vector"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/call_status_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/call_status_label"
@@ -71,21 +97,18 @@
         app:layout_constraintStart_toEndOf="@+id/call_status_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/call_status_label" />
-
     <TextView
         android:id="@+id/call_sim_id"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:alpha="0.8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="@color/text_less"
-        android:textSize="@dimen/dialpad_text_size"
-        android:visibility="gone"
+        android:textColor="@color/black"
+        android:textSize="@dimen/smaller_text_size"
         app:layout_constraintBottom_toBottomOf="@+id/call_sim_image"
         app:layout_constraintEnd_toEndOf="@+id/call_sim_image"
         app:layout_constraintStart_toStartOf="@+id/call_sim_image"
         app:layout_constraintTop_toTopOf="@+id/call_sim_image"
-        tools:text="1" />
+        android:text="1" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ongoing_call_holder"
@@ -95,8 +118,8 @@
 
         <ImageView
             android:id="@+id/call_toggle_microphone"
-            android:layout_width="@dimen/dialpad_button_size"
-            android:layout_height="@dimen/dialpad_button_size"
+            android:layout_width="@dimen/incoming_call_button_size"
+            android:layout_height="@dimen/incoming_call_button_size"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="@dimen/medium_margin"
             android:src="@drawable/ic_microphone_vector"
@@ -109,8 +132,8 @@
 
         <ImageView
             android:id="@+id/call_toggle_speaker"
-            android:layout_width="@dimen/dialpad_button_size"
-            android:layout_height="@dimen/dialpad_button_size"
+            android:layout_width="@dimen/incoming_call_button_size"
+            android:layout_height="@dimen/incoming_call_button_size"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="@dimen/medium_margin"
             android:src="@drawable/ic_speaker_off_vector"
@@ -122,11 +145,11 @@
 
         <ImageView
             android:id="@+id/call_dialpad"
-            android:layout_width="@dimen/dialpad_button_size"
-            android:layout_height="@dimen/dialpad_button_size"
+            android:layout_width="@dimen/incoming_call_button_size"
+            android:layout_height="@dimen/incoming_call_button_size"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="@dimen/medium_margin"
-            android:src="@drawable/ic_phone_keyboard_active"
+            android:src="@drawable/ic_phone_keyboard_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.85"
@@ -134,12 +157,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.75" />
 
-        <ImageView
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/call_end"
-            android:layout_width="@dimen/dialpad_button_size"
-            android:layout_height="@dimen/dialpad_button_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/decline"
-            android:src="@drawable/ic_call_decline"
+            android:src="@drawable/ic_call_decline_white"
+            app:backgroundTint="@color/red"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -154,50 +178,57 @@
         android:layout_height="match_parent"
         android:visibility="gone">
 
-        <ImageView
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/call_decline"
-            android:layout_width="@dimen/incoming_call_button_size"
-            android:layout_height="@dimen/incoming_call_button_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/decline"
-            android:src="@drawable/ic_call_decline"
+            android:src="@drawable/ic_call_decline_white"
+            app:backgroundTint="@color/red"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.15"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.85" />
+            app:layout_constraintVertical_bias="0.8" />
 
         <TextView
             android:id="@+id/call_decline_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/normal_margin"
+            android:layout_marginTop="@dimen/dp_10"
             android:text="@string/decline"
-            android:textSize="@dimen/actionbar_text_size"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium"
+            android:fontFamily="@font/svn_gilroy_light"
             app:layout_constraintEnd_toEndOf="@+id/call_decline"
             app:layout_constraintStart_toStartOf="@+id/call_decline"
             app:layout_constraintTop_toBottomOf="@+id/call_decline" />
 
-        <ImageView
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/call_accept"
-            android:layout_width="@dimen/incoming_call_button_size"
-            android:layout_height="@dimen/incoming_call_button_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/accept"
-            android:src="@drawable/ic_phone"
+            android:src="@drawable/ic_phone_white"
+            app:backgroundTint="@color/green"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.85"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.85" />
+            app:layout_constraintVertical_bias="0.8" />
 
         <TextView
             android:id="@+id/call_accept_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/normal_margin"
+            android:layout_marginTop="@dimen/dp_10"
             android:text="@string/accept"
-            android:textSize="@dimen/actionbar_text_size"
+            android:textColor="@color/white"
+
+            android:fontFamily="@font/svn_gilroy_light"
+            android:textSize="@dimen/text_size_medium"
             app:layout_constraintEnd_toEndOf="@+id/call_accept"
             app:layout_constraintStart_toStartOf="@+id/call_accept"
             app:layout_constraintTop_toBottomOf="@+id/call_accept" />
@@ -245,4 +276,27 @@
 
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/imgActionBlock"
+        android:layout_width="@dimen/size_icon_x1.5"
+        android:layout_height="@dimen/size_icon_x1.5"
+        android:background="?selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_block_x_white"
+        android:layout_marginStart="@dimen/dp_10"
+        android:padding="@dimen/dp_5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/imgActionBellClose"
+        android:layout_width="@dimen/size_icon_x1.5"
+        android:layout_height="@dimen/size_icon_x1.5"
+        android:background="?selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_bell_off_white"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:padding="@dimen/dp_5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+    />
 </androidx.constraintlayout.widget.ConstraintLayout>

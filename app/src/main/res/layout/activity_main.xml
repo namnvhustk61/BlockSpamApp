@@ -50,8 +50,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            app:activeIcon="@drawable/ic_phone_keyboard_active"
-            app:inactiveIcon="@drawable/ic_phone_keyboard_not_active"
+            app:activeIcon="@drawable/ic_recent_call_active"
+            app:inactiveIcon="@drawable/ic_recent_call_not_active"
             tools:ignore="InvalidId" />
     </com.stork.viewcustom.radius.LinearLayoutRadius>
 

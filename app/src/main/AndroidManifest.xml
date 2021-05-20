@@ -22,6 +22,7 @@
 
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
 
 
@@ -41,6 +42,8 @@
             android:label="@string/ongoing_call"
             android:screenOrientation="portrait"
             android:showOnLockScreen="true"
+            android:excludeFromRecents="true"
+            android:theme="@style/ThemeAccept"
             />
         <activity
             android:name=".ui.MainActivity"

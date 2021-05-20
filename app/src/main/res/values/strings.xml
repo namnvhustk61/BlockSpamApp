@@ -35,7 +35,7 @@
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
     <string name="unknown_caller">Unknown Caller</string>
-    <string name="is_calling">Is Calling…</string>
+    <string name="is_calling">calling…</string>
     <string name="dialing">Dialing…</string>
     <string name="always_use_this_sim">Always use this SIM for this number</string>
     <string name="select_sim">Select a SIM for this call</string>

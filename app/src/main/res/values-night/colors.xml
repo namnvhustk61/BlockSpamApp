@@ -5,6 +5,8 @@
     <color name="colorSecondary">#4CAF50</color>
     <color name="colorSecondaryVariant">#CDDC39</color>
     <color name="colorOnSecondary">#009688</color>
+    <color name="black">#000000</color>
+
     <color name="background">#000000</color>
     <color name="background_item">#1F1F1F</color>
     <color name="text">#FFFFFF</color>
@@ -26,6 +28,10 @@
     <color name="blue">#008DFF</color>
     <color name="red">#FF7066</color>
     <color name="green">#4CAF50</color>
+
+    <color name="green_blur">#6FA985</color>
+    <color name="red_blur">#774743</color>
+
 
     <color name="divide">#CC474747</color>
 
