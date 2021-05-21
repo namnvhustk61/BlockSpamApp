@@ -59,7 +59,7 @@
         android:id="@+id/fabShowKeyboardPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:backgroundTint="@color/green"
+        app:backgroundTint="@color/colorPrimary"
         android:layout_above="@id/mainTabBar"
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/dp_15"

@@ -22,10 +22,15 @@ class RecentCallFragment:  BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        refresh()
     }
 
     override fun onResume() {
         super.onResume()
+       refresh()
+    }
+
+    private fun refresh(){
         RecentHelper(context!!).getRecentCalls(true) { recents ->
             activity?.runOnUiThread {
                 (rcvRecentCall.adapter as RecentCallAdapter).refresh(recents)
