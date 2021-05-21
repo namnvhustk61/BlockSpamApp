@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.stork.blockspam.R
 import com.stork.blockspam.base.BaseFragment
+import com.stork.blockspam.utils.IntentAction
 import kotlinx.android.synthetic.main.fragment_recent_call.*
 
 class RecentCallFragment:  BaseFragment() {
@@ -22,6 +24,7 @@ class RecentCallFragment:  BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        onEvent()
         refresh()
     }
 
@@ -41,5 +44,23 @@ class RecentCallFragment:  BaseFragment() {
     private fun initView(){
         rcvRecentCall.layoutManager = LinearLayoutManager(context)
         rcvRecentCall.adapter = RecentCallAdapter()
+    }
+
+    private fun onEvent(){
+        (rcvRecentCall.adapter as RecentCallAdapter).setOnItemClickListener { item->
+            IntentAction.callPhone(activity as AppCompatActivity, item.phoneNumber)
+        }
+
+        (rcvRecentCall.adapter as RecentCallAdapter).setOnItemSwipeClickListener_Block { item, index ->
+            blockPhone(item.phoneNumber, item.name)
+        }
+
+        (rcvRecentCall.adapter as RecentCallAdapter).setOnItemSwipeClickListener_Call{ item, index ->
+            IntentAction.callPhone(activity as AppCompatActivity, item.phoneNumber)
+        }
+
+        (rcvRecentCall.adapter as RecentCallAdapter).setOnItemSwipeClickListener_Message { item, index ->
+            IntentAction.sendSMS(context!!, item.phoneNumber)
+        }
     }
 }

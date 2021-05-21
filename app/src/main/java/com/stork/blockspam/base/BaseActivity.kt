@@ -9,6 +9,12 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import com.stork.blockspam.AppConfig
+import com.stork.blockspam.R
+import com.stork.blockspam.database.model.CallPhone.CallPhone
+import com.stork.blockspam.database.model.CallPhone.CallPhoneKEY
+import com.stork.blockspam.extension.alert
+import com.stork.blockspam.extension.showToast
 import com.stork.blockspam.storage.AppSharedPreferences
 import com.stork.blockspam.utils.AppPermission
 import com.stork.blockspam.utils.AppSettingsManager
@@ -159,6 +165,21 @@ abstract class BaseActivity : AppCompatActivity(), BaseView {
                     ),
                     AppPermission.PER_REQUEST_CODE
             )
+        }
+    }
+    //////////////////// Action ///////////////
+
+     fun blockPhone(phone: String, name: String){
+        val callPhone = CallPhone()
+        callPhone.phone = phone
+        callPhone.name  = name
+        callPhone.type = CallPhoneKEY.TYPE.TYPE_LOCAL
+        callPhone.status = CallPhoneKEY.STATUS.STATUS_BLOCK
+        val status = callPhone.insertDB(this)
+        when(status){
+            AppConfig.SUCCESS   ->{this.showToast(getString(R.string.block_successfully))}
+            AppConfig.ERROR     ->{this.alert(getString(R.string.all_phone__alert_err_phone_saved))}
+            AppConfig.EXCEPTION ->{this.alert(getString(R.string.all_phone__alert_add_excaeption))}
         }
     }
 }
