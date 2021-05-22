@@ -7,6 +7,6 @@
         android:type="linear"
         />
     <corners
-        android:radius="@dimen/size_icon_30dp"
+        android:radius="@dimen/incoming_call_avatar_size"
         />
 </shape>

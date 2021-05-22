@@ -69,8 +69,12 @@ class AppSharedPreferences {
     }
 
     fun getBoolean(key :KEY_PREFERRENCE):Boolean {
-        if(sharedPreferences == null){return VALUE_BOOLEAN_FAIL}
-        return sharedPreferences!!.getBoolean( key.name, VALUE_BOOLEAN_FAIL)
+        try {
+            if(sharedPreferences == null){return VALUE_BOOLEAN_FAIL}
+            return sharedPreferences!!.getBoolean( key.name, VALUE_BOOLEAN_FAIL)
+        }catch (e: Exception){
+            return VALUE_BOOLEAN_FAIL
+        }
     }
 
     fun removeKey(key: KEY_PREFERRENCE){

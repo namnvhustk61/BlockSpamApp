@@ -22,6 +22,7 @@ import com.stork.blockspam.utils.AppSettingsManager
 import com.stork.http.API
 import com.stork.http.ServiceResult
 import com.stork.http.model.AddPhoneCloud
+import com.stork.http.model.BlockPhoneRes
 import com.stork.viewcustom.popup.PopupWindowMenu
 import kotlinx.android.synthetic.main.fragment_block_phone.*
 import java.util.*
@@ -183,13 +184,17 @@ class BlockPhoneFragment : BaseFragment() {
         }
         body.user_id = android_id
 
-        API.addPhoneCloud(body, object : API.ApiItf<Objects> {
-            override fun onSuccess(response: ServiceResult<Objects>?) {
-                alert(response!!.message)
+        API.addPhoneCloud(body, object : API.ApiItf<BlockPhoneRes> {
+            override fun onSuccess(response: ServiceResult<BlockPhoneRes>?) {
+                if(response?.data != null){
+                    alert(response.message, response.data.note, false){}
+                }else{
+                    alert(response?.message?:"", response?.message?:getString(R.string.successfully), false){}
+                }
             }
 
             override fun onError(message: String?) {
-                alert(message!!)
+                alert(getString(R.string.error), message!!, false){}
 
             }
 

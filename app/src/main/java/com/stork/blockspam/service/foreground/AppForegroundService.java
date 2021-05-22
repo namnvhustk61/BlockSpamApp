@@ -119,7 +119,7 @@ public class AppForegroundService extends Service {
                             callPhone.phone = item.phone;
                             callPhone.name  = item.name;
                             callPhone.type = item.type;
-                            callPhone.status = CallPhoneKEY.STATUS.STATUS_BLOCK;
+                            callPhone.status = CallPhoneKEY.STATUS.getSTATUS_BLOCK();
 
                             callPhone.insertDB(getBaseContext());
                         }

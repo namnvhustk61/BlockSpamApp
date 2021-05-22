@@ -2,6 +2,7 @@ package com.stork.http;
 
 import com.stork.http.model.AddPhoneCloud;
 import com.stork.http.model.BlockPhone;
+import com.stork.http.model.BlockPhoneRes;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,11 +35,11 @@ public class API{
                 }).isDisposed();
     }
 
-    public static void addPhoneCloud(AddPhoneCloud body, ApiItf<Objects> itf){
+    public static void addPhoneCloud(AddPhoneCloud body, ApiItf<BlockPhoneRes> itf){
         _call.addPhoneCloud(body)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<ServiceResult<Objects>>() {
+                .subscribe(new Consumer<ServiceResult<BlockPhoneRes>>() {
                     @Override
                     public void accept(ServiceResult res) throws Exception {
                         itf.onSuccess(res);

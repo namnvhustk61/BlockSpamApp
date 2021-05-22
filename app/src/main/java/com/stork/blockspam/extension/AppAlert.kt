@@ -120,8 +120,8 @@ fun Activity.alert(
         activity?.alert(null, message, BTN_TEXT_OK, cancelable, function)
     }
 
-    fun Fragment.alert(title: String, message: String, cancel: Boolean, function: (DialogInterface) -> Unit) {
-        if(cancel){
+    fun Fragment.alert(title: String, message: String, isBtnCancel: Boolean, function: (DialogInterface) -> Unit) {
+        if(isBtnCancel){
             activity?.alert(title, message, BTN_TEXT_OK, BTN_TEXT_CANCEL, true, function)
         }else{
             activity?.alert(title, message, BTN_TEXT_OK, true, function)

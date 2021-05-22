@@ -51,7 +51,14 @@
         app:activeIcon="@drawable/ic_done"
         app:inactiveIcon="@drawable/ic_round_not_select"/>
 
-    <include layout="@layout/part_divide" />
+    <include layout="@layout/part_divide"
+
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0_1"
+        android:layout_toEndOf="@id/imgStatus"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_below="@id/tvName"/>
 
 
 

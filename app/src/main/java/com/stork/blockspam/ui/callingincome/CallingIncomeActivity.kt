@@ -17,6 +17,7 @@ import android.view.WindowManager
 import android.widget.RemoteViews
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.stork.blockspam.R
 import com.stork.blockspam.extension.*
 import com.stork.blockspam.model.PhoneContact
@@ -47,7 +48,6 @@ class CallingIncomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calling_income)
         initButtons()
-
         audioManager.mode = AudioManager.MODE_IN_CALL
         CallManager.getCallContact(applicationContext) { contact ->
             callContact = contact
@@ -66,7 +66,7 @@ class CallingIncomeActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        notificationManager.cancel(CALL_NOTIFICATION_ID)
+//        notificationManager.cancel(CALL_NOTIFICATION_ID)
         CallManager.unregisterCallback(callCallback)
         callTimer.cancel()
         if (proximityWakeLock?.isHeld == true) {
@@ -197,18 +197,31 @@ class CallingIncomeActivity : AppCompatActivity() {
             return
         }
 
-        caller_name_label.text = if (callContact!!.name.isNotEmpty()) callContact!!.name else getString(R.string.unknown_caller)
-        if (callContact!!.phoneNumbers.isNotEmpty() && callContact!!.phoneNumbers != callContact!!.phoneNumbers) {
+        // set Name Caller
+
+        if (callContact!!.phoneNumbers.isNotEmpty()) {
             caller_number_label.text = callContact!!.phoneNumbers[0]
-        } else {
-            caller_number_label.beGone()
+        }
+        if (callContact!!.name.isNotEmpty() && callContact!!.name != caller_number_label.text){
+            caller_name_label.text = callContact!!.name
+        }  else {
+            caller_name_label.text = getText(R.string.unknown_caller)
         }
 
+        // set Avatar
         if (callContactAvatar != null) {
             caller_avatar_image.setImageBitmap(callContactAvatar)
 
             caller_avatar_image.visibility = View.VISIBLE
             caller_avatar_text.visibility = View.INVISIBLE
+        }else{
+            if(caller_name_label.text != getText(R.string.unknown_caller) ){
+                caller_avatar_text.background = ContextCompat.getDrawable(this, getRandomBgDrawable())
+                caller_avatar_text.text = get2CharHeadOfName(caller_name_label.text.toString())
+            }else{
+                caller_avatar_text.text = "#"
+                caller_avatar_text.background = ContextCompat.getDrawable(this, R.drawable.ic_text_view_round_0)
+            }
         }
     }
 
@@ -363,10 +376,11 @@ class CallingIncomeActivity : AppCompatActivity() {
 
     @SuppressLint("NewApi")
     private fun setupNotification() {
+        return
         val callState = CallManager.getState()
         val channelId = "simple_dialer_call"
         if (isOreoPlus()) {
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val importance = NotificationManager.IMPORTANCE_HIGH
             val name = "call_notification_channel"
 
             NotificationChannel(channelId, name, importance).apply {
@@ -401,6 +415,11 @@ class CallingIncomeActivity : AppCompatActivity() {
             setText(R.id.notification_call_status, getString(contentTextId))
             setVisibleIf(R.id.notification_accept_call, callState == Call.STATE_RINGING)
 
+            if(callState == Call.STATE_DISCONNECTED){
+                setVisibleIf(R.id.action_when_end, true)
+                setVisibleIf(R.id.notification_actions_holder, false)
+
+            }
             setOnClickPendingIntent(R.id.notification_decline_call, declinePendingIntent)
             setOnClickPendingIntent(R.id.notification_accept_call, acceptPendingIntent)
 
@@ -410,12 +429,12 @@ class CallingIncomeActivity : AppCompatActivity() {
         }
 
         val builder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_phone)
+            .setSmallIcon(R.drawable.ic_logo_app)
             .setContentIntent(openAppPendingIntent)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(Notification.CATEGORY_CALL)
             .setCustomContentView(collapsedView)
-            .setOngoing(true)
+            .setOngoing(callState != Call.STATE_DISCONNECTED)
             .setSound(null)
             .setUsesChronometer(callState == Call.STATE_ACTIVE)
             .setChannelId(channelId)

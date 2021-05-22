@@ -7,11 +7,13 @@ import android.content.Intent
 import android.os.Build
 import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
+import androidx.core.content.ContextCompat.startActivity
 import com.android.internal.telephony.ITelephony
 import com.stork.blockspam.database.model.CallPhone.CallPhone
 import com.stork.blockspam.storage.ACCEPT_CALL
 import com.stork.blockspam.storage.DECLINE_CALL
 import com.stork.blockspam.ui.callingincome.CallManager
+import com.stork.blockspam.ui.callingincome.CallingIncomeActivity
 import com.stork.blockspam.utils.AppPermission
 
 internal class BlockCallBroadcastReceiver : BroadcastReceiver() {
@@ -19,7 +21,15 @@ internal class BlockCallBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
 
         when (intent.action) {
-            ACCEPT_CALL -> CallManager.accept()
+
+            ACCEPT_CALL -> {
+                val intent = Intent(context, CallingIncomeActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(intent)
+
+                CallManager.accept()
+
+            }
             DECLINE_CALL -> CallManager.reject()
         }
         if (!AppPermission.hasPermission(context, AppPermission.PER_READ_PHONE_STATE) ||

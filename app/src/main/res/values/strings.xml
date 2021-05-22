@@ -45,4 +45,6 @@
     <string name="ongoing_call">Ongoing Call</string>
     <string name="key_board">key_board</string>
     <string name="no_app_found">App not found </string>
+    <string name="successfully">Successfully</string>
+    <string name="error">Error!</string>
 </resources>

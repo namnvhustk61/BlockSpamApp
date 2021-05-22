@@ -8,6 +8,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.stork.blockspam.R
+import com.stork.blockspam.extension.get2CharHeadOfName
+import com.stork.blockspam.extension.getRandomBgDrawable
 import com.stork.blockspam.model.PhoneContact
 import com.stork.viewcustom.general.TextViewAction
 import com.stork.viewcustom.otherlayout.MySwipeLayout
@@ -92,17 +94,8 @@ class ContactAdapter<T> : RecyclerView.Adapter<ViewHolder>() {
         private val bottom_wrapper_right_call: ImageViewRadius = itemView.bottom_wrapper_right_call
         private val bottom_wrapper_right_message: ImageViewRadius = itemView.bottom_wrapper_right_message
 
-        private val lsBgDrawable = listOf(
-                R.drawable.ic_text_view_round_1,
-                R.drawable.ic_text_view_round_2,
-                R.drawable.ic_text_view_round_3,
-                R.drawable.ic_text_view_round_4,
-                R.drawable.ic_text_view_round_5
-        )
-        var random: Random = Random()
-        private fun getRandomBgDrawable(): Int{
-            return lsBgDrawable[random.nextInt(lsBgDrawable.size)]
-        }
+
+
         fun setData(item: PhoneContact, pos: Int){
             if(item.name != ""){
                 tvName.text = item.name
@@ -117,23 +110,7 @@ class ContactAdapter<T> : RecyclerView.Adapter<ViewHolder>() {
             }
         }
 
-        private fun get2CharHeadOfName(name: String): String{
-            val ls = name.trim().split(" ")
-            if(ls.size == 1 && ls[0].length >= 2){
-                return ls[0].substring(0, 2)
-            }
-            var value = ""
-            ls.forEach { str: String ->
-            }
-            for ( index in ls.indices){
-                if(ls[index].isNotEmpty()){
-                    value += (ls[index][0])
-                }
-                if(value.length == 2){break}
-            }
-            return value
 
-        }
 
         fun setOnEvent(adapter: ContactAdapter<*>, item: PhoneContact, pos: Int){
 
