@@ -79,6 +79,8 @@
         <ImageView
             android:layout_width="@dimen/dp_0_1"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_2"
+            android:layout_marginBottom="@dimen/dp_2"
             android:background="@color/text"/>
 
         <TextView
@@ -96,6 +98,8 @@
         <ImageView
             android:layout_width="@dimen/dp_0_1"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_2"
+            android:layout_marginBottom="@dimen/dp_2"
             android:background="@color/text"/>
 
         <TextView

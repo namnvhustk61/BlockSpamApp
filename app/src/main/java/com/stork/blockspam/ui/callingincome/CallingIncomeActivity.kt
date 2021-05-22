@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.stork.blockspam.R
+import com.stork.blockspam.base.BaseActivity
 import com.stork.blockspam.extension.*
 import com.stork.blockspam.model.PhoneContact
 import com.stork.blockspam.service.BlockCallBroadcastReceiver
@@ -31,7 +32,7 @@ import kotlinx.android.synthetic.main.layout_dialpad.*
 import java.util.*
 
 
-class CallingIncomeActivity : AppCompatActivity() {
+class CallingIncomeActivity : BaseActivity() {
     private val CALL_NOTIFICATION_ID = 1
 
     private var isSpeakerOn = false
@@ -42,6 +43,9 @@ class CallingIncomeActivity : AppCompatActivity() {
     private var callContactAvatar: Bitmap? = null
     private var proximityWakeLock: PowerManager.WakeLock? = null
     private var callTimer = Timer()
+
+    private var phoneNumber: String = ""
+    private var name: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.hide()
@@ -139,7 +143,9 @@ class CallingIncomeActivity : AppCompatActivity() {
                 actionBellClose(setMute)
             }
         })
-        imgActionBlock.setOnClickListener {  }
+        imgActionBlock.setOnClickListener {
+            blockPhone(phoneNumber, name)
+        }
 
     }
 
@@ -207,6 +213,8 @@ class CallingIncomeActivity : AppCompatActivity() {
         }  else {
             caller_name_label.text = getText(R.string.unknown_caller)
         }
+        name = caller_name_label.text.toString()
+        phoneNumber = caller_number_label.text.toString()
 
         // set Avatar
         if (callContactAvatar != null) {
