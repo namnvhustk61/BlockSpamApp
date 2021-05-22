@@ -29,18 +29,23 @@ class MainActivity : BaseActivity() {
         /* Only, the first open App will ask user allow to DIAL
         * */
         if(!AppSharedPreferences.getInstance(this).getBoolean(AppSharedPreferences.KEY_PREFERRENCE.IS_FIRST_INSTALL)){
-            setPermissionV2 { onStatusListener ->  }
 
             AppSharedPreferences.getInstance(this)
                     .saveBoolean(AppSharedPreferences.KEY_PREFERRENCE.IS_FIRST_INSTALL, true)
         }
 
-        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            checkPermissionForBlockSpamService()
-        }else{
-            checkPermissionForBlockBroadcast()
+        setPermissionV2 { onStatusListener ->
+            /*
+            * neu ko la default phone thi xin quyen Block
+            * */
+            if(!onStatusListener){
+                if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                    checkPermissionForBlockSpamService()
+                }else{
+                    checkPermissionForBlockBroadcast()
+                }
+            }
         }
-
     }
 
     private fun setView(){

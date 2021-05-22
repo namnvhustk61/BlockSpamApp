@@ -87,7 +87,7 @@ class CallingIncomeService : InCallService() {
                  if(callState == Call.STATE_DISCONNECTED)
                      MainActivity::class.java
                  else CallingIncomeActivity::class.java
-        
+
         val openAppIntent = Intent(this, activityIntent)
         openAppIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
         val openAppPendingIntent = PendingIntent.getActivity(this, 0, openAppIntent, 0)
