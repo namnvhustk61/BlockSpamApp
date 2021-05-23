@@ -2,6 +2,7 @@ package com.stork.blockspam.extension
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -110,6 +111,10 @@ fun Activity.alert(
 
     fun Activity.showToast(message: String) {
       Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    fun Context.showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     fun Fragment.alert(message: String) {

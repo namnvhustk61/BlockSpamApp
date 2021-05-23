@@ -7,14 +7,16 @@ import android.content.Intent
 import android.os.Build
 import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
-import androidx.core.content.ContextCompat.startActivity
 import com.android.internal.telephony.ITelephony
 import com.stork.blockspam.database.model.CallPhone.CallPhone
 import com.stork.blockspam.storage.ACCEPT_CALL
+import com.stork.blockspam.storage.ACTION_BLOCK
+import com.stork.blockspam.storage.CALL_BACK
 import com.stork.blockspam.storage.DECLINE_CALL
 import com.stork.blockspam.ui.callingincome.CallManager
 import com.stork.blockspam.ui.callingincome.CallingIncomeActivity
 import com.stork.blockspam.utils.AppPermission
+import com.stork.blockspam.utils.IntentAction
 
 internal class BlockCallBroadcastReceiver : BroadcastReceiver() {
 
@@ -31,6 +33,19 @@ internal class BlockCallBroadcastReceiver : BroadcastReceiver() {
 
             }
             DECLINE_CALL -> CallManager.reject()
+
+            CALL_BACK -> {
+                val phone: String = intent.getStringExtra("phone")?:""
+                val name = intent.getStringExtra("name")
+                IntentAction.intentCallPhone(context, phone)
+                return
+            }
+            ACTION_BLOCK -> {
+                val phone: String = intent.getStringExtra("phone")?:""
+                val name = intent.getStringExtra("name")?:""
+                IntentAction.blockPhone(context, phone, name)
+                return
+            }
         }
         if (!AppPermission.hasPermission(context, AppPermission.PER_READ_PHONE_STATE) ||
                 !AppPermission.hasPermission(context, AppPermission.PER_READ_CALL_LOG)) {

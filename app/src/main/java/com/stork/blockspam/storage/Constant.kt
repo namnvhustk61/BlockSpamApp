@@ -19,3 +19,7 @@ class Constant {
 private const val PATH = "com.stork.blockspam.action."
 const val ACCEPT_CALL = PATH + "accept_call"
 const val DECLINE_CALL = PATH + "decline_call"
+
+const val CALL_BACK = PATH + "call_back"
+
+const val ACTION_BLOCK = PATH + "action_block"

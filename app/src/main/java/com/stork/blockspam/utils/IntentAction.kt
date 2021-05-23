@@ -10,7 +10,11 @@ import android.telecom.PhoneAccount
 import android.telecom.PhoneAccountHandle
 import android.telecom.TelecomManager
 import androidx.appcompat.app.AppCompatActivity
+import com.stork.blockspam.AppConfig
 import com.stork.blockspam.R
+import com.stork.blockspam.database.model.CallPhone.CallPhone
+import com.stork.blockspam.database.model.CallPhone.CallPhoneKEY
+import com.stork.blockspam.extension.alert
 import com.stork.blockspam.extension.showToast
 import com.stork.blockspam.extension.telecomManager
 
@@ -23,8 +27,25 @@ object IntentAction {
         } else {
             launchCallIntent(activity, phone, null)
         }
+    }
 
+    fun intentCallPhone(context: Context, phone: String){
+        val intentDial = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phone"))
+        context.startActivity(intentDial)
+    }
 
+    fun blockPhone(context: Context, phone: String, name: String){
+        val callPhone = CallPhone()
+        callPhone.phone = phone
+        callPhone.name  = name
+        callPhone.type = CallPhoneKEY.TYPE.TYPE_LOCAL
+        callPhone.status = CallPhoneKEY.STATUS.STATUS_BLOCK
+        val status = callPhone.insertDB(context)
+        when(status){
+            AppConfig.SUCCESS   ->{context.showToast(context.getString(R.string.block_successfully))}
+            AppConfig.ERROR     ->{context.showToast(context.getString(R.string.all_phone__alert_err_phone_saved))}
+            AppConfig.EXCEPTION ->{context.showToast(context.getString(R.string.all_phone__alert_add_excaeption))}
+        }
     }
 
     fun sendSMS(context: Context, phone: String){
@@ -32,7 +53,11 @@ object IntentAction {
         intent.addCategory(Intent.CATEGORY_DEFAULT)
         context.startActivity(intent)
     }
-
+    fun getIntentSendSMS(phone: String): Intent{
+        val intent = Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phone, null))
+        intent.addCategory(Intent.CATEGORY_DEFAULT)
+        return intent
+    }
     // used at devices with multiple SIM cards
     @SuppressLint("MissingPermission")
     fun getHandleToUse(activity: AppCompatActivity, intent: Intent?, phoneNumber: String, callback: (handle: PhoneAccountHandle?) -> Unit) {
@@ -71,6 +96,5 @@ object IntentAction {
             }
         }
     }
-
 
 }
