@@ -20,11 +20,11 @@
     <string name="you_added_number_block_phones">You added %s phones into Local Block Phone</string>
     <string name="auto_block_phone_from_server">Auto Block Phone From Server</string>
     <string name="ask_permission_title">Permission for block service</string>
-    <string name="ask_permission_dial_and_block">Let app can block the phone number,\nYou need give permission for the App to use it.\n\n1. <b>*Default Phone Dial App*</b> can <b>Block</b>, <b>Call</b> and <b>Receive</b> incoming phone call.\n\n2. <b>*Only Default Block App*</b> can only <b>Block</b> incoming phone call, can not call and receive \n***</string>
+    <string name="ask_permission_dial_and_block">Let app can block the phone number,\nYou need give permission for the App to use it.\n\n1. <b>*Default Phone Dial App*</b> can <b>Block</b>, <b>Call</b> and <b>Receive</b> incoming phone call.\n\n2. <b>*Only Default Block App*</b> can only <b>Block</b> incoming phone call, can not call and receive. \nSet now***</string>
     <string name="ask_permission_dial">Let app can <b>Call</b> and <b>Receive</b> incoming phone call.\n Let set <b>*Default Phone Dial App*</b>  \n***</string>
-    <string name="ask_permission_block">Let app can block the phone number,\nYou need give permission for the App to use it.\n\n1. <b>*Default Block App*</b> can <b>Block</b> incoming phone call. \n***</string>
-    <string name="give_dial_phone_now">1. Set Dial Phone</string>
-    <string name="give_block_phone_now_has_numb">2. Set Block Phone</string>
+    <string name="ask_permission_block">Let app can block the phone number,\nYou need give permission for the App to use it.\n\n1. <b>*Default Block App*</b> can <b>Block</b> incoming phone call. \nSet now***</string>
+    <string name="give_dial_phone_now">1. Dial Phone</string>
+    <string name="give_block_phone_now_has_numb">2. Block Phone</string>
     <string name="dismiss">Dismiss</string>
     <string name="frag_phone_title">Phone</string>
     <string name="frag_user_title">Contact</string>

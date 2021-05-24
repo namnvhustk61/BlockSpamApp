@@ -263,7 +263,7 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
 
     private var onGiveBlockDefaultNowClickListener: (()->Unit)? = null
     fun setOnGiveBlockDefaultNowClickListener(onGiveBlockDefaultNowClickListener: (()->Unit)){
-        this.onGiveBlockDefaultNowClickListener = onGivePhoneDefaultNowClickListener
+        this.onGiveBlockDefaultNowClickListener = onGiveBlockDefaultNowClickListener
     }
 
     private var onDismissClickListener: (()->Unit)? = null

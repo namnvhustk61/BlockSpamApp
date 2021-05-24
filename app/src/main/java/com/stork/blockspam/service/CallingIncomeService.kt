@@ -8,6 +8,7 @@ import android.telecom.InCallService
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.stork.blockspam.R
+import com.stork.blockspam.database.model.CallPhone.CallPhone
 import com.stork.blockspam.extension.notificationManager
 import com.stork.blockspam.extension.setText
 import com.stork.blockspam.extension.setVisibleIf
@@ -24,7 +25,11 @@ class CallingIncomeService : InCallService() {
     override fun onCallAdded(call: Call) {
         super.onCallAdded(call)
 
-
+        getCallPhone{phone->
+            if(CallPhone.isBlockDB(this, phone?:"")){
+                CallManager.reject()
+            }
+        }
 
         CallManager.call = call
         CallManager.inCallService = this
@@ -66,6 +71,43 @@ class CallingIncomeService : InCallService() {
 
 
     private var callContact: PhoneContact? = null
+
+    private fun getCallPhone(): String{
+        if(callContact == null){
+            CallManager.getCallContact(applicationContext) { contact ->
+                callContact = contact
+            }
+        }
+
+        if(callContact != null){
+           return callContact!!.phoneNumbers[0]
+        }else{
+            return ""
+        }
+    }
+
+    private fun getCallPhone(callback: (String?) -> Unit){
+        CallManager.getCallContact(applicationContext) { contact ->
+            callContact = contact
+            if(callContact != null){
+                callback.invoke(callContact!!.phoneNumbers[0])
+            }else{
+                callback(null)
+            }
+        }
+    }
+
+    private fun getCallName(): String{
+        if(callContact == null){
+            CallManager.getCallContact(applicationContext) { contact ->
+                callContact = contact
+            }
+        }
+
+       return if (callContact != null && callContact!!.name.isNotEmpty()) callContact!!.name
+       else getString(R.string.unknown_caller)
+    }
+
     private fun setupNotification() {
 
         CallManager.getCallContact(applicationContext) { contact ->
@@ -90,9 +132,9 @@ class CallingIncomeService : InCallService() {
 
         var phone: String = ""
         if(callContact != null){
-            phone = callContact!!.phoneNumbers[0]
+            phone = getCallPhone()
         }
-        val callerName = if (callContact != null && callContact!!.name.isNotEmpty()) callContact!!.name else getString(R.string.unknown_caller)
+        val callerName = getCallName()
 
         // Open App when click  notification
         val openAppIntent = Intent(this, activityIntent)

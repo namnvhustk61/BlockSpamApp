@@ -62,20 +62,21 @@ abstract class BaseActivity : AppCompatActivity(), BaseView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == AppSettingsManager.ROLE_CALL_SCREENING_ID) {
+            checkPermission()
             if (resultCode == android.app.Activity.RESULT_OK) {
                 // Your app is now the call screening app
                 /*
                 * Permission for BlockSpamService running
                 */
                 AppSharedPreferences.getInstance(this).saveBoolean(AppSharedPreferences.KEY_PREFERRENCE.IS_DEFAULT_BLOCK_APP, true)
-                checkPermissionForBlockSpamService()
+//                checkPermissionForBlockSpamService()
             } else {
                 // Your app is not the call screening app
                 /*
                 * Permission for BlockCallBroadcastReceiver running
                 */
                 AppSharedPreferences.getInstance(this).saveBoolean(AppSharedPreferences.KEY_PREFERRENCE.IS_DEFAULT_BLOCK_APP, false)
-                checkPermissionForBlockBroadcast()
+                checkPermission()
             }
         }
 
@@ -126,7 +127,7 @@ abstract class BaseActivity : AppCompatActivity(), BaseView {
             /*
             * Permission for BlockCallBroadcastReceiver running
             */
-            checkPermissionForBlockBroadcast()
+            checkPermission()
         }
     }
 
@@ -137,21 +138,46 @@ abstract class BaseActivity : AppCompatActivity(), BaseView {
         AppSettingsManager.setDefaultAppCallPhone(this)
     }
 
-    fun checkPermissionForBlockSpamService(){
-        AppPermission.requirePermissions(
-                this,
-                arrayOf(AppPermission.PER_READ_CONTACTS, AppPermission.PER_READ_PHONE_STATE),
-                AppPermission.PER_REQUEST_CODE
-        )
-    }
+//    fun checkPermissionForBlockSpamService(){
+//        AppPermission.requirePermissions(
+//                this,
+//                arrayOf(AppPermission.PER_READ_CONTACTS, AppPermission.PER_READ_PHONE_STATE),
+//                AppPermission.PER_REQUEST_CODE
+//        )
+//    }
+//
+//    fun checkPermissionForBlockBroadcast(){
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            AppPermission.requirePermissions(
+//                    this,
+//                    arrayOf(
+//                            AppPermission.PER_READ_PHONE_STATE,
+//                            AppPermission.PER_READ_CALL_LOG,
+//                            AppPermission.PER_ANSWER_PHONE_CALLS // >=26
+//                    ),
+//                    AppPermission.PER_REQUEST_CODE
+//            )
+//        }else{
+//            AppPermission.requirePermissions(
+//                    this,
+//                    arrayOf(
+//                            AppPermission.PER_READ_PHONE_STATE,
+//                            AppPermission.PER_READ_CALL_LOG
+//                    ),
+//                    AppPermission.PER_REQUEST_CODE
+//            )
+//        }
+//    }
 
-    fun checkPermissionForBlockBroadcast(){
+    fun checkPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             AppPermission.requirePermissions(
                     this,
                     arrayOf(
                             AppPermission.PER_READ_PHONE_STATE,
-                            AppPermission.PER_READ_CALL_LOG,
+//                            AppPermission.PER_CALL_PHONE,
+                            AppPermission.PER_READ_CALL_LOG, // BlockCallBroadcastReceiver : read phone
+                            AppPermission.PER_READ_CONTACTS, ///  BockSpamService
                             AppPermission.PER_ANSWER_PHONE_CALLS // >=26
                     ),
                     AppPermission.PER_REQUEST_CODE
@@ -161,7 +187,9 @@ abstract class BaseActivity : AppCompatActivity(), BaseView {
                     this,
                     arrayOf(
                             AppPermission.PER_READ_PHONE_STATE,
-                            AppPermission.PER_READ_CALL_LOG
+//                            AppPermission.PER_CALL_PHONE,
+                            AppPermission.PER_READ_CALL_LOG, // BlockCallBroadcastReceiver : read phone
+                            AppPermission.PER_READ_CONTACTS ///  BockSpamService
                     ),
                     AppPermission.PER_REQUEST_CODE
             )

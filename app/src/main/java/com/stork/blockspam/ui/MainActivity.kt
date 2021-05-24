@@ -38,13 +38,15 @@ class MainActivity : BaseActivity() {
             /*
             * neu ko la default phone thi xin quyen Block
             * */
-            if(!onStatusListener){
-                if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-                    checkPermissionForBlockSpamService()
-                }else{
-                    checkPermissionForBlockBroadcast()
-                }
-            }
+//            if(!onStatusListener){
+//                if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+//                    checkPermissionForBlockSpamService()
+//                }else{
+//                    checkPermissionForBlockBroadcast()
+//                }
+//            }
+
+            checkPermission()
         }
     }
 
