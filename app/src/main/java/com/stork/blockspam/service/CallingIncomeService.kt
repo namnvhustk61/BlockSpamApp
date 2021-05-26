@@ -33,7 +33,7 @@ class CallingIncomeService : InCallService() {
 
         CallManager.call = call
         CallManager.inCallService = this
-        if (isForeground("com.stork.blockspam")){
+        if (isForeground("com.stork.blockspam") || CallManager.getState() == Call.STATE_CONNECTING){
             val intent = Intent(this, CallingIncomeActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
@@ -178,7 +178,8 @@ class CallingIncomeService : InCallService() {
         }
 
         val collapsedView = RemoteViews(packageName, R.layout.call_notification).apply {
-            setText(R.id.notification_caller_name, callerName)
+            setText(R.id.notification_caller_name,
+                    if(callerName!=getString(R.string.unknown_caller))callerName else phone)
             setText(R.id.notification_call_status, getString(contentTextId))
             setVisibleIf(R.id.notification_accept_call, callState == Call.STATE_RINGING)
 
