@@ -49,7 +49,7 @@ class RecentHelper(private val context: Context) {
                 Calls.DURATION,
                 Calls.TYPE,
                 "phone_account_address"
-        )
+        ) 
 
         val numberToSimIDMap = HashMap<String, Int>()
         context.getAvailableSIMCardLabels().forEach {

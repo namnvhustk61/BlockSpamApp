@@ -437,7 +437,7 @@ class CallingIncomeActivity : BaseActivity() {
         }
 
         val builder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_logo_app)
+            .setSmallIcon(R.mipmap.icon_app)
             .setContentIntent(openAppPendingIntent)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(Notification.CATEGORY_CALL)

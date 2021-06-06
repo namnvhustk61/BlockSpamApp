@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/call_status_text_size"
         android:fontFamily="@font/svn_gilroy_bold"
-        tools:text="Caller name" />
+        android:text="-" />
 
     <TextView
         android:id="@+id/notification_call_status"
@@ -22,7 +22,7 @@
         android:layout_below="@+id/notification_caller_name"
         android:fontFamily="@font/svn_gilroy_medium"
         android:alpha="0.8"
-        tools:text="123 456 789" />
+        android:text="-" />
 
     <ImageView
         android:id="@+id/notification_thumbnail"

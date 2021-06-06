@@ -51,7 +51,7 @@ public class AppForegroundService extends Service {
         final NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Block Started")
                 .setContentText("Running")
-                .setSmallIcon(R.drawable.ic_logo_app)
+                .setSmallIcon(R.mipmap.icon_app)
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
                 .setVibrate(null) // Passing null here silently fails
                 .setContentIntent(pendingIntent);

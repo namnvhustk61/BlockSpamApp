@@ -29,6 +29,7 @@ class CallingIncomeService : InCallService() {
             if(CallPhone.isBlockDB(this, phone?:"")){
                 CallManager.reject()
             }
+            setupNotification(phone!!)
         }
 
         CallManager.call = call
@@ -39,8 +40,6 @@ class CallingIncomeService : InCallService() {
             startActivity(intent)
         }else{
             CallManager.registerCallback(callCallback)
-            updateCallState(CallManager.getState())
-            setupNotification()
         }
 
     }
@@ -59,7 +58,8 @@ class CallingIncomeService : InCallService() {
     }
 
     private fun updateCallState(state: Int) {
-        setupNotification()
+        val phone = getCallPhone()
+        setupNotification(phone)
     }
 
     private val callCallback = object : Call.Callback() {
@@ -97,7 +97,7 @@ class CallingIncomeService : InCallService() {
         }
     }
 
-    private fun getCallName(): String{
+    private fun getCallName(): String?{
         if(callContact == null){
             CallManager.getCallContact(applicationContext) { contact ->
                 callContact = contact
@@ -105,10 +105,10 @@ class CallingIncomeService : InCallService() {
         }
 
        return if (callContact != null && callContact!!.name.isNotEmpty()) callContact!!.name
-       else getString(R.string.unknown_caller)
+       else null
     }
 
-    private fun setupNotification() {
+    private fun setupNotification(phone: String) {
 
         CallManager.getCallContact(applicationContext) { contact ->
             callContact = contact
@@ -130,11 +130,8 @@ class CallingIncomeService : InCallService() {
                      MainActivity::class.java
                  else CallingIncomeActivity::class.java
 
-        var phone: String = ""
-        if(callContact != null){
-            phone = getCallPhone()
-        }
-        val callerName = getCallName()
+
+        val callerName = getCallName()?:phone
 
         // Open App when click  notification
         val openAppIntent = Intent(this, activityIntent)
@@ -200,7 +197,7 @@ class CallingIncomeService : InCallService() {
 
 
         val builder = NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.ic_logo_app)
+                .setSmallIcon(R.mipmap.icon_app)
                 .setContentIntent(openAppPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(Notification.CATEGORY_CALL)

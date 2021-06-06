@@ -5,8 +5,7 @@
         android:drawable="@color/background"/>
     <item
         android:gravity="center"
-        android:drawable="@drawable/ic_logo_app"/>
+        android:drawable="@drawable/ic_security_round"/>
 
 
 </layer-list>
-
