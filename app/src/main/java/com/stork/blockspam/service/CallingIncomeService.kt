@@ -13,7 +13,10 @@ import com.stork.blockspam.extension.notificationManager
 import com.stork.blockspam.extension.setText
 import com.stork.blockspam.extension.setVisibleIf
 import com.stork.blockspam.model.PhoneContact
-import com.stork.blockspam.storage.*
+import com.stork.blockspam.storage.ACCEPT_CALL
+import com.stork.blockspam.storage.ACTION_BLOCK
+import com.stork.blockspam.storage.CALL_BACK
+import com.stork.blockspam.storage.DECLINE_CALL
 import com.stork.blockspam.ui.MainActivity
 import com.stork.blockspam.ui.callingincome.CallManager
 import com.stork.blockspam.ui.callingincome.CallingIncomeActivity
@@ -26,22 +29,37 @@ class CallingIncomeService : InCallService() {
         super.onCallAdded(call)
 
         getCallPhone{phone->
+            /*
+            * Check  is Block ?
+            * */
             if(CallPhone.isBlockDB(this, phone?:"")){
                 CallManager.reject()
+                return@getCallPhone
             }
-            setupNotification(phone!!)
+
+            /*
+           *  Show Screen for Calling
+           * */
+
+            // check phone in Locked Screen
+            val keyguardService = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+            val isLocked = keyguardService.inKeyguardRestrictedInputMode()
+
+            // show fullscreen or notification
+            val isFullScreen = isLocked || isForeground("com.stork.blockspam") || CallManager.getState() == Call.STATE_CONNECTING
+
+            if(isFullScreen){
+                val intent = Intent(this, CallingIncomeActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }else{
+                setupNotification(phone!!)
+            }
         }
 
         CallManager.call = call
         CallManager.inCallService = this
-        if (isForeground("com.stork.blockspam") || CallManager.getState() == Call.STATE_CONNECTING){
-            val intent = Intent(this, CallingIncomeActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        }else{
-            CallManager.registerCallback(callCallback)
-        }
-
+        CallManager.registerCallback(callCallback)
     }
 
     fun isForeground(myPackage: String): Boolean {
@@ -65,7 +83,9 @@ class CallingIncomeService : InCallService() {
     private val callCallback = object : Call.Callback() {
         override fun onStateChanged(call: Call, state: Int) {
             super.onStateChanged(call, state)
-            updateCallState(state)
+            if(state != Call.STATE_DIALING){
+                updateCallState(state)
+            }
         }
     }
 
@@ -116,9 +136,17 @@ class CallingIncomeService : InCallService() {
         val callState = CallManager.getState()
         val channelId = "simple_dialer_call"
         if (isOreoPlus()) {
-            val importance = NotificationManager.IMPORTANCE_HIGH
+            /*
+           * if calling is dismiss
+           *   PRIORITY_LOW ---> notification not show front
+           * */
+            val importance = if (callState != Call.STATE_DISCONNECTED) {
+                NotificationManager.IMPORTANCE_MAX
+            }else{
+                NotificationManager.IMPORTANCE_LOW
+            }
+            // set notification
             val name = "call_notification_channel"
-
             NotificationChannel(channelId, name, importance).apply {
                 setSound(null, null)
                 notificationManager.createNotificationChannel(this)
@@ -199,7 +227,17 @@ class CallingIncomeService : InCallService() {
         val builder = NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(R.mipmap.icon_app)
                 .setContentIntent(openAppPendingIntent)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setPriority(
+                        /*
+                        * if calling is dismiss
+                        *   PRIORITY_LOW ---> notification not show front
+                        * */
+                        if (callState != Call.STATE_DISCONNECTED) {
+                            NotificationCompat.PRIORITY_MAX
+                        }else{
+                            NotificationCompat.PRIORITY_LOW
+                        }
+                )
                 .setCategory(Notification.CATEGORY_CALL)
                 .setCustomContentView(collapsedView)
                 .setOngoing(callState != Call.STATE_DISCONNECTED)
