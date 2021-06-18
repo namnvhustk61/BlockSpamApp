@@ -11,10 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.stork.blockspam.R
-import com.stork.blockspam.extension.areMultipleSIMsAvailable
-import com.stork.blockspam.extension.beVisibleIf
-import com.stork.blockspam.extension.formatDateOrTime
-import com.stork.blockspam.extension.getFormattedDuration
+import com.stork.blockspam.extension.*
+import com.stork.viewcustom.general.TextViewAction
 import com.stork.viewcustom.otherlayout.MySwipeLayout
 import com.stork.viewcustom.radius.ImageViewRadius
 import kotlinx.android.synthetic.main.item_recent_call.view.*
@@ -125,17 +123,28 @@ class RecentCallAdapter : RecyclerView.Adapter<ViewHolder>() {
         private val bottom_wrapper_right_call: ImageViewRadius = itemView.bottom_wrapper_right_call
         private val bottom_wrapper_right_message: ImageViewRadius = itemView.bottom_wrapper_right_message
 
+        private val tvHeader: TextViewAction = itemView.tv_recents_image
 
-        private val  outgoingCallIcon: Drawable? = ContextCompat.getDrawable(itemView.context, R.drawable.ic_call_decline)
-        private val  incomingCallIcon: Drawable? = ContextCompat.getDrawable(itemView.context, R.drawable.ic_phone)
+        private val  madeCallIcon: Drawable? = ContextCompat.getDrawable(itemView.context, R.drawable.ic_call_made_24)
+        private val  receiveCallIcon: Drawable? = ContextCompat.getDrawable(itemView.context, R.drawable.ic_call_received_24)
+        private val  missCallIcon: Drawable? = ContextCompat.getDrawable(itemView.context, R.drawable.ic_call_missed_24)
         fun setData(call: RecentCall){
             itemView.apply {
                 var nameToShow = SpannableString(call.name)
                 if (call.neighbourIDs.isNotEmpty()) {
                     nameToShow = SpannableString("$nameToShow (${call.neighbourIDs.size + 1})")
                 }
+                // set avatar
+                if(call.name != call.phoneNumber){
+                    tvHeader.background = ContextCompat.getDrawable(itemView.context, getRandomBgDrawable())
+                    tvHeader.text = get2CharHeadOfName(call.name)
+                }else{
 
-                item_recents_name.apply {
+                    tvHeader.text = ""
+                    tvHeader.background = ContextCompat.getDrawable(itemView.context, R.drawable.ic_text_view_round_0)
+                }
+                // set text
+                item_call_name.apply {
                     text = nameToShow
                 }
 
@@ -144,7 +153,8 @@ class RecentCallAdapter : RecyclerView.Adapter<ViewHolder>() {
                 }
 
                 item_recents_duration.apply {
-                    text =call.duration.getFormattedDuration()
+                    visibility = if(call.duration==0) View.INVISIBLE else View.VISIBLE
+                    text = call.duration.getFormattedDuration()
                 }
 
                 item_recents_sim_image.beVisibleIf(areMultipleSIMsAvailable)
@@ -156,9 +166,10 @@ class RecentCallAdapter : RecyclerView.Adapter<ViewHolder>() {
 //                item_recents_image
 //                call.photoUri
                 val drawable = when (call.type) {
-                    CallLog.Calls.OUTGOING_TYPE -> outgoingCallIcon
-                    CallLog.Calls.MISSED_TYPE -> incomingCallIcon
-                    else -> incomingCallIcon
+                    CallLog.Calls.OUTGOING_TYPE -> madeCallIcon // 2 call to
+                    CallLog.Calls.MISSED_TYPE -> missCallIcon  // 3 miss
+                    CallLog.Calls.INCOMING_TYPE -> receiveCallIcon  // 1 call from
+                    else -> receiveCallIcon
                 }
 
                 item_recents_type.setImageDrawable(drawable)

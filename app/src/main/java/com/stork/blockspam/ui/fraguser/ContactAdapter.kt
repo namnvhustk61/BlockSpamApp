@@ -104,8 +104,8 @@ class ContactAdapter<T> : RecyclerView.Adapter<ViewHolder>() {
                 tvHeader.text = get2CharHeadOfName(item.name)
             }else{
                 tvName.text =  item.phoneNumbers[0]
-                tvPhone.text = "#"
-                tvHeader.text = "#"
+                tvPhone.text = itemView.context.getString(R.string.unknown)
+                tvHeader.text = ""
                 tvHeader.background = ContextCompat.getDrawable(itemView.context, R.drawable.ic_text_view_round_0)
             }
         }

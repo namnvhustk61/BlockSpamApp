@@ -38,6 +38,25 @@ class KeyboardPhoneBottomSheet : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.bottom_sheet_keyboard_phone, container, false)
     }
 
+    private var numberInit: String = ""
+    public fun setNumberInit(phoneNumber: String){
+        this.numberInit = phoneNumber
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if(numberInit != ""){
+            dialpad_input.visibility = View.VISIBLE
+            dialpad_input.setText(numberInit)
+            numberInit = ""
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        dialpad_input.setText("")
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initView()

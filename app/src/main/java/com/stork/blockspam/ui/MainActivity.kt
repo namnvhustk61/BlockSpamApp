@@ -47,6 +47,21 @@ class MainActivity : BaseActivity() {
 //            }
 
             checkPermission()
+
+            /*
+            * catch number from Intent.ACTION_DIAL
+            *
+            * */
+            val actionDialData = intent?.data
+            if(actionDialData != null){
+                if(actionDialData.toString().startsWith("tel:")){
+                    val phoneNumb = actionDialData.toString().substring(4)
+
+                    keyboardPhoneBottomSheet?.setNumberInit(phoneNumb)
+                    keyboardPhoneBottomSheet?.show(supportFragmentManager, keyboardPhoneBottomSheet?.tag)
+                }
+            }
+
         }
     }
 
