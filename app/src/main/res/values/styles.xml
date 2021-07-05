@@ -7,6 +7,8 @@
         <item name="android:paddingTop">@dimen/normal_margin</item>
         <item name="android:textSize">@dimen/dialpad_text_size</item>
         <item name="android:background">@drawable/bg_state_pressed</item>
+        <item name="android:textColor">@color/text</item>
+
     </style>
 
     <style name="DialpadEditText">
@@ -21,6 +23,8 @@
         <item name="android:gravity">center_horizontal</item>
         <item name="android:textSize">@dimen/smaller_text_size</item>
         <item name="android:alpha">0.8</item>
+        <item name="android:textColor">@color/text</item>
+
     </style>
 
 

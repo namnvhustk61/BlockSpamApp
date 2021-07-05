@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -78,7 +79,14 @@ public class PopupWindowMenu extends PopupWindow {
 
         LinearLayout vElement = new LinearLayout(context);
         bg = new GradientDrawable();
-        bg.setColorFilter(context.getColor(R.color.stroke), PorterDuff.Mode.SRC_ATOP);
+        int colorBgStroke = 0;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            colorBgStroke = context.getColor(R.color.stroke);
+        } else {
+            colorBgStroke =  ContextCompat.getColor(context, R.color.stroke);
+        }
+        bg.setColorFilter(colorBgStroke, PorterDuff.Mode.SRC_ATOP);
+
         bg.setAlpha(60);
         bg.setCornerRadius(dp);
         vElement.setBackground(bg);
@@ -115,6 +123,15 @@ public class PopupWindowMenu extends PopupWindow {
         Typeface typeface = ResourcesCompat.getFont(context, R.font.svn_gilroy_medium);
         tv.setTypeface(typeface);
         tv.setText(title);
+
+        int colorBgStroke = 0;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            colorBgStroke = context.getColor(R.color.text);
+        } else {
+            colorBgStroke =  ContextCompat.getColor(context, R.color.text);
+        }
+        tv.setTextColor(colorBgStroke);
+
 
         vRoot.addView(img);
 

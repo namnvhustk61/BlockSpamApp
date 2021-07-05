@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.stork.blockspam.R
@@ -28,11 +30,11 @@ const val BTN_TEXT_OK :String = "OK"
     }
 
     fun Activity.alert(
-        title: String? = null,
-        message: String = "",
-        buttonText: String = BTN_TEXT_OK,
-        cancelable: Boolean = true,
-        function: (DialogInterface) -> Unit
+            title: String? = null,
+            message: String = "",
+            buttonText: String = BTN_TEXT_OK,
+            cancelable: Boolean = true,
+            function: (DialogInterface) -> Unit
     ) {
         try {
             val builder = AlertDialog.Builder(this)
@@ -49,7 +51,7 @@ const val BTN_TEXT_OK :String = "OK"
             dialog.show()
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.colorPrimary))
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.gray))
-        }catch (e : Exception){
+        }catch (e: Exception){
 
         }
     }
@@ -79,7 +81,7 @@ fun Activity.alert(
         dialog.show()
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getColor(R.color.colorPrimary))
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.gray))
-    }catch (e : Exception){
+    }catch (e: Exception){
 
     }
 }
@@ -100,7 +102,7 @@ fun Activity.alert(
         }
     }
 
-    fun Activity.alert(message: String, cancelable: Boolean, cancel: Boolean,  function: (DialogInterface) -> Unit) {
+    fun Activity.alert(message: String, cancelable: Boolean, cancel: Boolean, function: (DialogInterface) -> Unit) {
         if(cancel){
             alert(null, message, BTN_TEXT_OK, BTN_TEXT_CANCEL, cancelable, function)
         }else{
@@ -133,7 +135,7 @@ fun Activity.alert(
         }
     }
 
-    fun Fragment.alert(message: String, cancelable: Boolean, cancel: Boolean,  function: (DialogInterface) -> Unit) {
+    fun Fragment.alert(message: String, cancelable: Boolean, cancel: Boolean, function: (DialogInterface) -> Unit) {
         if(cancel){
             activity?.alert(null, message, BTN_TEXT_OK, BTN_TEXT_CANCEL, cancelable, function)
         }else{

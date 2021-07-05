@@ -9,7 +9,6 @@
     <color name="black">#000000</color>
     <color name="background">#F1F1F1</color>
     <color name="background_item">#FFFFFF</color>
-    <color name="text">#000000</color>
     <color name="text_less">#232323</color>
     <color name="not_active">#5F5F5F</color>
     <color name="swipe">#F0FAFF</color>

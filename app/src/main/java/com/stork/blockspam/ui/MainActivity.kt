@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import com.stork.blockspam.R
 import com.stork.blockspam.base.BaseActivity
+import com.stork.blockspam.extension.beVisibleIf
 import com.stork.blockspam.storage.AppSharedPreferences
 import com.stork.blockspam.ui.fragblockphone.BlockPhoneFragment
 import com.stork.blockspam.ui.fragphone.PhoneFragment
@@ -89,7 +90,8 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        selectTab(AppSharedPreferences.getInstance(this).getInt(AppSharedPreferences.KEY_PREFERRENCE.TAB_SELECTED)?:0)
+//        selectTab(AppSharedPreferences.getInstance(this).getInt(AppSharedPreferences.KEY_PREFERRENCE.TAB_SELECTED)?:0)
+        selectTab(0)
         keyboardPhoneBottomSheet = KeyboardPhoneBottomSheet()
     }
 

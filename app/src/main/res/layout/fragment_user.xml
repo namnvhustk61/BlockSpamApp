@@ -8,39 +8,61 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dp_15"
         android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/llActionBar_user"
+            android:padding="@dimen/dp_15"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_22"
+                android:textColor="@color/text"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/svn_gilroy_medium"
+                android:text="@string/frag_user_title"
+                />
+            <com.stork.viewcustom.radius.ImageViewRadius
+                android:id="@+id/imgSearch_user"
+                android:layout_toStartOf="@id/imgMenu_user"
+                android:layout_width="@dimen/size_icon"
+                android:layout_height="@dimen/size_icon"
+                android:layout_marginEnd="@dimen/dp_10"
+                app:radius="@dimen/size_icon_x2"
+                android:src="@drawable/ic_search"
+                android:layout_centerVertical="true"
+                />
+            <com.stork.viewcustom.radius.ImageViewRadius
+                android:id="@+id/imgMenu_user"
+                android:layout_alignParentEnd="true"
+                android:layout_width="@dimen/size_icon"
+                android:layout_height="@dimen/size_icon"
+                android:layout_centerVertical="true"
+
+                android:src="@drawable/ic_menu"
+                app:radius="@dimen/size_icon_x2"
+                />
+        </RelativeLayout>
+
+        <EditText
+            android:visibility="invisible"
+            android:id="@+id/edtSearch_user"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp_22"
-            android:textColor="@color/text"
-            android:layout_centerVertical="true"
-            android:fontFamily="@font/svn_gilroy_medium"
-            android:text="@string/frag_user_title"
-             />
-
-        <com.stork.viewcustom.radius.ImageViewRadius
-            android:id="@+id/imgAdd"
-            android:layout_toStartOf="@id/imgMenu"
-            android:layout_width="@dimen/size_icon"
-            android:layout_height="@dimen/size_icon"
-            android:layout_marginEnd="@dimen/dp_10"
-            app:radius="@dimen/size_icon_x2"
-            android:src="@drawable/ic_search"
-            android:layout_centerVertical="true"
-            />
-        <com.stork.viewcustom.radius.ImageViewRadius
-            android:id="@+id/imgMenu"
-            android:layout_alignParentEnd="true"
-            android:layout_width="@dimen/size_icon"
-            android:layout_height="@dimen/size_icon"
-            android:layout_centerVertical="true"
-
-            android:src="@drawable/ic_menu"
-            app:radius="@dimen/size_icon_x2"
+            android:padding="@dimen/dp_5"
+            android:layout_margin="@dimen/dp_10"
+            android:textColor="@color/text_less"
+            android:hint="@string/search"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:drawableStart="@drawable/ic_back_search"
+            android:drawableEnd="@drawable/ic_clear_search"
+            android:background="@drawable/bg_edittext_search"
             />
 
     </RelativeLayout>

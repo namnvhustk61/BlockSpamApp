@@ -12,6 +12,8 @@ import android.os.Build
 import android.telecom.TelecomManager
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 
 @TargetApi(Build.VERSION_CODES.M)
 fun isMarshmallowPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M

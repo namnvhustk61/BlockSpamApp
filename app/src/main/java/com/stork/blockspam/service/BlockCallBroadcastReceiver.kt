@@ -1,4 +1,4 @@
-package com.stork.blockspam.service
+ package com.stork.blockspam.service
 
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver

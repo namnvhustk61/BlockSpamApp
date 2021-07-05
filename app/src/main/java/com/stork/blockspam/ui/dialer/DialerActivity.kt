@@ -109,7 +109,7 @@ class DialerActivity : AppCompatActivity() {
 
             defaultHandle != null -> callback(defaultHandle)
             else -> {
-
+                callback(null)
             }
         }
 //            }

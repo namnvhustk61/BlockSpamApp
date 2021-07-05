@@ -176,8 +176,8 @@ abstract class BaseActivity : AppCompatActivity(), BaseView {
                     arrayOf(
                             AppPermission.PER_READ_PHONE_STATE,
 //                            AppPermission.PER_CALL_PHONE,
-                            AppPermission.PER_READ_CALL_LOG, // BlockCallBroadcastReceiver : read phone
-                            AppPermission.PER_READ_CONTACTS, ///  BockSpamService
+//                            AppPermission.PER_READ_CALL_LOG, // BlockCallBroadcastReceiver : read phone
+//                            AppPermission.PER_READ_CONTACTS, ///  BockSpamService
                             AppPermission.PER_ANSWER_PHONE_CALLS // >=26
                     ),
                     AppPermission.PER_REQUEST_CODE
@@ -186,10 +186,10 @@ abstract class BaseActivity : AppCompatActivity(), BaseView {
             AppPermission.requirePermissions(
                     this,
                     arrayOf(
-                            AppPermission.PER_READ_PHONE_STATE,
+                            AppPermission.PER_READ_PHONE_STATE
 //                            AppPermission.PER_CALL_PHONE,
-                            AppPermission.PER_READ_CALL_LOG, // BlockCallBroadcastReceiver : read phone
-                            AppPermission.PER_READ_CONTACTS ///  BockSpamService
+//                            AppPermission.PER_READ_CALL_LOG, // BlockCallBroadcastReceiver : read phone
+//                            AppPermission.PER_READ_CONTACTS ///  BockSpamService
                     ),
                     AppPermission.PER_REQUEST_CODE
             )

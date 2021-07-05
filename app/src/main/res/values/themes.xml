@@ -11,6 +11,7 @@
         <item name="colorOnSecondary">@color/colorSecondaryVariant</item>
         <item name="colorOnBackground">@color/colorSecondaryVariant</item>
 
+
         <!-- Status bar color. -->
     </style>
     <!-- Splash Screen theme. -->
@@ -23,7 +24,7 @@
 
 
         <item name="android:itemBackground">@color/background</item>
-        <item name="android:textColor">@color/text</item>
+        <item name="android:textColor">@color/background</item>
         <item name="android:popupElevation">@dimen/dp_15</item>
 
     </style>

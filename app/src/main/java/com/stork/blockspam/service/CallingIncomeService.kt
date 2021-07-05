@@ -1,11 +1,16 @@
 package com.stork.blockspam.service
 
+import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.telecom.Call
 import android.telecom.InCallService
+import android.view.View
 import android.widget.RemoteViews
+import android.widget.Toast
+import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
 import com.stork.blockspam.R
 import com.stork.blockspam.database.model.CallPhone.CallPhone
@@ -25,6 +30,7 @@ import com.stork.blockspam.utils.isOreoPlus
 
 
 class CallingIncomeService : InCallService() {
+
     override fun onCallAdded(call: Call) {
         super.onCallAdded(call)
 
@@ -37,24 +43,9 @@ class CallingIncomeService : InCallService() {
                 return@getCallPhone
             }
 
-            /*
-           *  Show Screen for Calling
-           * */
-
-            // check phone in Locked Screen
-            val keyguardService = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-            val isLocked = keyguardService.inKeyguardRestrictedInputMode()
-
-            // show fullscreen or notification
-            val isFullScreen = isLocked || isForeground("com.stork.blockspam") || CallManager.getState() == Call.STATE_CONNECTING
-
-            if(isFullScreen){
-                val intent = Intent(this, CallingIncomeActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-            }else{
-                setupNotification(phone!!)
-            }
+            // show fullscreen or notification , when calling coming
+            // usually is  Call.STATE_RINGING
+            callCallback.onStateChanged(call, CallManager.getState())
         }
 
         CallManager.call = call
@@ -80,18 +71,56 @@ class CallingIncomeService : InCallService() {
         setupNotification(phone)
     }
 
+    private var statusIconCall:Int = 0
     private val callCallback = object : Call.Callback() {
         override fun onStateChanged(call: Call, state: Int) {
             super.onStateChanged(call, state)
-            if(state != Call.STATE_DIALING){
-                updateCallState(state)
+
+            when (state) {
+                Call.STATE_DIALING -> {
+                    statusIconCall = Call.STATE_DIALING// 1
+                    openFullScreen()
+                    return
+                }
+
+                Call.STATE_RINGING -> {
+                    statusIconCall = Call.STATE_RINGING // 2
+                    // check phone in Locked Screen
+                    val keyguardService = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+                    val isLocked = keyguardService.inKeyguardRestrictedInputMode()
+                    val isAppShowing = isForeground("com.stork.blockspam")
+
+                    val isFullScreen = isLocked || isAppShowing
+                    if (isFullScreen) {
+                        openFullScreen()
+                        return
+                    }
+                }
+                Call.STATE_HOLDING, Call.STATE_ACTIVE->{
+                    statusIconCall *= 10 // x2
+                    return
+                }
+                Call.STATE_DISCONNECTED->{
+                    statusIconCall *= 10 // x3
+                }
+                Call.STATE_CONNECTING->{
+                    // when start call in app --> no show notification
+                    return
+                }
             }
+
+            updateCallState(state)
         }
+    }
+
+    private fun openFullScreen(){
+        val intent = Intent(baseContext, CallingIncomeActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 
 
     private var callContact: PhoneContact? = null
-
     private fun getCallPhone(): String{
         if(callContact == null){
             CallManager.getCallContact(applicationContext) { contact ->
@@ -109,7 +138,7 @@ class CallingIncomeService : InCallService() {
     private fun getCallPhone(callback: (String?) -> Unit){
         CallManager.getCallContact(applicationContext) { contact ->
             callContact = contact
-            if(callContact != null){
+            if(callContact != null && callContact?.phoneNumbers != null && callContact?.phoneNumbers!!.size >0){
                 callback.invoke(callContact!!.phoneNumbers[0])
             }else{
                 callback(null)
@@ -128,25 +157,31 @@ class CallingIncomeService : InCallService() {
        else null
     }
 
+
     private fun setupNotification(phone: String) {
 
         CallManager.getCallContact(applicationContext) { contact ->
             callContact = contact
         }
         val callState = CallManager.getState()
-        val channelId = "simple_dialer_call"
+        var channelId = "simple_dialer_call"
+        var name = ""
         if (isOreoPlus()) {
             /*
            * if calling is dismiss
            *   PRIORITY_LOW ---> notification not show front
            * */
             val importance = if (callState != Call.STATE_DISCONNECTED) {
+                channelId = "id_channel_max"
+                name = "STATE_CALL_COMING"
                 NotificationManager.IMPORTANCE_MAX
             }else{
+                channelId = "id_channel_low"
+                name = "STATE_CALL_FINISH"
                 NotificationManager.IMPORTANCE_LOW
             }
             // set notification
-            val name = "call_notification_channel"
+
             NotificationChannel(channelId, name, importance).apply {
                 setSound(null, null)
                 notificationManager.createNotificationChannel(this)
@@ -196,10 +231,9 @@ class CallingIncomeService : InCallService() {
 
         val contentTextId = when (callState) {
             Call.STATE_RINGING -> R.string.is_calling
-            Call.STATE_DIALING -> R.string.dialing
             Call.STATE_DISCONNECTED -> R.string.call_ended
             Call.STATE_DISCONNECTING -> R.string.call_ending
-            else -> R.string.ongoing_call
+            else -> R.string.unknown
         }
 
         val collapsedView = RemoteViews(packageName, R.layout.call_notification).apply {
@@ -223,9 +257,36 @@ class CallingIncomeService : InCallService() {
 
         }
 
+        @ColorInt
+        var colorIcon = Color.WHITE
+        val rIcon =  when(statusIconCall){
+
+            Call.STATE_DIALING*10->{
+                colorIcon = Color.RED
+                R.drawable.ic_call_missed_outgoing
+            }
+            Call.STATE_DIALING*100->{
+                colorIcon = Color.GREEN
+                R.drawable.ic_call_made_succes
+            }
+
+
+            Call.STATE_RINGING*10->{
+                colorIcon = Color.RED
+                R.drawable.ic_call_missed_24
+            }
+            Call.STATE_RINGING*100->{
+                colorIcon = Color.BLUE
+                R.drawable.ic_call_received_24
+            }
+
+            else -> R.mipmap.icon_app
+        }
+
 
         val builder = NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.mipmap.icon_app)
+                .setSmallIcon(rIcon)
+                .setColor(colorIcon)
                 .setContentIntent(openAppPendingIntent)
                 .setPriority(
                         /*
@@ -235,7 +296,7 @@ class CallingIncomeService : InCallService() {
                         if (callState != Call.STATE_DISCONNECTED) {
                             NotificationCompat.PRIORITY_MAX
                         }else{
-                            NotificationCompat.PRIORITY_LOW
+                            NotificationCompat.PRIORITY_DEFAULT
                         }
                 )
                 .setCategory(Notification.CATEGORY_CALL)
