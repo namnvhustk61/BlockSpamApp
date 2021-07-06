@@ -14,7 +14,6 @@ import com.stork.blockspam.AppConfig
 import com.stork.blockspam.R
 import com.stork.blockspam.database.model.CallPhone.CallPhone
 import com.stork.blockspam.database.model.CallPhone.CallPhoneKEY
-import com.stork.blockspam.extension.alert
 import com.stork.blockspam.extension.showToast
 import com.stork.blockspam.extension.telecomManager
 
@@ -29,8 +28,11 @@ object IntentAction {
         }
     }
 
-    fun intentCallPhone(context: Context, phone: String){
+    fun intentCallPhoneFromNotification(context: Context, phone: String){
         val intentDial = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phone"))
+        intentDial.flags =
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+
         context.startActivity(intentDial)
     }
 
@@ -42,9 +44,15 @@ object IntentAction {
         callPhone.status = CallPhoneKEY.STATUS.STATUS_BLOCK
         val status = callPhone.insertDB(context)
         when(status){
-            AppConfig.SUCCESS   ->{context.showToast(context.getString(R.string.block_successfully))}
-            AppConfig.ERROR     ->{context.showToast(context.getString(R.string.all_phone__alert_err_phone_saved))}
-            AppConfig.EXCEPTION ->{context.showToast(context.getString(R.string.all_phone__alert_add_excaeption))}
+            AppConfig.SUCCESS -> {
+                context.showToast(context.getString(R.string.block_successfully))
+            }
+            AppConfig.ERROR -> {
+                context.showToast(context.getString(R.string.all_phone__alert_err_phone_saved))
+            }
+            AppConfig.EXCEPTION -> {
+                context.showToast(context.getString(R.string.all_phone__alert_add_excaeption))
+            }
         }
     }
 
@@ -53,6 +61,12 @@ object IntentAction {
         intent.addCategory(Intent.CATEGORY_DEFAULT)
         context.startActivity(intent)
     }
+     fun sendSMSFromNotification(context: Context, phone: String){
+        val intent = Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phone, null))
+        intent.addCategory(Intent.CATEGORY_DEFAULT)
+         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+         context.startActivity(intent)
+    }
     fun getIntentSendSMS(phone: String): Intent{
         val intent = Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phone, null))
         intent.addCategory(Intent.CATEGORY_DEFAULT)
@@ -60,11 +74,20 @@ object IntentAction {
     }
     // used at devices with multiple SIM cards
     @SuppressLint("MissingPermission")
-    fun getHandleToUse(activity: AppCompatActivity, intent: Intent?, phoneNumber: String, callback: (handle: PhoneAccountHandle?) -> Unit) {
+    fun getHandleToUse(
+        activity: AppCompatActivity,
+        intent: Intent?,
+        phoneNumber: String,
+        callback: (handle: PhoneAccountHandle?) -> Unit
+    ) {
         if (AppPermission.hasPermission(activity, AppPermission.PER_READ_PHONE_STATE)) {
             val defaultHandle = activity.telecomManager.getDefaultOutgoingPhoneAccount(PhoneAccount.SCHEME_TEL)
             when {
-                intent?.hasExtra(TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE) == true -> callback(intent.getParcelableExtra(TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE)!!)
+                intent?.hasExtra(TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE) == true -> callback(
+                    intent.getParcelableExtra(
+                        TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE
+                    )!!
+                )
 
                 defaultHandle != null -> callback(defaultHandle)
                 else -> {
@@ -74,11 +97,19 @@ object IntentAction {
                 }
             }
         }else{
-            AppPermission.requirePermissions(activity, AppPermission.PER_READ_PHONE_STATE, AppPermission.PER_REQUEST_CODE_READ_PHONE)
+            AppPermission.requirePermissions(
+                activity,
+                AppPermission.PER_READ_PHONE_STATE,
+                AppPermission.PER_REQUEST_CODE_READ_PHONE
+            )
         }
     }
 
-    fun launchCallIntent(activity: AppCompatActivity, recipient: String, handle: PhoneAccountHandle? = null) {
+    fun launchCallIntent(
+        activity: AppCompatActivity,
+        recipient: String,
+        handle: PhoneAccountHandle? = null
+    ) {
         val action = if (AppPermission.hasPermission(activity, AppPermission.PER_CALL_PHONE)){
             Intent.ACTION_CALL
         }else{Intent.ACTION_DIAL}

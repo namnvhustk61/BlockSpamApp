@@ -18,10 +18,8 @@ import com.stork.blockspam.extension.notificationManager
 import com.stork.blockspam.extension.setText
 import com.stork.blockspam.extension.setVisibleIf
 import com.stork.blockspam.model.PhoneContact
-import com.stork.blockspam.storage.ACCEPT_CALL
-import com.stork.blockspam.storage.ACTION_BLOCK
+import com.stork.blockspam.storage.*
 import com.stork.blockspam.storage.CALL_BACK
-import com.stork.blockspam.storage.DECLINE_CALL
 import com.stork.blockspam.ui.MainActivity
 import com.stork.blockspam.ui.callingincome.CallManager
 import com.stork.blockspam.ui.callingincome.CallingIncomeActivity
@@ -199,7 +197,7 @@ class CallingIncomeService : InCallService() {
         // Open App when click  notification
         val openAppIntent = Intent(this, activityIntent)
         openAppIntent.flags = Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT
-        val openAppPendingIntent = PendingIntent.getActivity(this, 0, openAppIntent, 0)
+        val openAppPendingIntent = PendingIntent.getActivity(this, 10, openAppIntent, 0)
 
         //  click  ACCEPT_CALL
         val acceptCallIntent = Intent(this, BlockCallBroadcastReceiver::class.java)
@@ -217,7 +215,7 @@ class CallingIncomeService : InCallService() {
         actionBlockIntent.putExtra("phone", phone)
         actionBlockIntent.putExtra("name", callerName)
 
-        val sendBlockPendingIntent = PendingIntent.getBroadcast(this, 2, declineCallIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+        val sendBlockPendingIntent = PendingIntent.getBroadcast(this, 2, actionBlockIntent, PendingIntent.FLAG_CANCEL_CURRENT)
 
 
         // click action call back
@@ -226,7 +224,13 @@ class CallingIncomeService : InCallService() {
         callBackIntent.putExtra("phone", phone)
         callBackIntent.putExtra("name", callerName)
 
-        val callBackPendingIntent = PendingIntent.getBroadcast(this, 3, declineCallIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+        val callBackPendingIntent = PendingIntent.getBroadcast(this, 3, callBackIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+
+        // click action message
+        val sendMessageIntent = Intent(this, BlockCallBroadcastReceiver::class.java)
+        sendMessageIntent.action = ACTION_SEND_MESSAGE
+        sendMessageIntent.putExtra("phone", phone)
+        val sendMessagePendingIntent = PendingIntent.getBroadcast(this, 4, sendMessageIntent, PendingIntent.FLAG_ONE_SHOT)
 
 
         val contentTextId = when (callState) {
@@ -253,7 +257,7 @@ class CallingIncomeService : InCallService() {
             setOnClickPendingIntent(R.id.tvBlock, sendBlockPendingIntent)
             setOnClickPendingIntent(R.id.tvCallback, callBackPendingIntent)
 
-            setOnClickFillInIntent(R.id.tvMessage, IntentAction.getIntentSendSMS(phone))
+            setOnClickPendingIntent(R.id.tvMessage, sendMessagePendingIntent)
 
         }
 
@@ -308,6 +312,6 @@ class CallingIncomeService : InCallService() {
                 .setStyle(NotificationCompat.DecoratedCustomViewStyle())
 
         val notification = builder.build()
-        notificationManager.notify(1, notification)
+        notificationManager.notify(ID_NOTIFICATION, notification)
     }
 }

@@ -23,3 +23,6 @@ const val DECLINE_CALL = PATH + "decline_call"
 const val CALL_BACK = PATH + "call_back"
 
 const val ACTION_BLOCK = PATH + "action_block"
+const val ACTION_SEND_MESSAGE = PATH + "action_send_message"
+
+const val ID_NOTIFICATION = 10

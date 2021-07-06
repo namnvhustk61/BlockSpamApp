@@ -94,7 +94,7 @@
             android:gravity="center"
             android:paddingTop="@dimen/dp_2"
             android:paddingBottom="@dimen/dp_2"
-            android:textColor="@color/red"
+            android:textColor="@color/blue"
             android:text="@string/message" />
 
         <ImageView
@@ -112,7 +112,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/svn_gilroy_medium"
             android:gravity="center"
-            android:textColor="@color/blue"
+            android:textColor="@color/green_blur"
             android:text="@string/call_back" />
 
     </LinearLayout>

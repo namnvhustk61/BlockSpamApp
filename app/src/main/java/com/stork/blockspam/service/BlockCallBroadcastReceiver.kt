@@ -1,6 +1,7 @@
  package com.stork.blockspam.service
 
 import android.annotation.SuppressLint
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -9,16 +10,14 @@ import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
 import com.android.internal.telephony.ITelephony
 import com.stork.blockspam.database.model.CallPhone.CallPhone
-import com.stork.blockspam.storage.ACCEPT_CALL
-import com.stork.blockspam.storage.ACTION_BLOCK
-import com.stork.blockspam.storage.CALL_BACK
-import com.stork.blockspam.storage.DECLINE_CALL
+import com.stork.blockspam.storage.*
 import com.stork.blockspam.ui.callingincome.CallManager
 import com.stork.blockspam.ui.callingincome.CallingIncomeActivity
 import com.stork.blockspam.utils.AppPermission
 import com.stork.blockspam.utils.IntentAction
 
-internal class BlockCallBroadcastReceiver : BroadcastReceiver() {
+
+ internal class BlockCallBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
 
@@ -35,15 +34,24 @@ internal class BlockCallBroadcastReceiver : BroadcastReceiver() {
             DECLINE_CALL -> CallManager.reject()
 
             CALL_BACK -> {
-                val phone: String = intent.getStringExtra("phone")?:""
+                val phone: String = intent.getStringExtra("phone") ?: ""
                 val name = intent.getStringExtra("name")
-                IntentAction.intentCallPhone(context, phone)
+                IntentAction.intentCallPhoneFromNotification(context, phone)
+                dismissNotification(context)
                 return
             }
             ACTION_BLOCK -> {
-                val phone: String = intent.getStringExtra("phone")?:""
-                val name = intent.getStringExtra("name")?:""
+                val phone: String = intent.getStringExtra("phone") ?: ""
+                val name = intent.getStringExtra("name") ?: ""
                 IntentAction.blockPhone(context, phone, name)
+                dismissNotification(context)
+                return
+            }
+
+            ACTION_SEND_MESSAGE -> {
+                val phone: String = intent.getStringExtra("phone") ?: ""
+                IntentAction.sendSMSFromNotification(context, phone)
+                dismissNotification(context)
                 return
             }
         }
@@ -72,11 +80,21 @@ internal class BlockCallBroadcastReceiver : BroadcastReceiver() {
 //        }
         // get incoming call number.
         val number = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
-        if(CallPhone.isBlockDB(context, number?:"")){
+        if(CallPhone.isBlockDB(context, number ?: "")){
             breakCall(context)
         }
     }
 
+     // dismiss notification
+    private fun dismissNotification(context: Context){
+         // dismiss notification
+         try {
+             val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+             manager?.cancel(ID_NOTIFICATION)
+         }catch (e: Exception){
+         }
+
+    }
 
     // Ends phone call
     private fun breakCall(context: Context) {
