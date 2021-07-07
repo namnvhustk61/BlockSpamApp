@@ -1,6 +1,7 @@
 package com.stork.blockspam.ui.fraguser
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView.OnEditorActionListener
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.stork.blockspam.R
@@ -19,6 +21,7 @@ import com.stork.blockspam.extension.normalizeString
 import com.stork.blockspam.model.PhoneContact
 import com.stork.blockspam.utils.AppPermission
 import com.stork.blockspam.utils.IntentAction
+import com.stork.viewcustom.popup.PopupWindowMenu
 import kotlinx.android.synthetic.main.fragment_user.*
 import kotlinx.android.synthetic.main.layout_ask_permission.*
 import kotlinx.android.synthetic.main.layout_ask_permission.view.*
@@ -26,6 +29,10 @@ import java.util.*
 
 
 class UserFragment : BaseFragment() {
+
+    private var lsTitle: List<String>? = null
+    private var lsIcons: List<Drawable?>? =null
+    private var popupMenu :PopupWindowMenu?= null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,6 +92,14 @@ class UserFragment : BaseFragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun onEvent(){
 
+        // show click menu
+        imgMenu_user.setOnClickListener {
+            showOptionsMenu(it, PopupWindowMenu.Itf { index ->
+                when(index){
+                    0->{IntentAction.createNewContract(context!!)}
+                }
+            })
+        }
         /** Event Recycle**/
         (rcvContacts.adapter as ContactAdapter<*>).setOnItemClickListener { item->
             IntentAction.callPhone(activity as AppCompatActivity, item.phoneNumbers[0])
@@ -177,5 +192,25 @@ class UserFragment : BaseFragment() {
     private fun changeStatusSearch(isOpen: Boolean){
         edtSearch_user.beVisibleIf(isOpen)
         llActionBar_user.beVisibleIf(!isOpen)
+    }
+
+    /**
+     * Show Menu
+     * */
+
+    private fun showOptionsMenu(view: View, onclickItem: PopupWindowMenu.Itf){
+        if(popupMenu == null){
+            lsTitle =  listOf("Add new")
+            lsIcons =listOf(
+                    ContextCompat.getDrawable(context!!, R.drawable.ic_add))
+
+            popupMenu = PopupWindowMenu(
+                    context, lsTitle, lsIcons,
+                    ContextCompat.getColor(context!!, R.color.background_item),
+                    onclickItem
+            )
+        }
+
+        popupMenu?.showAsDropDown(view, 0, -70)
     }
 }

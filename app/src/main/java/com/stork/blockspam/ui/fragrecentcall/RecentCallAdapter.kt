@@ -166,9 +166,9 @@ class RecentCallAdapter : RecyclerView.Adapter<ViewHolder>() {
 //                item_recents_image
 //                call.photoUri
                 val drawable = when (call.type) {
-                    CallLog.Calls.OUTGOING_TYPE -> madeCallIcon // 2 call to
+                    CallLog.Calls.OUTGOING_TYPE -> madeCallIcon // 2 call to       //
                     CallLog.Calls.MISSED_TYPE -> missCallIcon  // 3 miss
-                    CallLog.Calls.INCOMING_TYPE -> receiveCallIcon  // 1 call from
+                    CallLog.Calls.INCOMING_TYPE -> receiveCallIcon  // 1 call from // from out to user
                     else -> receiveCallIcon
                 }
 

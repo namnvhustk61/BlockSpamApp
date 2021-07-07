@@ -1,7 +1,9 @@
 package com.stork.blockspam.ui.fragrecentcall
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.provider.CallLog
 
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -10,6 +12,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 
@@ -19,10 +22,13 @@ import com.stork.blockspam.extension.beVisibleIf
 import com.stork.blockspam.extension.formatDateOrTime
 import com.stork.blockspam.extension.normalizeString
 import com.stork.blockspam.utils.IntentAction
+import com.stork.viewcustom.popup.PopupWindowMenu
 import kotlinx.android.synthetic.main.fragment_recent_call.*
 
 class RecentCallFragment:  BaseFragment() {
-
+    private var lsTitle: List<String>? = null
+    private var lsIcons: List<Drawable?>? =null
+    private var popupMenu :PopupWindowMenu?= null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -62,6 +68,19 @@ class RecentCallFragment:  BaseFragment() {
         (rcvRecentCall.adapter as RecentCallAdapter).refresh(searchList)
     }
 
+    private fun filterType(type: Int){
+        /*
+        * Filter by Type Call
+        *   CallLog.Calls.OUTGOING_TYPE -> madeCallIcon // 2 call to
+            CallLog.Calls.MISSED_TYPE -> missCallIcon  // 3 miss
+            CallLog.Calls.INCOMING_TYPE -> receiveCallIcon  // 1 call from
+        * */
+        val searchList = lsRecentCall?.filter { phoneContact ->
+            type == phoneContact.type
+        }
+        (rcvRecentCall.adapter as RecentCallAdapter).refresh(searchList)
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun initView(){
         rcvRecentCall.layoutManager = LinearLayoutManager(context)
@@ -75,6 +94,22 @@ class RecentCallFragment:  BaseFragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun onEvent(){
+        // show click menu
+        imgMenu_recent.setOnClickListener {
+            showOptionsMenu(it, PopupWindowMenu.Itf { index ->
+                when(index){
+        /*Miss*/    0->{
+                        filterType(CallLog.Calls.MISSED_TYPE)
+                    }
+        /*Receive*/ 1->{
+                        filterType(CallLog.Calls.INCOMING_TYPE)
+                    }
+        /*All*/     2->{
+                        searchKey("")
+                    }
+                }
+            })
+        }
         /** Event Recycle**/
         (rcvRecentCall.adapter as RecentCallAdapter).setOnItemClickListener { item->
             IntentAction.callPhone(activity as AppCompatActivity, item.phoneNumber)
@@ -145,5 +180,24 @@ class RecentCallFragment:  BaseFragment() {
         rlToolBar_recent.beVisibleIf(!isOpen)
     }
 
+
+    private fun showOptionsMenu(view: View, onclickItem: PopupWindowMenu.Itf){
+        if(popupMenu == null){
+            lsTitle =  listOf("Miss call", "Receive call", "All call")
+            lsIcons =listOf(
+                    ContextCompat.getDrawable(context!!, R.drawable.ic_call_missed_24),
+                    ContextCompat.getDrawable(context!!, R.drawable.ic_call_received_24),
+                    ContextCompat.getDrawable(context!!, R.drawable.ic_selection_all)
+            )
+
+            popupMenu = PopupWindowMenu(
+                    context, lsTitle, lsIcons,
+                    ContextCompat.getColor(context!!, R.color.background_item),
+                    onclickItem
+            )
+        }
+
+        popupMenu?.showAsDropDown(view, 0, -70)
+    }
 
 }

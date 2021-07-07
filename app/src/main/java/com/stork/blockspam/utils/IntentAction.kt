@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.provider.ContactsContract
 import android.telecom.PhoneAccount
 import android.telecom.PhoneAccountHandle
 import android.telecom.TelecomManager
@@ -128,4 +129,20 @@ object IntentAction {
         }
     }
 
+    /**
+     * Save new Contract
+     * */
+
+    fun createNewContract(context: Context){
+        try {
+            Intent().apply {
+                action = Intent.ACTION_INSERT
+                data = ContactsContract.Contacts.CONTENT_URI
+                context.startActivity(this)
+            }
+        }catch (e: Exception){
+            context.showToast(context.getString(R.string.no_app_found))
+        }
+
+    }
 }
