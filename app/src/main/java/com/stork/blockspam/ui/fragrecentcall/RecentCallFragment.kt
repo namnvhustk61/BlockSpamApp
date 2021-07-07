@@ -39,7 +39,7 @@ class RecentCallFragment:  BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         onEvent()
-//        refresh()
+        refresh()
     }
 
     override fun onResume() {

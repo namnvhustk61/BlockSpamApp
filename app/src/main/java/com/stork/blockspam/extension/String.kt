@@ -33,3 +33,11 @@ fun get2CharHeadOfName(name: String): String{
     return value
 
 }
+
+fun get1CharHeadOfNameUpperCase(name: String?): String{
+    if(name == null){return "#"}
+    if(name == ""){return "#"}
+    val charHeader = name[0].toString()
+
+    return charHeader.toUpperCase()
+}

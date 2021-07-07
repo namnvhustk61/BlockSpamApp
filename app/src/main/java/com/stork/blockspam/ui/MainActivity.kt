@@ -74,8 +74,8 @@ class MainActivity : BaseActivity() {
                 RecentCallFragment()
         )
 
-        mainViewPager.adapter = MainPagerAdapter(supportFragmentManager, fragments)
         mainViewPager.offscreenPageLimit = 4
+        mainViewPager.adapter = MainPagerAdapter(supportFragmentManager, fragments)
 
         tabBarItems = listOf(
                 tab0,

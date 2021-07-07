@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.stork.blockspam.R
 import com.stork.blockspam.extension.*
+import com.stork.blockspam.ui.fragblockphone.BlockPhoneAdapter
 import com.stork.viewcustom.general.TextViewAction
 import com.stork.viewcustom.otherlayout.MySwipeLayout
 import com.stork.viewcustom.radius.ImageViewRadius
@@ -27,16 +28,26 @@ class RecentCallAdapter : RecyclerView.Adapter<ViewHolder>() {
         return _items
     }
 
+    // Add Title
+    private val mapTypeItem: HashMap<String, List<RecentCall>> = hashMapOf()
+    private val lsKeyTitleType = mutableListOf<String>()
+
     var onStateLongCLick: Boolean = false
 
     private val VIEWTYPEDATA = 1
     private val VIEWTYPENULL = 0
 
+    private val VIEWTYPEDATATITLE = 3
+
     private var view:View? = null
 
     override fun getItemViewType(position: Int): Int {
        return if(_items.size > 0){
-           VIEWTYPEDATA
+           if(getItemDataInMap(position) == null){
+                VIEWTYPEDATATITLE
+           }else{
+                VIEWTYPEDATA
+           }
        }else{
            VIEWTYPENULL
        }
@@ -53,6 +64,11 @@ class RecentCallAdapter : RecyclerView.Adapter<ViewHolder>() {
                 view = LayoutInflater.from(parent.context).inflate(R.layout.layout_null, parent, false)
                 ViewNull(view!!)
             }
+
+            VIEWTYPEDATATITLE->{
+                view = LayoutInflater.from(parent.context).inflate(R.layout.item_recent_call_title, parent, false)
+                BlockPhoneAdapter.ViewTitleType(view!!)
+            }
             else  -> {
                 view = LayoutInflater.from(parent.context).inflate(R.layout.item_block_phone_swipe, parent, false)
                 ThisViewHolder(view!!)
@@ -61,26 +77,60 @@ class RecentCallAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return if(_items.size >0){
-            _items.size
+        //
+        return if (_items.size != 0){
+            mapTypeItem.keys.size + _items.size
         }else{
-            1
+            1 // VIEW TYPE NULL PERMISSION
         }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when(holder){
             is ThisViewHolder->{
-                holder.setData(_items[position])
-                holder.setOnEvent(this, _items[position], position)
+               getItemDataInMap(position)?.let {
+                   holder.setData(it)
+                   holder.setOnEvent(this, it, position)
+               }
+            }
+
+            is BlockPhoneAdapter.ViewTitleType ->{
+                val item = getItemDataInMap(position+1)
+                holder.setData(item?.startTS?.formatDateOrTime()?:"")
             }
         }
     }
 
     fun refresh(items: List<RecentCall>?) {
         if (items == null){return}
+
         this._items.clear()
+        this.mapTypeItem.clear()
+        this.lsKeyTitleType.clear()
+
         this._items.addAll(items)
+
+        // TYPE_LOCAL
+        this._items.forEach { _item: RecentCall? ->
+            val titleKey = _item?.startTS?.formatDateOrTime()?:""
+            val indexType = lsKeyTitleType.indexOf(titleKey)
+            if(indexType == -1){
+                // create new item map
+                val entryNew: ArrayList<RecentCall>  = arrayListOf<RecentCall>()
+                val keyNew: String = "${lsKeyTitleType.size}-${titleKey}"
+
+                entryNew.add(_item!!)
+                mapTypeItem.put(keyNew, entryNew)
+                // create new item ls type
+                lsKeyTitleType.add(titleKey)
+
+            }else{
+                val key = "${indexType}-${titleKey}"
+                val entry =  mapTypeItem.get(key) as  ArrayList<RecentCall>
+
+                entry.add(_item!!)
+            }
+        }
         this.notifyDataSetChanged()
     }
 
@@ -88,6 +138,27 @@ class RecentCallAdapter : RecyclerView.Adapter<ViewHolder>() {
         if (items == null){return}
         this._items.addAll(items)
         this.notifyDataSetChanged()
+    }
+
+    fun getItemDataInMap(position: Int): RecentCall?{
+        val posReal = position
+        var sum = 0
+        var result: RecentCall?= null
+        lsKeyTitleType.forEachIndexed { index, type ->
+            sum += 1
+            sum += mapTypeItem.get("${index}-${type}")!!.size
+
+            if(posReal < sum){
+
+                val entry = mapTypeItem.get("${index}-${type}")
+                val idxInEntryMap = entry!!.size -( sum -1 - posReal)
+                if(idxInEntryMap > 0){
+                    result =  entry.get(idxInEntryMap - 1)
+                }
+                return result
+            }
+        }
+        return result
     }
 
     private var onItemClickListener: ((item: RecentCall)->Unit)? = null

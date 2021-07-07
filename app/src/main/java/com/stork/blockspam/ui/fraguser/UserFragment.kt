@@ -81,7 +81,7 @@ class UserFragment : BaseFragment() {
         tvGiveDialPhoneNow.setOnClickListener {  PhoneContact.requirePermissions(this) }
 
         rcvContacts.layoutManager =  LinearLayoutManager(context)
-        rcvContacts.adapter =  ContactAdapter<PhoneContact>()
+        rcvContacts.adapter =  ContactAdapter()
 
         rcvContacts.setOnTouchListener { v, event ->
             hideKeyBoard()
@@ -101,19 +101,19 @@ class UserFragment : BaseFragment() {
             })
         }
         /** Event Recycle**/
-        (rcvContacts.adapter as ContactAdapter<*>).setOnItemClickListener { item->
+        (rcvContacts.adapter as ContactAdapter).setOnItemClickListener { item->
             IntentAction.callPhone(activity as AppCompatActivity, item.phoneNumbers[0])
         }
 
-        (rcvContacts.adapter as ContactAdapter<*>).setOnItemSwipeClickListener_Block { item, index ->
+        (rcvContacts.adapter as ContactAdapter).setOnItemSwipeClickListener_Block { item, index ->
             blockPhone(item.phoneNumbers[0], item.name)
         }
 
-        (rcvContacts.adapter as ContactAdapter<*>).setOnItemSwipeClickListener_Call{ item, index ->
+        (rcvContacts.adapter as ContactAdapter).setOnItemSwipeClickListener_Call{ item, index ->
             IntentAction.callPhone(activity as AppCompatActivity, item.phoneNumbers[0])
         }
 
-        (rcvContacts.adapter as ContactAdapter<*>).setOnItemSwipeClickListener_Message { item, index ->
+        (rcvContacts.adapter as ContactAdapter).setOnItemSwipeClickListener_Message { item, index ->
             IntentAction.sendSMS(context!!, item.phoneNumbers[0])
         }
 
@@ -175,7 +175,7 @@ class UserFragment : BaseFragment() {
             context!!,
             false
         )
-        (rcvContacts.adapter as? ContactAdapter<PhoneContact>)?.refresh(listPhoneContact)
+        (rcvContacts.adapter as? ContactAdapter)?.refresh(listPhoneContact)
     }
 
     private fun searchKey(text: String){
@@ -186,7 +186,7 @@ class UserFragment : BaseFragment() {
 
         }
 
-        (rcvContacts.adapter as? ContactAdapter<PhoneContact>)?.refresh(searchList)
+        (rcvContacts.adapter as? ContactAdapter)?.refresh(searchList)
     }
 
     private fun changeStatusSearch(isOpen: Boolean){

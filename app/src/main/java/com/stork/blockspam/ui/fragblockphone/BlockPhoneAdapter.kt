@@ -154,7 +154,7 @@ class BlockPhoneAdapter : RecyclerView.Adapter<ViewHolder>() {
         this.notifyDataSetChanged()
     }
 
-    fun refresh() {
+    private fun refresh() {
 
         this.mapTypeItem.clear()
         this.lsKeyTitleType.clear()
