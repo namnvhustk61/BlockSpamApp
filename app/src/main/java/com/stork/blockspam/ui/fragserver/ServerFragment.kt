@@ -59,7 +59,7 @@ class ServerFragment : BaseFragment() {
 
         imgAddAll.setOnClickListener {
             val lsDB:ArrayList<BlockPhone> = arrayListOf()
-            (rcvBlockPhone.adapter as ServerAdapter).items.forEach { item: BlockPhone ->
+            (rcvBlockPhone.adapter as ServerAdapter)._items.forEach { item: BlockPhone ->
                 if(item.status == CallPhoneKEY.STATUS.STATUS_BLOCK){
                     if(!addPhoneToBlockList(item)){
                         lsDB.add(item)
@@ -84,7 +84,7 @@ class ServerFragment : BaseFragment() {
         (rcvBlockPhone.adapter as ServerAdapter).setOnItemSwipeClickListener {
             item, index ->
             if(addPhoneToBlockList(item)){
-                (rcvBlockPhone.adapter as ServerAdapter).items.removeAt(index)
+                (rcvBlockPhone.adapter as ServerAdapter)._items.removeAt(index)
                 rcvBlockPhone.adapter?.notifyItemRemoved(index)
             }
         }
@@ -144,12 +144,12 @@ class ServerFragment : BaseFragment() {
     private fun setSelectAll(bool: Boolean){
         if(bool){
             // select All
-            (rcvBlockPhone.adapter as ServerAdapter).items.forEach{item: BlockPhone? ->
+            (rcvBlockPhone.adapter as ServerAdapter)._items.forEach{item: BlockPhone? ->
                 item?.status = CallPhoneKEY.STATUS.STATUS_BLOCK
             }
         }else{
             // dismiss select All
-            (rcvBlockPhone.adapter as ServerAdapter).items.forEach { item: BlockPhone? ->
+            (rcvBlockPhone.adapter as ServerAdapter)._items.forEach { item: BlockPhone? ->
                 item?.status = CallPhoneKEY.STATUS.STATUS_UNBLOCK
             }
         }

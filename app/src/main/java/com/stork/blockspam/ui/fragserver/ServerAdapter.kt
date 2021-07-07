@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.stork.blockspam.R
 import com.stork.blockspam.database.model.CallPhone.CallPhoneKEY
+import com.stork.blockspam.ui.fragblockphone.BlockPhoneAdapter
 import com.stork.http.model.BlockPhone
 import com.stork.viewcustom.general.ImageViewSwap
 import com.stork.viewcustom.otherlayout.MySwipeLayout
@@ -18,55 +19,132 @@ import kotlinx.android.synthetic.main.item_server_phone.view.*
 
 
 class ServerAdapter : RecyclerView.Adapter<ViewHolder>() {
-    val items = mutableListOf<BlockPhone>()
+    val _items = mutableListOf<BlockPhone>()
     private val VIEWTYPEDATA = 1
     private val VIEWTYPENULL = 0
+    private val VIEWTYPEDATATITLE = 3
+
+    private val mapTypeItem: HashMap<String, List<BlockPhone>> = hashMapOf()
+    private val lsKeyTitleType = mutableListOf<String>()
 
     var onStateLongCLick: Boolean = false
     private var view:View? = null
 
     override fun getItemViewType(position: Int): Int {
-        return if (items.size != 0){
-            VIEWTYPEDATA
+        return if(_items.size > 0){
+            if(getItemDataInMap(position) == null){
+                VIEWTYPEDATATITLE
+            }else{
+                VIEWTYPEDATA
+            }
         }else{
             VIEWTYPENULL
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        return if (viewType == VIEWTYPEDATA){
-            view = LayoutInflater.from(parent.context).inflate(R.layout.item_server_phone, parent, false)
-            ThisViewHolder(view!!)
-        }else{
-            view = LayoutInflater.from(parent.context).inflate(R.layout.layout_null, parent, false)
-            ViewNull(view!!)
+        return when(viewType){
+            VIEWTYPEDATA->{
+                view = LayoutInflater.from(parent.context).inflate(R.layout.item_server_phone, parent, false)
+                ThisViewHolder(view!!)
+            }
+            VIEWTYPENULL->{
+                view = LayoutInflater.from(parent.context).inflate(R.layout.layout_null, parent, false)
+                ViewNull(view!!)
+            }
+            VIEWTYPEDATATITLE->{
+                view = LayoutInflater.from(parent.context).inflate(R.layout.item_block_phone_title, parent, false)
+                BlockPhoneAdapter.ViewTitleType(view!!)
+            }
+            else->{
+                view = LayoutInflater.from(parent.context).inflate(R.layout.item_server_phone, parent, false)
+                ThisViewHolder(view!!)
+            }
         }
     }
 
     override fun getItemCount(): Int {
-        return if (items.size != 0){ items.size }else{ 1 }
+        //
+        return if (_items.size != 0){
+            mapTypeItem.keys.size + _items.size
+        }else{
+            1 // VIEW TYPE NULL PERMISSION
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (holder is ThisViewHolder){
-            holder.setData(items[position], this.onStateLongCLick)
-            holder.setOnEvent(
-                this,
-                items[position], position
-            )
+        when(holder){
+            is ThisViewHolder ->{
+                getItemDataInMap(position)?.let {
+                    holder.setData(it,this.onStateLongCLick)
+                    holder.setOnEvent(this, it, position)
+                }
+            }
+
+            is BlockPhoneAdapter.ViewTitleType ->{
+                val item = getItemDataInMap(position+1)
+                holder.setData(item!!.type)
+            }
         }
     }
 
     fun refresh(items: List<BlockPhone>?) {
         if (items == null){return}
-        this.items.clear()
-        this.items.addAll(items)
+
+        this._items.clear()
+        this.mapTypeItem.clear()
+        this.lsKeyTitleType.clear()
+
+        this._items.addAll(items)
+
+        // TYPE_LOCAL
+        this._items.forEach { _item: BlockPhone? ->
+            val titleKey = _item?.type?:""
+            val indexType = lsKeyTitleType.indexOf(titleKey)
+            if(indexType == -1){
+                // create new item map
+                val entryNew: ArrayList<BlockPhone>  = arrayListOf<BlockPhone>()
+                val keyNew: String = "${lsKeyTitleType.size}-${titleKey}"
+
+                entryNew.add(_item!!)
+                mapTypeItem.put(keyNew, entryNew)
+                // create new item ls type
+                lsKeyTitleType.add(titleKey)
+
+            }else{
+                val key = "${indexType}-${titleKey}"
+                val entry =  mapTypeItem.get(key) as  ArrayList<BlockPhone>
+
+                entry.add(_item!!)
+            }
+        }
         this.notifyDataSetChanged()
+    }
+
+    fun getItemDataInMap(position: Int): BlockPhone?{
+        val posReal = position
+        var sum = 0
+        var result: BlockPhone?= null
+        lsKeyTitleType.forEachIndexed { index, type ->
+            sum += 1
+            sum += mapTypeItem.get("${index}-${type}")!!.size
+
+            if(posReal < sum){
+
+                val entry = mapTypeItem.get("${index}-${type}")
+                val idxInEntryMap = entry!!.size -( sum -1 - posReal)
+                if(idxInEntryMap > 0){
+                    result =  entry.get(idxInEntryMap - 1)
+                }
+                return result
+            }
+        }
+        return result
     }
 
     fun append(items: List<BlockPhone>?){
         if (items == null){return}
-        this.items.addAll(items)
+        this._items.addAll(items)
         this.notifyDataSetChanged()
     }
 
